@@ -1,0 +1,39 @@
+/* Estilos para el contenedor azul */
+.carousel-conteiner{
+  width: auto; /* Ancho del contenedor, 100% del ancho de la ventana */
+  height: 90vh; /* Altura fija del contenedor */
+}
+
+.carousel-item{
+  width: 100%; /* Ancho de la imagen, 100% del ancho del contenedor */
+  height: 100%; /* Altura fija de la imagen */
+  /*background-color: rgb(119, 59, 116);*/
+}
+.carousel-inner{
+  width: 100%; /* Ancho del carrusel, 100% del ancho del contenedor */
+  height: 100%; /* Altura fija del carrusel */
+}
+.carousel-slide{
+  width: 100%; /* Ancho del carrusel, 100% del ancho del contenedor */
+  height: 90vh; /* Altura fija del carrusel */
+}
+
+
+.imagen{
+  width: 100%; /* Ancho de la imagen, 100% del ancho del contenedor */
+  height: 100%; /* Altura fija de la imagen */
+}
+h3{
+  color: white; /* Color del texto */
+  font-size: 3em; /* Tamaño de la fuente */
+  font-family: 'Nunito'; /* Tipo de fuente */
+  text-align: center; /* Alineación del texto */
+  margin-top: 20px; /* Margen superior */
+}
+p{
+  color: white; /* Color del texto */
+  font-size: 1.5em; /* Tamaño de la fuente */
+  font-family: 'Nunito'; /* Tipo de fuente */
+  text-align: center; /* Alineación del texto */
+  margin-top: 20px; /* Margen superior */
+}

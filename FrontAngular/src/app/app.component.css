@@ -3,3 +3,19 @@ h1 {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 250%;
 }
+.barra-navegacion {
+    background-color: rgb(69, 41, 102);
+}
+.nav-link {
+    color: white;
+}
+.navbar-nav {
+    justify-content: center; 
+    font-family: 'Nunito';
+    width: 100%;
+    font-size: 170%;
+    display: flex;
+    gap: 30px;
+    padding: 0; /* Remove default padding if necessary */
+    list-style: none; /* Remove default list style if necessary */
+}
