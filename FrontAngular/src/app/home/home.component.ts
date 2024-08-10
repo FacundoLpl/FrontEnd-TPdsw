@@ -1,11 +1,11 @@
 import { Component, OnInit, HostListener  } from '@angular/core';
 import { RouterModule, RouterOutlet } from '@angular/router';
-import { UserComponent } from '../user/user.component';
 import { CartaComponent } from '../carta/carta.component.js';
+
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [UserComponent],
+  imports: [],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
