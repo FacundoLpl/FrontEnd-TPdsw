@@ -1,0 +1,23 @@
+.flex-container {
+    display: flex;
+    justify-content: space-between; /* Espacio entre columnas */
+}
+
+.flex-item {
+    background-color: lightgreen;
+    padding: 20px;
+    width: 23%; /* Ajuste del ancho para permitir espacio entre columnas */
+    text-align: center;
+}
+.comunicacionComponentes {
+    background-color: lightblue;
+    padding: 20px;
+    width: 100%;
+    text-align: center;
+}
+.textoDinamico {
+    background-color: rgb(246, 189, 248);
+    padding: 20px;
+    width: 100%;
+    text-align: center;
+}

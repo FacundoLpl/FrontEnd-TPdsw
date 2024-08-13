@@ -1,6 +1,45 @@
-<h1>Hola<h1>
-<pre>
-    {{ users | json }}
+<div class="flex-container">
+    <div class="flex-item">Columna 1
+        <pre>{{ users | json }}</pre>
+        <button (click)=loadUsers()>Obtener Usuarios</button> 
+    </div>
+    <div class="flex-item">Columna 2
+        <input type="text" #idInput>
+        <pre>{{ userBuscado | json }}</pre>
+        <button (click)=loadOneUser(idInput.value)>Obtener Usuario Especifico</button>
+    </div>
+    <div class="flex-item">Columna 3
+        <button (click)=postUser()>Crear Usuario</button>
+    </div>
+    <div class="flex-item">Columna 4
+        <input type="text" #idDInput>
+        {{userDeleted}}
+        <button (click)=deleteUser(idDInput.value)>Borrar Usuario</button>
+    </div>
+</div>
+<br/><br/>
 
-</pre>
-<button (click)=loadUsers()>Get FAQ</button>
+
+
+<div class="comunicacionComponentes">
+    Comunicacion entre componente padre y componente hijo: <br/>
+    <app-hijo-prueba [empresaPasajeICH]="empresa" (empresaDevueltaOCH)="agregarEmpresaN($event)"></app-hijo-prueba>
+    <br/>
+    Empresa Recibida: {{empresaRecibidaCP}}
+    <br/><br/><br/>
+</div>
+<br/><br/><br/>
+
+
+<div class="textoDinamico">
+Edad del empleado: {{edad<18 ? "Menor de edad" : "Mayor de edad" }}<br/>
+<br/>{{getRegistroUsuario()}} {{textoDeRegistro}} <br/>
+Registrado: <input type="radio" value="si" name="nRegistro" [checked]="usuRegistrado" (click)="setUsuarioRegistrado($event)"><br/>
+No registrado: <input type="radio" value="no" name="nRegistro" [checked]="usuRegistrado" (click)="setUsuarioRegistrado($event)">
+<br/>
+<br/>
+<p>Nombre del empleado: {{nombre.value}}</p>
+<p>Introduce el nombre: <input type="text" #nombre (keyup)="0"></p>
+</div>
+
+
