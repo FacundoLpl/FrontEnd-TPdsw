@@ -3,13 +3,14 @@ import { RouterModule, RouterOutlet } from '@angular/router';
 import { HomeComponent } from './home/home.component.js';
 import { CartaComponent } from './carta/carta.component.js';
 import {FormsModule} from '@angular/forms';
+import { LoginComponent } from './login/login.component.js';
 
 
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HomeComponent, CartaComponent, RouterModule, FormsModule],
+  imports: [RouterOutlet, HomeComponent, CartaComponent, RouterModule, FormsModule, LoginComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -17,4 +18,8 @@ export class AppComponent implements OnInit {
   title = 'FrontAngular';
   username ='Facundo';
   ngOnInit(): void{}
+
+  signUp(){
+    alert('Sign Up');
+  }
   }

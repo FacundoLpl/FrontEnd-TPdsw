@@ -4,7 +4,7 @@ h1 {
     font-size: 250%;
 }
 .barra-navegacion {
-    background-color: rgb(69, 41, 102);
+    background-color: rgb(70, 129, 137);
 }
 .nav-link {
     color: white;
@@ -19,3 +19,4 @@ h1 {
     padding: 0; /* Remove default padding if necessary */
     list-style: none; /* Remove default list style if necessary */
 }
+
