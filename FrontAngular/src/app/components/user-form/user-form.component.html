@@ -1,0 +1,25 @@
+<form (ngSubmit)="postUser()">
+    <br>
+    <div class="container">
+        <h1 class="text-center">Ingresar Usuario</h1>
+        <form class="reserva-form">
+            <div class="form-group">
+                <label for="nombre">Nombre</label>
+                <input type="text" id="nombre" [(ngModel)]="user.firstName" name="nombre" placeholder="Ingrese su nombre " required>
+            </div>
+            <div class="form-group">
+                <label for="apellido">Apellido</label>
+                <input type="text" id="apellido" [(ngModel)]="user.lastName" name="apellido" placeholder="Ingrese su Apellido" required>
+            </div>
+            <div class="form-group">
+                <label for="dni">DNI</label>
+                <input type="text" id="dni" [(ngModel)]="user.dni" name="dni" placeholder="Ingrese su DNI" required>
+            </div>
+            <div class="form-group">
+                <label for="tipousuario">Tipo de Usuario</label>
+                <input type="text" id="tipousuario" [(ngModel)]="user.userType" name="tipousuario" placeholder="Ingrese tipo de usuario" required>
+            </div>
+            <button (click)=postUser()>Crear Usuario</button>
+        </form>
+    </div>
+</form>

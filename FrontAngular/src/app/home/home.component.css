@@ -1,39 +1,68 @@
 /* Estilos para el contenedor azul */
-.carousel-conteiner{
-  width: auto; /* Ancho del contenedor, 100% del ancho de la ventana */
-  height: 90vh; /* Altura fija del contenedor */
+.carousel-conteiner {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
 }
 
-.carousel-item{
-  width: 100%; /* Ancho de la imagen, 100% del ancho del contenedor */
-  height: 100%; /* Altura fija de la imagen */
-  /*background-color: rgb(119, 59, 116);*/
-}
-.carousel-inner{
-  width: 100%; /* Ancho del carrusel, 100% del ancho del contenedor */
-  height: 100%; /* Altura fija del carrusel */
-}
-.carousel-slide{
-  width: 100%; /* Ancho del carrusel, 100% del ancho del contenedor */
-  height: 90vh; /* Altura fija del carrusel */
+.barra-navegacion {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 2;
 }
 
+.carousel-item {
+  width: 100%;
+  height: 100%;
+}
 
-.imagen{
-  width: 100%; /* Ancho de la imagen, 100% del ancho del contenedor */
-  height: 100%; /* Altura fija de la imagen */
+.carousel-inner {
+  width: 100%;
+  height: 100%;
 }
-h3{
-  color: white; /* Color del texto */
-  font-size: 3em; /* Tamaño de la fuente */
-  font-family: 'Nunito'; /* Tipo de fuente */
-  text-align: center; /* Alineación del texto */
-  margin-top: 20px; /* Margen superior */
+
+.carousel-slide {
+  width: 100%;
+  height: 90vh;
 }
-p{
-  color: white; /* Color del texto */
-  font-size: 1.5em; /* Tamaño de la fuente */
-  font-family: 'Nunito'; /* Tipo de fuente */
-  text-align: center; /* Alineación del texto */
-  margin-top: 20px; /* Margen superior */
+
+.imagen {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Estilos para los textos del carrusel */
+.carousel-caption {
+  position: absolute;
+  top: 60%; /* Ajusta para estar más abajo en la página */
+  left: 50%;
+  transform: translate(-50%, -50%); /* Centra el texto horizontal y verticalmente desde el punto top/left */
+  text-align: center;
+  width: 80%; /* Ajusta el ancho del contenedor de texto si es necesario */
+}
+
+.carousel-caption h3 {
+  color: white;
+  font-size: 4em; /* Tamaño de la fuente aumentado */
+  font-family: 'Nunito', sans-serif;
+  margin: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Fondo negro semi-transparente */
+  padding: 15px 25px; /* Ajusta el relleno para mayor visibilidad */
+  border-radius: 8px;
+}
+
+.carousel-caption p {
+  color: white;
+  font-size: 1.5em; /* Tamaño de la fuente ajustado */
+  font-family: 'Nunito', sans-serif;
+  margin-top: 10px;
+  background-color: rgba(0, 0, 0, 0.5); /* Fondo negro semi-transparente */
+  padding: 10px 20px; /* Ajusta el relleno para mayor visibilidad */
+  border-radius: 8px;
 }

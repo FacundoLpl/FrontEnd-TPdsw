@@ -3,12 +3,13 @@ import { MiServPruebaService } from '../mi-serv-prueba.service.js';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HijoPruebaComponent } from './hijo-prueba/hijo-prueba.component.js';
+import { NavbarComponent } from '../components/navbar/navbar.component.js';
 
 
 @Component({
   selector: 'app-faq',
   standalone: true,
-  imports: [CommonModule, FormsModule, HijoPruebaComponent],
+  imports: [CommonModule, FormsModule, HijoPruebaComponent,NavbarComponent],
   templateUrl: './faq.component.html',
   styleUrl: './faq.component.css'
 })

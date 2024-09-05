@@ -5,6 +5,7 @@ import { ReservaComponent } from './reserva/reserva.component';
 import { FaqComponent } from './faq/faq.component';
 import { NosotrosComponent } from './nosotros/nosotros.component';
 
+
 export const routes: Routes = [
 
     {path: '', component: HomeComponent},
@@ -12,6 +13,7 @@ export const routes: Routes = [
     {path: 'reserva', component: ReservaComponent},
     {path: 'faq', component: FaqComponent},
     {path: 'nosotros', component: NosotrosComponent},
+
 
 
 ];

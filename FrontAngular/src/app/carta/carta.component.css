@@ -1,5 +1,73 @@
+/* Estilos para la carta de restaurante */
+
+/* Fondo general de la carta */
+.restaurant-menu {
+  padding: 40px 0;
+  background-color: #333; /* Cambia el color de fondo a #333 */
+  color: #fff; /* Asegura que el texto sea legible sobre el fondo oscuro */
+}
+/* Estilos para el título principal en la carta */
+.restaurant-menu h1 {
+  font-size: 2.5rem; /* Tamaño del texto igual al de "Nuestra Carta" */
+    text-align: center; /* Centra el texto */
+    color: #f9f9f9; /* Color blanco suave */
+    margin-bottom: 40px; /* Espacio debajo del título */
+    font-family: 'Nunito', sans-serif; /* Fuente consistente */
+    font-weight: 700; /* Peso de la fuente para destacar el título */
+    background-color: #444; /* Fondo negro para el título */
+    padding: 20px; /* Espaciado interno */
+    border-radius: 8px; /* Bordes redondeados */
+}
+.restaurant-menu .container {
+  max-width: 1200px;
+  background-color: #333; /* Fondo ligeramente diferente para el contenedor */
+  margin: 0 auto;
+  padding: 20px; /* Agrega un padding para separar el contenido de los bordes */
+  border-radius: 8px; /* Bordes redondeados para el contenedor */
+}
+
+/* Estilo para categorías del menú */
+.menu-category {
+  margin-bottom: 40px;
+}
+
+.menu-category h2 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #fff; /* Cambia el color del texto a blanco para contraste */
+}
+
+/* Estilo para los items del menú */
+.menu-item {
+  text-align: center;
+  background-color: #fff; /* Fondo blanco para los items de menú para contrastar */
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.menu-item:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilo para las imágenes de menú para que tengan el mismo tamaño */
 .custom-img-size {
-    width: 500px;
-    height: 300px;
-  }
-  
+  width: 100%;
+  height: 200px; /* Altura fija para todas las imágenes */
+  object-fit: cover; /* Ajusta la imagen para cubrir el área asignada sin distorsión */
+  border-radius: 8px; /* Bordes redondeados */
+}
+
+.menu-item h3 {
+  font-size: 20px;
+  margin-top: 15px;
+  color: #333; /* Color del texto del título de los items de menú */
+}
+
+.menu-item p {
+  font-size: 14px;
+  color: #666; /* Color del texto de descripción para mejor contraste */
+  margin-top: 10px;
+}

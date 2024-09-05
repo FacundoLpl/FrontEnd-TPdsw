@@ -1,58 +1,64 @@
 <!-- Carousel -->
-<div class="carousel-conteiner">
-  <div id="carousel" class="carousel-slide carousel" data-bs-ride="carousel">
+<div class="carousel-container">
+  <app-navbar class="barra-navegacion"></app-navbar>
 
-      <div class="carousel-indicators">
-        <button type="button" data-bs-target="#carousel" data-bs-slide-to="0" class="active"></button>
-        <button type="button" data-bs-target="#carousel" data-bs-slide-to="1"></button>
-        <button type="button" data-bs-target="#carousel" data-bs-slide-to="2"></button>
-        <button type="button" data-bs-target="#carousel" data-bs-slide-to="3"></button>
-      </div>
+  <div id="carousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#carousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#carousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+      <button type="button" data-bs-target="#carousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+      <button type="button" data-bs-target="#carousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
+    </div>
 
-      <div class="carousel-inner">
-        <div class="carousel-item active">
-          <a href="/carta">
-          <img src="https://aprende.com/wp-content/uploads/2023/11/como-crear-el-menu-de-tu-restaurante.webp" alt="Menu" class="imagen">
-          <div class="carousel-caption">
-            <h3>Menu</h3>
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <a href="/carta">
+          <img src="https://rockandfellers.com.ar/front/images/bg/ryf1.jpg" alt="Menu" class="d-block w-100">
+          <div class="carousel-caption d-none d-md-block">
+            <h3>Menú</h3>
             <p>Mira nuestra variedad de productos!</p>
           </div>
         </a>
-        </div>
-        <div class="carousel-item">
-          <a href="/reserva">
-          <img src="https://s1.elespanol.com/2024/05/16/elandroidelibre/aplicaciones/855674608_242326428_1024x576.jpg" alt="Reserva" class="imagen">
-          <div class="carousel-caption">
+      </div>
+      <div class="carousel-item">
+        <a href="/reserva">
+          <img src="https://rockandfellers.com.ar/front/images/bg/ryf2.jpg" alt="Reserva" class="d-block w-100">
+          <div class="carousel-caption d-none d-md-block">
             <h3>Reserva</h3>
             <p>No te quedes sin venir a visitarnos!</p>
           </div>
         </a>
-        </div>
-        <div class="carousel-item">
-          <a href="/faq">
-          <img src="https://img.freepik.com/vector-premium/concepto-preguntas-respuestas-o-preguntas-frecuentes-busqueda-soluciones-informacion-util_194360-309.jpg" alt="FaQ" class="imagen">
-          <div class="carousel-caption">
+      </div>
+      <div class="carousel-item">
+        <a href="/faq">
+          <img src="https://rockandfellers.com.ar/front/images/bg/ryf3.jpg" alt="FaQ" class="d-block w-100">
+          <div class="carousel-caption d-none d-md-block">
             <h3>FaQ</h3>
             <p>Preguntas frecuentes de nuestros clientes!</p>
           </div>
         </a>
-        </div>
-        <div class="carousel-item">
-          <a href="/nosotros">
-          <img src="https://takami.co/static/img/work_with_us/hero_desktop.593e1247dd1b.jpg" alt="Nosotros" class="imagen">
-          <div class="carousel-caption">
+      </div>
+      <div class="carousel-item">
+        <a href="/nosotros">
+          <img src="https://rockandfellers.com.ar/front/images/bg/ryf4.png" alt="Nosotros" class="d-block w-100">
+          <div class="carousel-caption d-none d-md-block">
             <h3>Nosotros</h3>
             <p>Conoce nuestra familia!</p>
           </div>
         </a>
-        </div>
       </div>
-
-      <button class="carousel-control-prev" type="button" data-bs-target="#carousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon"></span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#carousel" data-bs-slide="next">
-        <span class="carousel-control-next-icon"></span>
-      </button>
     </div>
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#carousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+
+  <app-footer></app-footer>
 </div>
+<!-- Fin Carousel -->

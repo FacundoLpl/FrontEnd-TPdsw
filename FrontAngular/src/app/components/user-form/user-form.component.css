@@ -1,0 +1,54 @@
+/* Estilos para la sección de reservas */
+.reservas {
+    background-color: #333; /* Fondo oscuro para la sección */
+    color: #fff; /* Texto blanco */
+    padding: 60px 0; /* Espaciado superior e inferior */
+  }
+  
+  .reservas h1 {
+    font-size: 2.5rem; /* Tamaño del texto igual al de "Nuestra Carta" */
+    text-align: center; /* Centra el texto */
+    color: #f9f9f9; /* Color blanco suave */
+    margin-bottom: 40px; /* Espacio debajo del título */
+    font-family: 'Nunito', sans-serif; /* Fuente consistente */
+    font-weight: 700; /* Peso de la fuente para destacar el título */
+    background-color: #444; /* Fondo negro para el título */
+    padding: 20px; /* Espaciado interno */
+    border-radius: 8px; /* Bordes redondeados */
+  }
+  
+  /* Estilo para el formulario */
+  .reserva-form {
+    background-color: #444; /* Fondo más claro para el formulario */
+    padding: 30px; /* Espaciado interno */
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para un efecto flotante */
+    max-width: 600px; /* Ancho máximo del formulario */
+    margin: 0 auto; /* Centra el formulario horizontalmente */
+  }
+  
+  .form-group {
+    margin-bottom: 20px; /* Espacio entre los campos del formulario */
+  }
+  
+  .form-group label {
+    display: block; /* Hace que la etiqueta ocupe toda la línea */
+    margin-bottom: 5px; /* Espacio debajo de la etiqueta */
+    font-size: 1rem; /* Tamaño del texto de la etiqueta */
+  }
+  
+  .form-group input,
+  .form-group textarea {
+    width: 100%; /* Hace que el campo ocupe todo el ancho disponible */
+    padding: 10px; /* Espaciado interno */
+    border: 1px solid #ccc; /* Borde gris claro */
+    border-radius: 4px; /* Bordes redondeados */
+    background-color: #fff; /* Fondo blanco */
+    color: #333; /* Texto oscuro para mejor legibilidad */
+    font-size: 1rem; /* Tamaño del texto */
+  }
+  
+  .form-group textarea {
+    resize: vertical; /* Permite redimensionar verticalmente */
+    min-height: 100px; /* Altura mínima */
+  }
