@@ -10,7 +10,21 @@
         <button (click)=loadOneUser(idInput.value)>Obtener Usuario Especifico</button>
     </div>
     <div class="flex-item">Columna 3
-        <button (click)=postUser()>Crear Usuario</button>
+        <form (ngSubmit)="postUser()">
+            <label for="dni">DNI:</label>
+            <input id="dni" type="text" [(ngModel)]="user.dni" name="dni" required><br/>
+
+            <label for="firstName">Nombre:</label>
+            <input id="firstName" type="text" [(ngModel)]="user.firstName" name="firstName" required><br/>
+    
+            <label for="lastName">Apelldo:</label>
+            <input id="lastName" type="lastName" [(ngModel)]="user.lastName" name="lastName" required><br/>
+    
+            <label for="userType">Tipo de Usuario:</label>
+            <input id="userType" type="userType" [(ngModel)]="user.userType" name="userType" required><br/>
+    
+            <button type="submit">Crear Usuario</button>
+        </form>
     </div>
     <div class="flex-item">Columna 4
         <input type="text" #idDInput>

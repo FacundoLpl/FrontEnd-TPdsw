@@ -19,14 +19,24 @@ export class FaqComponent implements OnInit {
   
   users = []
   userBuscado = []
-  userPostReq = {"dni": "12345678A", "firstName": "Pepe", "lastName": "García", "userType": "admin"}
   userPostRes = {}
-  userDeleted = {}
+  userDeleted = {
+    dni: '',
+    firstName: '',
+    lastName: '',
+    userType: ''
+  }
   edad = 23
   empresa = "Google"
   usuRegistrado=true
   textoDeRegistro= "No hay nadie registrado"
   empresaRecibidaCP:string= "no recibi nda"
+  user = {
+    dni: '',
+    firstName: '',
+    lastName: '',
+    userType: ''
+  }
   
   constructor(private service: MiServPruebaService) { }
 
@@ -48,9 +58,20 @@ export class FaqComponent implements OnInit {
 
   loadOneUser(id: string) {this.service.getOneUser(id).subscribe((response:any) => this.userBuscado = response)}
 
-  postUser() {this.service.postUser(this.userPostReq).subscribe((response:any) => this.userPostRes=response)
-    alert("Usuario registrado" + " " + this.userPostReq.firstName + " " + this.userPostReq.lastName)
+  postUser() {this.service.postUser(this.user).subscribe((response:any) => this.userPostRes=response)
+    alert("Usuario registrado" + " " + this.user.firstName + " " + this.user.lastName)
   }
 
-  deleteUser(id: string) {this.service.deleteUser(id).subscribe((response:any) => this.userDeleted = response)}
+  deleteUser(id: string) {
+    this.service.deleteUser(id).subscribe(
+        (response: any) => {
+            this.userDeleted = response;
+            if (response) {
+                alert(`Usuario eliminado`);
+            } else {
+              alert(`Usuario no encontrado`);
+            }
+        },
+    );
+}
 }

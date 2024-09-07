@@ -20,4 +20,8 @@ export class AppComponent implements OnInit {
   title = 'FrontAngular';
   username ='Facundo';
   ngOnInit(): void{}
+
+  signUp(){
+    alert('Sign Up');
+  }
   }
