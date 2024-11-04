@@ -2,40 +2,34 @@
     <app-navbar class="barra-navegacion"> </app-navbar>
     <div class="container">
         <h1 class="text-center" >Nuestra Carta</h1>
-
-        <!-- Sección de Bebidas -->
-        <div class="menu-category">
-            <h2 class="text-center">Bebidas</h2>
-            <div class="row">
-                <article class="col-md-4">
-                    <figure class="menu-item">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTp0IgycSIQp2igj1ZTkHkbdAoHbz-vf--fMQ&s" class="custom-img-size mx-auto d-block" alt="Bebida 1">
-                        <figcaption>
-                            <h3>Gaseosas</h3>
-                           
-                        </figcaption>
-                    </figure>
-                </article>
-                <article class="col-md-4">
-                    <figure class="menu-item">
-                        <img src="https://i.blogs.es/139e0f/cafe-americano2/450_1000.jpeg" class="custom-img-size mx-auto d-block" alt="Bebida 2">
-                        <figcaption>
-                            <h3>Cafeteria</h3>
-                            
-                        </figcaption>
-                    </figure>
-                </article>
-                <article class="col-md-4">
-                    <figure class="menu-item">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQ3sDedQeumb59knQikImxjy-bo7lOs9XpMg&s" class="custom-img-size mx-auto d-block" alt="Bebida 3">
-                        <figcaption>
-                            <h3>Cocktails</h3>
-                            
-                        </figcaption>
-                    </figure>
-                </article>
-            </div>
+        
+    <!-- Sección de Bebidas -->
+    <div class="menu-category">
+        <h2 class="text-center">Bebidas</h2>
+        <div class="row">
+            <article class="col-md-4" (click)="openModal('Gaseosas','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTp0IgycSIQp2igj1ZTkHkbdAoHbz-vf--fMQ&s')">
+            <app-menu-item 
+            title="Gaseosas"
+            imageUrl="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTp0IgycSIQp2igj1ZTkHkbdAoHbz-vf--fMQ&s"
+            altText="Bebida 1">
+            </app-menu-item>
+        </article>
+        <article class="col-md-4" (click)="openModal('Cafeteria','https://i.blogs.es/139e0f/cafe-americano2/450_1000.jpeg')">
+            <app-menu-item
+            title="Cafetería"
+            imageUrl="https://i.blogs.es/139e0f/cafe-americano2/450_1000.jpeg"
+            altText="Bebida 2">
+            </app-menu-item>
+        </article>
+        <article class="col-md-4" (click)="openModal('Cocktails','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQ3sDedQeumb59knQikImxjy-bo7lOs9XpMg&s')">
+            <app-menu-item
+            title="Cocktails"
+            imageUrl="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQ3sDedQeumb59knQikImxjy-bo7lOs9XpMg&s"
+            altText="Bebida 3">
+            </app-menu-item>
+        </article>
         </div>
+    </div>
 
         <!-- Sección de Comidas -->
         <div class="menu-category">
@@ -53,7 +47,7 @@
                 <article class="col-md-4">
                     <figure class="menu-item">
                         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUsNR0xd194zoUvtHBC-SxYFUiobqrmRaX-Q&s" class="custom-img-size mx-auto d-block" alt="Comida 2">
-                       <figcaption>
+                    <figcaption>
                             <h3>Comida Vegetariana</h3>
                             
                         </figcaption>
@@ -86,7 +80,7 @@
                         <article class="col-md-4">
                             <figure class="menu-item">
                                 <img src="https://www.clarin.com/img/2021/08/30/hpCwRCJQX_1200x0__1.jpg" class="custom-img-size mx-auto d-block" alt="Comida 2">
-                               <figcaption>
+                            <figcaption>
                                     <h3>Chocolate</h3>
                                     
                                 </figcaption>
@@ -103,8 +97,15 @@
                         </article>
                     </div>
                 </div>
+                {{isModalOpen}}
         
-    
+                <app-menu-item-modal
+                *ngIf="isModalOpen"
+                [itemTitle]="selectedItemTitle"
+                [imageUrl]="selectedImageUrl"
+                (close)="closeModal()"
+                (orderAdded)="handleOrderAdded($event)">
+            </app-menu-item-modal>
     </div>
     <app-user-form></app-user-form>
     <app-footer></app-footer>
