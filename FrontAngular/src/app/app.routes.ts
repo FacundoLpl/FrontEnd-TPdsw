@@ -5,7 +5,7 @@ import { ReservaComponent } from './reserva/reserva.component';
 import { FaqComponent } from './faq/faq.component';
 import { NosotrosComponent } from './nosotros/nosotros.component';
 import { LoginComponent } from './login/login.component.js';
-
+import { CarritoComponent } from './carrito/carrito.component';
 
 export const routes: Routes = [
 
@@ -14,7 +14,8 @@ export const routes: Routes = [
     {path: 'reserva', component: ReservaComponent},
     {path: 'faq', component: FaqComponent},
     {path: 'nosotros', component: NosotrosComponent},
-    {path: 'login', component: LoginComponent}
+    {path: 'login', component: LoginComponent},
+    {path: 'carrito', component: CarritoComponent},
 
 
 
