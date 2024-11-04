@@ -1,12 +1,46 @@
 <app-navbar class="barra-navegacion"> </app-navbar>
 <div class="flex-container">
     <div class="flex-item">Columna 1
-        <pre>{{ users | json }}</pre>
-        <button (click)=loadUsers()>Obtener Usuarios</button> 
+        <!--<pre>{{ users | json }}</pre>
+        <button (click)=loadUsers()>Obtener Usuarios</button> -->
+        <div class="container">
+            <table class="table table-striped" *ngIf="users && users.length > 0">
+            <thead>
+                <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>DNI</th>
+                <th>User Type</th>
+                <th *ngIf="showId">ID</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let user of users">
+                <td>{{ user.firstName }}</td>
+                <td>{{ user.lastName }}</td>
+                <td>{{ user.dni }}</td>
+                <td>{{ user.userType }}</td>
+                <td *ngIf="showId">{{ user.id }}</td>
+                </tr>
+            </tbody>
+            </table>
+            <p *ngIf="users && users.length === 0">No hay usuarios para mostrar.</p>
+            <button (click)="loadUsers()" class="btn btn-primary">Listar Usuarios</button>
+            <div class="button-group">
+                <button (click)="showId = true" [class.active]="showId" class="btn btn-circle">Mostrar ID</button>
+                <button (click)="showId = false" [class.active]="!showId" class="btn btn-circle">No Mostrar ID</button>
+            </div>
+        </div>
     </div>
     <div class="flex-item">Columna 2
         <input type="text" #idInput>
-        <pre>{{ userBuscado | json }}</pre>
+        <div *ngIf="userBuscado && userBuscado.id">
+            <div><strong>ID:</strong> {{ userBuscado.id }}</div>
+            <div><strong>First Name:</strong> {{ userBuscado.firstName }}</div>
+            <div><strong>Last Name:</strong> {{ userBuscado.lastName }}</div>
+            <div><strong>DNI:</strong> {{ userBuscado.dni }}</div>
+            <div><strong>User Type:</strong> {{ userBuscado.userType }}</div>
+        </div>
         <button (click)=loadOneUser(idInput.value)>Obtener Usuario Especifico</button>
     </div>
     <div class="flex-item">Columna 3
@@ -37,14 +71,9 @@
 
 
 <div class="comunicacionComponentes">
-    Comunicacion entre componente padre y componente hijo: <br/>
-    <app-hijo-prueba [empresaPasajeICH]="empresa" (empresaDevueltaOCH)="agregarEmpresaN($event)"></app-hijo-prueba>
-    <br/>
-    Empresa Recibida: {{empresaRecibidaCP}}
-    <br/><br/><br/>
-</div>
+    <app-user-form></app-user-form>
+    
 <br/><br/><br/>
-
 
 <div class="textoDinamico">
 Edad del empleado: {{edad<18 ? "Menor de edad" : "Mayor de edad" }}<br/>
