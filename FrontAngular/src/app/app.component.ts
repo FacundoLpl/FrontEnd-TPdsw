@@ -6,7 +6,7 @@ import {FormsModule} from '@angular/forms';
 import { FooterComponent } from './components/footer/footer/footer.component.js';
 import { NavbarComponent } from './components/navbar/navbar.component.js';
 import { UserFormComponent } from './components/user-form/user-form.component.js';
-import { CarritoComponent } from './carrito/carrito.component.js';
+import { CarritoComponent } from './components/carrito/carrito.component.js';
 
 
 
