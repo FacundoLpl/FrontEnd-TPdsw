@@ -16,13 +16,6 @@
     <textarea id="comment" [(ngModel)]="comment"></textarea>
 </div>
 
-<!-- Botón para agregar al pedido --><button (click)="addToOrder()">Agregar al pedido</button>
+<!-- Botón para agregar al pedido -->
+<button (click)="addToCart()">Agregar al carrito</button>
 </div>
-<!--mismo que en carritoService, modificar el addToCart en caso que sea mejor este, o editarlo para que lleve el produc al carrito 
-o sea hace lo mismo pero no lo cambie para poder evaluar juntos como queda mejor--> 
-<div>
-  <h3>{{ title }}</h3>
-  <p>Precio: {{ price | currency }}</p>
-  <button (click)="addToCart()">Agregar al carrito</button>
-</div>
-
