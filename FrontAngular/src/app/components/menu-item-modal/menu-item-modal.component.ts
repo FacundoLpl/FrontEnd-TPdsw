@@ -11,11 +11,12 @@ import { FormsModule } from '@angular/forms';
 export class MenuItemModalComponent {
   @Input() itemTitle: string = '';
   @Input() imageUrl: string = '';
+  @Input() price: number = 0;
   quantity: number = 1;
   comment: string = '';
 
   @Output() close = new EventEmitter<void>();
-  @Output() orderAdded = new EventEmitter<{ quantity: number, comment: string }>();
+  @Output() orderAdded = new EventEmitter<{ title: string; price: number; quantity: number; comment: string }>();
 
   increaseQuantity() {
     this.quantity++;
@@ -26,13 +27,9 @@ export class MenuItemModalComponent {
   }
 
   addToOrder() {
-    this.orderAdded.emit({ quantity: this.quantity, comment: this.comment });
+    this.orderAdded.emit({ title: this.itemTitle, price: this.price, quantity: this.quantity, comment: this.comment });
     this.closeModal();
-  }
- addToCart() {
-    this.carritoService.addItem({ code: this.code, name: this.title, price: this.price, quantity: 1 });
-  }
-  //no se si el addtoorder seria el qe lo hacia y ahy que modificarlo o si lo habian pensado distinto
+
   closeModal() {
     this.close.emit();
   }
