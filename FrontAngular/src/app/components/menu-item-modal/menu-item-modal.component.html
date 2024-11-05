@@ -18,6 +18,26 @@
     <textarea id="comment" [(ngModel)]="comment"></textarea>
   </div>
 
-  <!-- Botón para agregar al pedido -->
-  <button class="add-button" (click)="addToOrder()">Agregar al pedido</button>
+<!-- Botón para agregar al pedido -->
+<button (click)="addToCart()">Agregar al carrito</button>
+</div><div class="modal-overlay" (click)="closeModal()"></div>
+<div class="modal-content">
+    <h2>{{ itemTitle }}</h2>
+    <figure><img [src]="imageUrl" class="custom-img-size mx-auto d-block"></figure>
+
+    <!-- Control de cantidad -->
+    <div class="quantity-control">
+        <button (click)="decreaseQuantity()">-</button>
+        <span>{{ quantity }}</span>
+        <button (click)="increaseQuantity()">+</button>
+    </div>
+
+    <!-- Campo para agregar comentarios -->
+    <div class="comment-section">
+        <label for="comment">Comentario:</label>
+        <textarea id="comment" [(ngModel)]="comment"></textarea>
+    </div>
+
+    <!-- Botón para agregar al pedido -->
+    <button (click)="addToCart()">Agregar al carrito</button>
 </div>

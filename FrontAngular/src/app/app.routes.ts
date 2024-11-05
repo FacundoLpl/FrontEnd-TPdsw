@@ -4,7 +4,7 @@ import { CartaComponent } from './carta/carta.component';
 import { ReservaComponent } from './reserva/reserva.component';
 import { FaqComponent } from './faq/faq.component';
 import { NosotrosComponent } from './nosotros/nosotros.component';
-import { LoginComponent } from './components/login/login.component.js';
+import { LoginComponent } from './login/login.component.js';
 import { CarritoComponent } from './components/carrito/carrito.component';
 
 export const routes: Routes = [
