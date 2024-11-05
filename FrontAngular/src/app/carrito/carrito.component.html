@@ -1,46 +1,21 @@
 <section class="restaurant-menu">
-  <app-navbar class="barra-navegacion"> </app-navbar>
-  <div class="container">
-    <h1 class="text-center">Carrito</h1>
+    <app-navbar class="barra-navegacion"> </app-navbar>
+    <div class="container">
+        <h1 class="text-center" >Carrito</h1>
 
-<div class="carrito">
-  <h2>Carrito de Compras</h2>
-<h2>Carrito de Compras</h2>
-
-  <!-- Verifica si hay productos en el carrito -->
-  <div *ngIf="items.length > 0; else emptyCart">
-    <div class="carrito-items">
-      <div *ngFor="let item of items" class="carrito-item">
-        <!-- Imagen del producto -->
-        <img [src]="item.image" alt="{{ item.name }}" class="item-image">
-
-        <!-- Información del producto -->
-        <div class="item-details">
-          <h3>{{ item.name }}</h3>
-          <p>{{ item.description }}</p>
-          <p>Precio: ${{ item.price }}</p>
-          <div class="item-controls">
-            <button (click)="removeItem(item)">Eliminar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Total del carrito 
-    <div class="carrito-total">
-      <p><strong>Total:</strong> ${{ getTotal() }}</p>
-      <button class="checkout-button" (click)="checkout()">Proceder al Pago</button>
-    </div>
-  </div>
--->
-  <!-- Mensaje si el carrito está vacío -->
-  <ng-template #emptyCart>
-    <p>El carrito está vacío.</p>
-  </ng-template>
-</div>
-
-    </div>
+      <section class="padded">
+          <div class="container">
+              <table class="table table-bordered table-hover">
+                <thead>
+                  <tr>
+                    <th>Codigo</th>
+                    <th>Nombre</th>
+                    <th>Precio</th>
+                    <th>Subtotal</th>
+                  </tr>
+                </thead>
+      
+   </div>
     <app-user-form></app-user-form>
     <app-footer></app-footer>
-    
-    </section>
+</section>
