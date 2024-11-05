@@ -1,10 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-<<<<<<< HEAD
-import { CarritoService } from '../../services/carrito.service'; // checkear q importe servicio de carrito
-=======
-import { CarritoService } from '../services/carrito.service'; // checkear q importe servicio de carrito
->>>>>>> 436434df5d206df9ffe4b72d775a66aef84b84e8
 
 @Component({
   selector: 'app-menu-item-modal',
@@ -23,7 +18,7 @@ export class MenuItemModalComponent {
   @Output() close = new EventEmitter<void>();
   @Output() orderAdded = new EventEmitter<{ quantity: number, comment: string }>();
 
-  constructor(private carritoService: CarritoService) {} 
+  addToCart(){}
 
   increaseQuantity() {
     this.quantity++;
@@ -31,16 +26,6 @@ export class MenuItemModalComponent {
 
   decreaseQuantity() {
     if (this.quantity > 1) this.quantity--;
-  }
-
-  addToCart() {
-    this.carritoService.addItem({
-      name: this.itemTitle,
-      price: this.price,
-      quantity: this.quantity,
-      comment: this.comment
-    });
-    this.closeModal();
   }
 
   closeModal() {
