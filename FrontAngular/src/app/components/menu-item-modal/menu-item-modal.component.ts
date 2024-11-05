@@ -29,7 +29,10 @@ export class MenuItemModalComponent {
     this.orderAdded.emit({ quantity: this.quantity, comment: this.comment });
     this.closeModal();
   }
-
+ addToCart() {
+    this.carritoService.addItem({ code: this.code, name: this.title, price: this.price, quantity: 1 });
+  }
+  //no se si el addtoorder seria el qe lo hacia y ahy que modificarlo o si lo habian pensado distinto
   closeModal() {
     this.close.emit();
   }
