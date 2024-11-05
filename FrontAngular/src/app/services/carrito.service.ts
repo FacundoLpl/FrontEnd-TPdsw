@@ -1,12 +1,5 @@
 import { Injectable } from '@angular/core';
 
-interface Item {
-  code: string;
-  name: string;
-  price: number;
-  quantity: number;
-}
-
 @Injectable({
   providedIn: 'root'
 })
@@ -23,6 +16,7 @@ export class CarritoService {
       existingItem.quantity += item.quantity;
     } else {
       this.items.push(item);
+      console.log('Item añadido al carrito:', item);
     }
   }
 
