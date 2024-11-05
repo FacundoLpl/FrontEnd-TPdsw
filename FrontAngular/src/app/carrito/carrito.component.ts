@@ -6,10 +6,23 @@ import { UserFormComponent } from '../components/user-form/user-form.component.j
 @Component({
   selector: 'app-carrito',
   standalone: true,
-  imports: [NavbarComponent, FooterComponent,UserFormComponent],
-  templateUrl: 'src/app/carrito/carrito.component.html',
-  styleUrl: './carrito.component.css'
+  imports: [NavbarComponent, FooterComponent, UserFormComponent],
+  templateUrl: './carrito.component.html',
+  styleUrls: ['./carrito.component.css']
 })
+  
 export class CarritoComponent {
+  constructor(private carritoService: CarritoService) {}
 
+  get items() {
+    return this.carritoService.getItems();
+  }
+
+  get total() {
+    return this.carritoService.total;
+  }
+
+  removeItem(code: string) {
+    this.carritoService.removeItem(code);
+  }
 }
