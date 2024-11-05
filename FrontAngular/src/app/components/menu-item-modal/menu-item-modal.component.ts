@@ -1,6 +1,10 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+<<<<<<< HEAD
 import { CarritoService } from '../../services/carrito.service'; // checkear q importe servicio de carrito
+=======
+import { CarritoService } from '../services/carrito.service'; // checkear q importe servicio de carrito
+>>>>>>> 436434df5d206df9ffe4b72d775a66aef84b84e8
 
 @Component({
   selector: 'app-menu-item-modal',
@@ -43,3 +47,4 @@ export class MenuItemModalComponent {
     this.close.emit();
   }
 }
+
