@@ -63,4 +63,3 @@ getProductsByCategory(categoryName: string) {
 }
 
   }
-

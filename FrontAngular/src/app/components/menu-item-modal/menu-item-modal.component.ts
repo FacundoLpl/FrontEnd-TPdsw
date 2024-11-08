@@ -53,5 +53,9 @@ export class MenuItemModalComponent {
   closeModal() {
     this.close.emit();
   }
-}
 
+  addOrder() {
+    this.orderAdded.emit({ itemTitle: this.itemTitle, price: this.price, quantity: this.quantity, comment: this.comment });
+    this.closeModal();
+  }
+}
