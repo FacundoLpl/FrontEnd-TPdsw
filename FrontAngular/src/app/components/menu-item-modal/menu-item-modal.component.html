@@ -5,27 +5,6 @@
     <img [src]="imageUrl" class="custom-img-size mx-auto d-block">
   </figure>
 
-
-<!-- commit problem (facu))-->
-  <!--Control de cantidad -->
-    <div class="quantity-control">
-        <button class="round-button" (click)="decreaseQuantity()">-</button>
-        <span>{{ quantity }}</span>
-        <button class="round-button" (click)="increaseQuantity()">+</button>
-    </div>
-
-    <!-- Campo para agregar comentarios -->
-    <div class="comment-section">
-        <label for="comment">Comentario:</label>
-        <textarea id="comment" [(ngModel)]="comment"></textarea>
-    </div>
-
-    <!-- Botón para agregar al pedido 
-    <button type="button" (click)="addOrder(quantity, cartItem, newOrder)">Agregar Orden</button>
--->
-  </div>
-
-  <!-- commit problem (paz))-->
   <!-- Control de cantidad -->
   <div class="quantity-control">
     <button class="round-button" (click)="decreaseQuantity()">-</button>
@@ -40,5 +19,10 @@
   </div>
 
   <!-- Botón para agregar al pedido -->
-  <button (click)="addToCart()">Agregar al carrito</button>
+   {{ cartId}}
+  <button class="add-button"(click)="addToCart(quantity, productId)">Agregar al carrito</button>
+  <div>  
+    <h2>ProductoID: {{ productId }}</h2>
+    <h2>Item: {{ itemTitle }}</h2>
+    <h2>Precio: {{ price }}</h2></div>
 </div>

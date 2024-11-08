@@ -7,7 +7,7 @@ import { Order } from '../entities/order.entity';
 })
 export class CartServiceService {
   order: any;
-
+  finalUrl: string;
   readonly baseUrl = 'http://localhost:3000/api/carts/';
 
   constructor(private http: HttpClient) { }
@@ -28,12 +28,14 @@ export class CartServiceService {
 
 
 addOrder(quantity:number,cartId: string, productId: string) {
+
   this.order = {
     "quantity": quantity,
     "product": productId,
     "cart": cartId
   }
-  return this.http.post<Order>(`${this.baseUrl}${cartId}/orders`, this.order);
-}
-
-}
+  this.finalUrl = `${this.baseUrl}${cartId}/orders`;
+  alert(this.finalUrl);
+  this.http.post<any>(this.finalUrl, this.order).subscribe(
+  );
+}}

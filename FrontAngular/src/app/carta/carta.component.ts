@@ -24,12 +24,14 @@ export class CartaComponent {
   isModalOpen: boolean = false
   selectedItemTitle: string = '';
   selectedImageUrl: string = '';
+  selectedProductId: string = '';
   orderData: { itemTitle: string, price: number, quantity: number, comment: string };  // Aquí se almacenarán los datos del pedido
   products: any[] = [];
 
-  openModal(itemTitle: string, imageUrl: string) {
+  openModal(itemTitle: string, imageUrl: string, productId: string) {
     this.selectedItemTitle = itemTitle;
     this.selectedImageUrl = imageUrl;
+    this.selectedProductId = productId;
     this.isModalOpen = true;
   }
 
@@ -61,4 +63,3 @@ getProductsByCategory(categoryName: string) {
 }
 
   }
-
