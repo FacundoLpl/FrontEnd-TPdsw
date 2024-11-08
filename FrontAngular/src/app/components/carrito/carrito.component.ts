@@ -3,12 +3,12 @@ import { NavbarComponent } from '../navbar/navbar.component.js';
 import { FooterComponent } from '../footer/footer/footer.component.js';
 import { UserFormComponent } from '../user-form/user-form.component.js';
 
-import { NgFor, NgIf } from '@angular/common';
+import { CommonModule, NgFor, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-carrito',
   standalone: true,
-  imports: [NavbarComponent, FooterComponent, UserFormComponent, NgIf, NgFor],
+  imports: [NavbarComponent, FooterComponent, NgIf, NgFor, CommonModule,UserFormComponent],
   templateUrl: './carrito.component.html',
   styleUrls: ['./carrito.component.css']
 })

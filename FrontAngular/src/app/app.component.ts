@@ -13,7 +13,8 @@ import { CarritoComponent } from './components/carrito/carrito.component.js';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HomeComponent, CartaComponent, RouterModule, FormsModule,NavbarComponent  ,FooterComponent, UserFormComponent],
+  imports: [RouterOutlet, HomeComponent, CartaComponent, 
+  RouterModule, FormsModule,NavbarComponent  ,FooterComponent, UserFormComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

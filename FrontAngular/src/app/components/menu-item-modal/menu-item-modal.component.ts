@@ -18,7 +18,9 @@ export class MenuItemModalComponent {
   @Output() close = new EventEmitter<void>();
   @Output() orderAdded = new EventEmitter<{ quantity: number, comment: string }>();
 
-  addToCart(){}
+  addToCart(){
+    
+    };
 
   increaseQuantity() {
     this.quantity++;
