@@ -19,5 +19,10 @@
   </div>
 
   <!-- Botón para agregar al pedido -->
-  <button (click)="addToCart()">Agregar al carrito</button>
+   {{ cartId}}
+  <button class="add-button"(click)="addToCart(quantity, productId)">Agregar al carrito</button>
+  <div>  
+    <h2>ProductoID: {{ productId }}</h2>
+    <h2>Item: {{ itemTitle }}</h2>
+    <h2>Precio: {{ price }}</h2></div>
 </div>

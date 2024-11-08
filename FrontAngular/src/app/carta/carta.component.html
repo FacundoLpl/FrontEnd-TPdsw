@@ -1,113 +1,162 @@
 <section class="restaurant-menu">
+    
     <app-navbar class="barra-navegacion"> </app-navbar>
+    
+    
     <div class="container">
         <h1 class="text-center" >Nuestra Carta</h1>
-        
+
+
     <!-- Sección de Bebidas -->
     <div class="menu-category">
         <h2 class="text-center">Bebidas</h2>
-        <div class="row">
-            <article class="col-md-4" (click)="openModal('Gaseosas','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTp0IgycSIQp2igj1ZTkHkbdAoHbz-vf--fMQ&s')">
-            <app-menu-item 
-            title="Gaseosas"
-            imageUrl="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTp0IgycSIQp2igj1ZTkHkbdAoHbz-vf--fMQ&s"
-            altText="Bebida 1">
-            </app-menu-item>
-        </article>
-        <article class="col-md-4" (click)="openModal('Cafeteria','https://i.blogs.es/139e0f/cafe-americano2/450_1000.jpeg')">
-            <app-menu-item
-            title="Cafetería"
-            imageUrl="https://i.blogs.es/139e0f/cafe-americano2/450_1000.jpeg"
-            altText="Bebida 2">
-            </app-menu-item>
-        </article>
-        <article class="col-md-4" (click)="openModal('Cocktails','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQ3sDedQeumb59knQikImxjy-bo7lOs9XpMg&s')">
-            <app-menu-item
-            title="Cocktails"
-            imageUrl="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQ3sDedQeumb59knQikImxjy-bo7lOs9XpMg&s"
-            altText="Bebida 3">
-            </app-menu-item>
-        </article>
+        <div id="carouselBebidas" class="carousel slide">
+            <div class="carousel-inner">
+                <div class="carousel-item" *ngFor="let productGroup of groupProductsByThree('Bebidas'); let i = index" [class.active]="i === 0">
+                    <div class="row">
+                        <div class="col-md-4" *ngFor="let product of productGroup" (click)="openModal(product.name, product.imageUrl, product.id)">
+                            <app-menu-item 
+                                [title]="product.name"
+                                [imageUrl]="product.imageUrl"
+                                [altText]="product.name">
+                            </app-menu-item>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev custom-carousel-control" type="button" data-bs-target="#carouselBebidas" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next custom-carousel-control" type="button" data-bs-target="#carouselBebidas" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+    
+
+<!-- Sección de Entradas -->
+    <div class="menu-category">
+        <h2 class="text-center">Entradas</h2>
+        <div id="carouselEntradas" class="carousel slide">
+            <div class="carousel-inner">
+                <div class="carousel-item" *ngFor="let productGroup of groupProductsByThree('Entradas'); let i = index" [class.active]="i === 0">
+                    <div class="row">
+                        <div class="col-md-4" *ngFor="let product of productGroup" (click)="openModal(product.name, product.imageUrl,product.id)">
+                            <app-menu-item 
+                                [title]="product.name"
+                                [imageUrl]="product.imageUrl"
+                                [altText]="product.name">
+                            </app-menu-item>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev custom-carousel-control" type="button" data-bs-target="#carouselEntradas" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next custom-carousel-control" type="button" data-bs-target="#carouselEntradas" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
         </div>
     </div>
 
-        <!-- Sección de Comidas -->
-        <div class="menu-category">
-            <h2 class="text-center">Comidas</h2>
-            <div class="row">
-                <article class="col-md-4">
-                    <figure class="menu-item">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTsjFurvY1kF9VsmSc2V2LWVHIOlYlpvf07nw&s" class="custom-img-size mx-auto d-block" alt="Comida 1">
-                        <figcaption>
-                            <h3>Comida Vegana</h3>
-                            
-                        </figcaption>
-                    </figure>
-                </article>
-                <article class="col-md-4">
-                    <figure class="menu-item">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUsNR0xd194zoUvtHBC-SxYFUiobqrmRaX-Q&s" class="custom-img-size mx-auto d-block" alt="Comida 2">
-                    <figcaption>
-                            <h3>Comida Vegetariana</h3>
-                            
-                        </figcaption>
-                    </figure>
-                </article>
-                <article class="col-md-4">
-                    <figure class="menu-item">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRi0OzEnjD7uCQQ3MFebsia6b0P-mkVGVFdyA&s" class="custom-img-size mx-auto d-block" alt="Comida 3">
-                        <figcaption>
-                            <h3>Comida para normales</h3>
-                            
-                        </figcaption>
-                    </figure>
-                </article>
-            </div>
-        </div>
-                <!-- Sección de Comidas -->
-                <div class="menu-category">
-                    <h2 class="text-center">Postres</h2>
+    <!-- Sección de Guarniciones -->
+    <div class="menu-category">
+        <h2 class="text-center">Guarniciones</h2>
+        <div id="carouselGuarniciones" class="carousel slide">
+            <div class="carousel-inner">
+                <div class="carousel-item" *ngFor="let productGroup of groupProductsByThree('Guarniciones'); let i = index" [class.active]="i === 0">
                     <div class="row">
-                        <article class="col-md-4">
-                            <figure class="menu-item">
-                                <img src="https://mejorconsalud.as.com/wp-content/uploads/2018/03/Deliciosos-postres-de-frutas.jpg" class="custom-img-size mx-auto d-block" alt="Comida 1">
-                                <figcaption>
-                                    <h3>Frutales</h3>
-                                    
-                                </figcaption>
-                            </figure>
-                        </article>
-                        <article class="col-md-4">
-                            <figure class="menu-item">
-                                <img src="https://www.clarin.com/img/2021/08/30/hpCwRCJQX_1200x0__1.jpg" class="custom-img-size mx-auto d-block" alt="Comida 2">
-                            <figcaption>
-                                    <h3>Chocolate</h3>
-                                    
-                                </figcaption>
-                            </figure>
-                        </article>
-                        <article class="col-md-4">
-                            <figure class="menu-item">
-                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-SebumA27eCk7TnWnlS_IL8dc-K0pVTtJeg&s" class="custom-img-size mx-auto d-block" alt="Comida 3">
-                                <figcaption>
-                                    <h3>El mejor postre</h3>
-                                    
-                                </figcaption>
-                            </figure>
-                        </article>
+                        <div class="col-md-4" *ngFor="let product of productGroup" (click)="openModal(product.name, product.imageUrl, product.id)">
+                            <app-menu-item 
+                                [title]="product.name"
+                                [imageUrl]="product.imageUrl"
+                                [altText]="product.name">
+                            </app-menu-item>
+                        </div>
                     </div>
                 </div>
-                {{isModalOpen}}
+            </div>
+            <button class="carousel-control-prev custom-carousel-control" type="button" data-bs-target="#carouselGuarniciones" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next custom-carousel-control" type="button" data-bs-target="#carouselGuarniciones" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Sección de Principales -->
+    <div class="menu-category">
+        <h2 class="text-center">Principales</h2>
+        <div id="carouselPrincipales" class="carousel slide">
+            <div class="carousel-inner">
+                <div class="carousel-item" *ngFor="let productGroup of groupProductsByThree('Principales'); let i = index" [class.active]="i === 0">
+                    <div class="row">
+                        <div class="col-md-4" *ngFor="let product of productGroup" (click)="openModal(product.name, product.imageUrl, product.id)">
+                            <app-menu-item 
+                                [title]="product.name"
+                                [imageUrl]="product.imageUrl"
+                                [altText]="product.name">
+                            </app-menu-item>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev custom-carousel-control" type="button" data-bs-target="#carouselPrincipales" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next custom-carousel-control" type="button" data-bs-target="#carouselPrincipales" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+
+
+    <!-- Sección de Postres -->
+    <div class="menu-category">
+        <h2 class="text-center">Postres</h2>
+        <div id="carouselPostres" class="carousel slide">
+            <div class="carousel-inner">
+                <div class="carousel-item" *ngFor="let productGroup of groupProductsByThree('Postres'); let i = index" [class.active]="i === 0">
+                    <div class="row">
+                        <div class="col-md-4" *ngFor="let product of productGroup" (click)="openModal(product.name, product.imageUrl,  product.id)">
+                            <app-menu-item 
+                                [title]="product.name"
+                                [imageUrl]="product.imageUrl"
+                                [altText]="product.name">
+                            </app-menu-item>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev custom-carousel-control" type="button" data-bs-target="#carouselPostres" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next custom-carousel-control" type="button" data-bs-target="#carouselPostres" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
         
+    <!-- Modal de productos-->
                 <app-menu-item-modal
                 *ngIf="isModalOpen"
                 [itemTitle]="selectedItemTitle"
                 [imageUrl]="selectedImageUrl"
+                [productId]="selectedProductId"
                 (close)="closeModal()"
-                (orderAdded)="handleOrderAdded($event)">
+                >
             </app-menu-item-modal>
-    </div>
-
     <app-footer></app-footer>
-    
-</section>
+

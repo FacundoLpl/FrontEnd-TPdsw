@@ -1,44 +1,44 @@
 <section class="restaurant-menu">
   <app-navbar class="barra-navegacion"> </app-navbar>
-
   <div class="container">
     <h1 class="text-center">Carrito</h1>
-
-    <section class="padded">
-      <div class="container">
-        <table class="table table-bordered table-hover">
-          <thead>
-            <tr>
-              <th>Codigo</th>
-              <th>Nombre</th>
-              <th>Precio</th>
-              <th>Cantidad</th>
-              <th>Subtotal</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let item of items; let i = index">
-              <td>{{ item.code }}</td>
-              <td>{{ item.name }}</td>
-              <td>{{ item.price }}</td>
-              <td>{{ item.quantity }}</td>
-              <td>{{ item.price * item.quantity }}</td>
-              <td>
-                <button (click)="removeItem(i)">Eliminar</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="carrito-total">
-          <strong>Total: {{ total }}</strong>
-        </div>
-        <button class="checkout-button">Finalizar Compra</button>
+<section class="padded">
+  <div class="container">
+    <div *ngFor="let cartItem of cart">
+      <h3>Carrito ID: {{ cartItem.id }}</h3>
+      <h3>Estado: {{ cartItem.state }}</h3>
+      <h3>Total: {{ cartItem.total }}</h3>
+      <table class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th>Precio Unitario</th>
+            <th>Cantidad</th>
+            <th>Subtotal</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let order of cartItem.orders">
+            <td>{{ order.product.name }}</td>
+            <td>${{ order.product.price }}</td>
+            <td>{{ order.quantity }}</td>
+            <td>${{ order.subtotal }}</td>
+            <td>
+            <button (click)="removeOrder(order, cartItem)">Eliminar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="carrito-total">
+        <strong>Total: {{ cartItem.total }}</strong>
       </div>
-    </section>
-
+      <button class="checkout-button">Finalizar Compra</button>
+    </div>
   </div>
-
-  <app-user-form></app-user-form>
-  <app-footer></app-footer>
 </section>
+<!-- deje los dos commits por las dudas --> 
+
+    <app-footer></app-footer>
+  
+
