@@ -86,7 +86,11 @@ img {
 .round-button:active {
   background-color: #313131; /* Color de fondo al hacer clic */
 }
-
+span {
+  font-size: 1.5em; /* Tamaño de la fuente más grande */
+  color: #333; /* Color del texto */
+  margin: 0 15px; /* Espaciado a los lados */
+}
 .quantity-control {
   display: flex; /* Alinear botones y número en fila */
   align-items: center; /* Alinear verticalmente */

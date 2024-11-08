@@ -1,14 +1,13 @@
-import { Component, Input } from '@angular/core';
+//import { Component, Input } from '@angular/core';
 
-@Component({
-  selector: 'app-menu-item',
-  standalone: true,
-  imports: [],
-  templateUrl: './menu-item.component.html',
-  styleUrl: './menu-item.component.css'
-})
-export class MenuItemComponent {
-  @Input() title: string = '';
-  @Input() imageUrl: string = '';
-  @Input() altText: string = '';
-}
+//@Component({
+//  selector: 'app-menu-item',
+//  standalone: true,
+//  imports: [],
+//  templateUrl: './menu-item.component.html',
+//  styleUrl: './menu-item.component.css'
+//})
+//export class MenuItemComponent {
+//  @Input() title: string = '';
+//  @Input() imageUrl: string = '';
+//  @Input() altText: string = '';}
