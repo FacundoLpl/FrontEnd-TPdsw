@@ -1,15 +1,14 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CartServiceService } from '../../services/cart-service.service.js';
-import { Order } from '../../entities/order.entity.js';
 import { Cart } from '../../entities/cart.entity.js';
-import { Product } from '../../entities/product.entity.js';
+
 
 @Component({
   selector: 'app-menu-item-modal',
   standalone: true,
-  imports: [FormsModule,],
-  templateUrl: './menu-item-modal.component.html',
+  imports: [FormsModule],
+  templateUrl: './menu-item-modal.component.html', 
   styleUrl: './menu-item-modal.component.css'
 })
 export class MenuItemModalComponent {
@@ -54,8 +53,4 @@ export class MenuItemModalComponent {
     this.close.emit();
   }
 
-  addOrder() {
-    this.orderAdded.emit({ itemTitle: this.itemTitle, price: this.price, quantity: this.quantity, comment: this.comment });
-    this.closeModal();
   }
-}
