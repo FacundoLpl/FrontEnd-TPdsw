@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Order } from '../entities/order.entity';
 import { catchError } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { of } from 'rxjs';
 
 @Injectable({
@@ -14,6 +15,12 @@ export class CartServiceService {
 
   constructor(private http: HttpClient) { }
 
+
+  completePurchase(cartId: string, newCart: any): Observable<any> {
+    const url = `${this.baseUrl}${cartId}`;
+    
+    return this.http.put(url, newCart);
+    }
   // busca todos los carts segun los filtros. (carrito.component.ts)
   findAll(filter: any) { 
     let params = new HttpParams();
@@ -30,8 +37,6 @@ export class CartServiceService {
     return this.http.delete(`${this.baseUrl}`+cartId+'/orders/'+ orderId);
   }
   
-
-
   
   // agrega una linea al pedido del user. (menu-item-modal.component.ts)
   addOrder(quantity: number, cartId: string, productId: string) {

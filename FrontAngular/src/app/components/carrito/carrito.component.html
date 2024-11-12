@@ -1,44 +1,119 @@
-<section class="restaurant-menu">
-  <app-navbar class="barra-navegacion"> </app-navbar>
-  <div class="container">
-    <h1 class="text-center">Carrito</h1>
-<section class="padded">
-  <div class="container">
-    <div *ngFor="let cartItem of cart">
-      <h3>Carrito ID: {{ cartItem.id }}</h3>
-      <h3>Estado: {{ cartItem.state }}</h3>
-      <h3>Total: {{ cartItem.total }}</h3>
-      <table class="table table-bordered table-hover">
-        <thead>
-          <tr>
-            <th>Producto</th>
-            <th>Precio Unitario</th>
-            <th>Cantidad</th>
-            <th>Subtotal</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let order of cartItem.orders">
-            <td>{{ order.product.name }}</td>
-            <td>${{ order.product.price }}</td>
-            <td>{{ order.quantity }}</td>
-            <td>${{ order.subtotal }}</td>
-            <td>
-            <button (click)="removeOrder(order, cartItem)">Eliminar</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <div class="carrito-total">
-        <strong>Total: {{ cartItem.total }}</strong>
+<section class="restaurant-menu bg-gray-100 min-h-screen">
+  <app-navbar class="barra-navegacion"></app-navbar>
+  
+  <div class="container mx-auto p-6">
+    <h1 class="text-4xl font-semibold text-center text-gray-800 mb-6">Carrito</h1>
+
+    <section class="padded mb-8">
+      <div class="space-y-8">
+        <div *ngFor="let cartItem of cart" class="bg-white shadow-lg rounded-lg p-6">
+          <h3 class="text-2xl font-medium text-gray-800">Carrito ID: {{ cartItem.id }}</h3>
+          <h3 class="text-xl text-gray-600">Estado: {{ cartItem.state }}</h3>
+          <h3 class="text-xl text-gray-600 mb-4">MetodoPago: {{ this.paymentMethod }}</h3>
+          <h3 class="text-xl text-gray-600 mb-4">TipoEnvio: ${{ this.deliveryType }}</h3>
+          <h3 class="text-xl text-gray-600 mb-4">NumeroContacto: ${{ this.contactNumber }}</h3>
+          <h3 class="text-xl text-gray-600 mb-4">ComentariosPedido: ${{ this.additionalInstructions }}</h3>
+
+          <table class="min-w-full table-auto border-collapse bg-white border border-gray-300 rounded-lg">
+            <thead class="bg-gray-200">
+              <tr>
+                <th class="p-3 text-left">Producto</th>
+                <th class="p-3 text-left">Precio Unitario</th>
+                <th class="p-3 text-left">Cantidad</th>
+                <th class="p-3 text-left">Subtotal</th>
+                <th class="p-3 text-left">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let order of cartItem.orders">
+                <td class="p-3 border-b">{{ order.product.name }}</td>
+                <td class="p-3 border-b">${{ order.product.price }}</td>
+                <td class="p-3 border-b">{{ order.quantity }}</td>
+                <td class="p-3 border-b">${{ order.subtotal }}</td>
+                <td class="p-3 border-b">
+                  <button (click)="removeOrder(order, cartItem)" class="text-red-500 hover:text-red-700 font-semibold">Eliminar</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="mt-4 flex justify-between items-center">
+            <strong class="text-lg text-gray-800">Total: ${{ cartItem.total }}</strong>
+          </div>
+        </div>
       </div>
-      <button class="checkout-button">Finalizar Compra</button>
+    </section>
+
+    <!-- Formulario de Datos de Entrega y Pago -->
+    <div class="data-carrito bg-white shadow-lg rounded-lg p-6 mb-8">
+      <h2 class="text-3xl font-semibold text-center text-gray-800 mb-6">Datos de Entrega y Pago</h2>
+      <form (ngSubmit)="submitData()" class="space-y-6">
+        <!-- Forma de Entrega -->
+        <div class="form-group">
+          <label for="deliveryType" class="block text-gray-700 font-medium">Forma de Entrega</label>
+          <select id="deliveryType" [(ngModel)]="deliveryType" name="deliveryType" required class="w-full p-3 mt-2 border border-gray-300 rounded-md">
+            <option value="delivery">Delivery</option>
+            <option value="pickup">Retiro en el local</option>
+          </select>
+        </div>
+
+        <!-- Dirección de Entrega -->
+        <div *ngIf="deliveryType === 'delivery'" class="form-group">
+          <label for="deliveryAddress" class="block text-gray-700 font-medium">Dirección de Entrega</label>
+          <input
+            id="deliveryAddress"
+            type="text"
+            [(ngModel)]="deliveryAddress"
+            name="deliveryAddress"
+            placeholder="Ingrese su dirección"
+            required
+            class="w-full p-3 mt-2 border border-gray-300 rounded-md"
+          />
+        </div>
+
+        <!-- Forma de Pago -->
+        <div class="form-group">
+          <label for="paymentMethod" class="block text-gray-700 font-medium">Forma de Pago</label>
+          <select id="paymentMethod" [(ngModel)]="paymentMethod" name="paymentMethod" required class="w-full p-3 mt-2 border border-gray-300 rounded-md">
+            <option value="cash">Efectivo</option>
+          </select>
+        </div>
+
+        <!-- Teléfono de Contacto -->
+        <div class="form-group">
+          <label for="contactNumber" class="block text-gray-700 font-medium">Teléfono de Contacto</label>
+          <input
+            id="contactNumber"
+            type="tel"
+            [(ngModel)]="contactNumber"
+            name="contactNumber"
+            placeholder="Ingrese su número de teléfono"
+            required
+            class="w-full p-3 mt-2 border border-gray-300 rounded-md"
+          />
+        </div>
+
+        <!-- Instrucciones Adicionales -->
+        <div class="form-group">
+          <label for="additionalInstructions" class="block text-gray-700 font-medium">Instrucciones Adicionales</label>
+          <textarea
+            id="additionalInstructions"
+            [(ngModel)]="additionalInstructions"
+            name="additionalInstructions"
+            placeholder="Agregue alguna instrucción especial (opcional)"
+            class="w-full p-3 mt-2 border border-gray-300 rounded-md"
+          ></textarea>
+        </div>
+
+        <!-- Botón de Confirmación -->
+        <button 
+        (click)="finalizarCompra(cart[0], deliveryType, deliveryAddress, paymentMethod, contactNumber, additionalInstructions)" 
+        class="w-full bg-green-500 text-white hover:bg-green-600 font-semibold py-2 px-4 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50">
+        Finalizar Compra
+      </button>
+      </form>
     </div>
   </div>
+
+  <app-footer></app-footer>
 </section>
-<!-- deje los dos commits por las dudas --> 
-
-    <app-footer></app-footer>
-  
-
