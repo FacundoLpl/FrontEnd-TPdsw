@@ -51,7 +51,7 @@ export class CarritoComponent {
           });
         });
       },
-      error: (err) => console.error("Error fetching carts", err),
+      error: (err: any) => console.error("Error fetching carts", err),
     });
   }
 
