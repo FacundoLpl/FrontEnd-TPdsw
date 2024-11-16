@@ -12,6 +12,7 @@ export class CartServiceService {
   order: any;
   finalUrl: string;
   readonly baseUrl = 'http://localhost:3000/api/carts/';
+  readonly orderUrl = 'http://localhost:3000/api/orders/';
 
   constructor(private http: HttpClient) { }
 
@@ -40,7 +41,7 @@ export class CartServiceService {
   
   // agrega una linea al pedido del user. (menu-item-modal.component.ts)
   addOrder(quantity: number, cartId: string, productId: string) {
-    this.http.get<any>(`${this.baseUrl}${cartId}/orders`)
+    this.http.get<any>(this.orderUrl)
       .pipe(
         catchError(err => {
           return of({ data: [] }); // Retorna un objeto con data vacío en caso de error
@@ -61,7 +62,7 @@ export class CartServiceService {
           if (existingOrder) {
             // Si ya existe, sumamos la cantidad
             const updatedQuantity = existingOrder.quantity + quantity;
-            const updateUrl = `${this.baseUrl}${cartId}/orders/${existingOrder.id}`;
+            const updateUrl = `${this.orderUrl}${existingOrder.id}`;
   
             this.http.put(updateUrl, { quantity: updatedQuantity }).subscribe({
               error: (err) => console.error("Error al actualizar la cantidad:", err)
@@ -73,8 +74,8 @@ export class CartServiceService {
               "product": productId,
               "cart": cartId
             };
-            this.finalUrl = `${this.baseUrl}${cartId}/orders`;
-            this.http.post<any>(this.finalUrl, this.order).subscribe({
+          //  this.finalUrl = `${this.baseUrl}${cartId}/orders`; 
+            this.http.post<any>(this.orderUrl, this.order).subscribe({
             error: (err) => console.error("Error al agregar nueva orden:", err)
             });
           }

@@ -12,7 +12,7 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-carrito',
   standalone: true,
-  imports: [NavbarComponent, FooterComponent, NgFor, UserFormComponent,FormsModule],
+  imports: [NavbarComponent, FooterComponent, NgFor, UserFormComponent,FormsModule, NgIf],
   templateUrl: './carrito.component.html',
   styleUrls: ['./carrito.component.css']
 })
