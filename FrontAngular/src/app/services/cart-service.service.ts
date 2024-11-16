@@ -1,39 +1,84 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Order } from '../entities/order.entity';
+import { catchError } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CartServiceService {
   order: any;
-
+  finalUrl: string;
   readonly baseUrl = 'http://localhost:3000/api/carts/';
 
   constructor(private http: HttpClient) { }
 
-  findAll(filter: any) {
+
+  completePurchase(cartId: string, newCart: any): Observable<any> {
+    const url = `${this.baseUrl}${cartId}`;
+    
+    return this.http.put(url, newCart);
+    }
+  // busca todos los carts segun los filtros. (carrito.component.ts)
+  findAll(filter: any) { 
     let params = new HttpParams();
-    if (filter.state) {
+    if (filter.state) { // si se pasa un estado como filtro
       params = params.set('state', filter.state);
     }
-    if (filter.user) {
+    if (filter.user) { // si se pasa un usuario como filtro
       params = params.set('user', filter.user);
     }
     return this.http.get(`${this.baseUrl}`, { params });
   }
+  
   deleteOrder(orderId: string, cartId: string) {
     return this.http.delete(`${this.baseUrl}`+cartId+'/orders/'+ orderId);
   }
+  
+  
+  // agrega una linea al pedido del user. (menu-item-modal.component.ts)
+  addOrder(quantity: number, cartId: string, productId: string) {
+    this.http.get<any>(`${this.baseUrl}${cartId}/orders`)
+      .pipe(
+        catchError(err => {
+          return of({ data: [] }); // Retorna un objeto con data vacío en caso de error
+        }))
+      .subscribe({
+        next: (response) => {
+          const orders = response.data; // Accede al array en la propiedad data
+  
+          // Verificamos que orders sea un array válido
+          if (!Array.isArray(orders)) {
+            console.error("Respuesta inválida: 'orders' no es un array.");
+            return;
+          }
 
-
-addOrder(quantity:number,cartId: string, productId: string) {
-  this.order = {
-    "quantity": quantity,
-    "product": productId,
-    "cart": cartId
+          // Buscamos si ya hay una orden con el mismo productId
+          const existingOrder = orders.find(order => order.product === productId);
+  
+          if (existingOrder) {
+            // Si ya existe, sumamos la cantidad
+            const updatedQuantity = existingOrder.quantity + quantity;
+            const updateUrl = `${this.baseUrl}${cartId}/orders/${existingOrder.id}`;
+  
+            this.http.put(updateUrl, { quantity: updatedQuantity }).subscribe({
+              error: (err) => console.error("Error al actualizar la cantidad:", err)
+            });
+          } else {
+            // Si no existe, creamos una nueva orden
+            this.order = {
+              "quantity": quantity,
+              "product": productId,
+              "cart": cartId
+            };
+            this.finalUrl = `${this.baseUrl}${cartId}/orders`;
+            this.http.post<any>(this.finalUrl, this.order).subscribe({
+            error: (err) => console.error("Error al agregar nueva orden:", err)
+            });
+          }
+        },
+      });
   }
-  return this.http.post<Order>(`${this.baseUrl}${cartId}/orders`, this.order);
-}
-
 }

@@ -12,7 +12,7 @@
     text-align: center; 
     color: #f9f9f9; 
     margin-bottom: 40px;
-    font-family: 'Nunito', sans-serif; 
+    font-family: "Outfit", sans-serif;
     font-weight: 700; 
     background-color: #444; 
     padding: 20px; 
@@ -24,6 +24,8 @@
   margin: 0 auto;
   padding: 20px; 
   border-radius: 8px;
+  font-family: "Outfit", sans-serif;
+  
 }
 
 /* Estilo para categorías del menú */
@@ -44,7 +46,16 @@
   padding: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
+
   transition: transform 0.3s, box-shadow 0.3s;
+  font-family: "Libre Baskerville", serif;
+  font-weight: 400;
+  font-style: normal;
+  font-family: "Outfit", serif;
+  font-optical-sizing: auto;
+  
+  
+
 }
 
 .menu-item:hover {
@@ -54,10 +65,10 @@
 
 /* Estilo para las imágenes de menú para que tengan el mismo tamaño */
 .custom-img-size {
-  width: 100%;
+  width: 300%;
   height: 200px; 
   object-fit: cover; 
-  border-radius: 8px;
+  border-radius: 500px;
 }
 
 .menu-item h3 {
