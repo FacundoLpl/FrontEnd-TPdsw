@@ -39,6 +39,7 @@ export class MenuItemModalComponent {
   addToCart(quantity:number,productId: string) {
   
     this.cartService.addOrder(quantity,this.cartId, productId);
+    this.closeModal();
 
   }
   increaseQuantity() {

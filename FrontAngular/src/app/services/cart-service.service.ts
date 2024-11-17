@@ -16,7 +16,7 @@ export class CartServiceService {
 
   constructor(private http: HttpClient) { }
 
-
+// HAY QUE CAMBIAR LA URL POR ORDER URL
   completePurchase(cartId: string, newCart: any): Observable<any> {
     const url = `${this.baseUrl}${cartId}`;
     
@@ -35,7 +35,7 @@ export class CartServiceService {
   }
   
   deleteOrder(orderId: string, cartId: string) {
-    return this.http.delete(`${this.baseUrl}`+cartId+'/orders/'+ orderId);
+    return this.http.delete(`${this.orderUrl}`+ orderId);
   }
   
   
@@ -63,6 +63,8 @@ export class CartServiceService {
             // Si ya existe, sumamos la cantidad
             const updatedQuantity = existingOrder.quantity + quantity;
             const updateUrl = `${this.orderUrl}${existingOrder.id}`;
+
+
   
             this.http.put(updateUrl, { quantity: updatedQuantity }).subscribe({
               error: (err) => console.error("Error al actualizar la cantidad:", err)
@@ -72,9 +74,10 @@ export class CartServiceService {
             this.order = {
               "quantity": quantity,
               "product": productId,
-              "cart": cartId
+              "subtotal": 159,
+              "user": "672d4f6cb48ca087afa73e84"
             };
-          //  this.finalUrl = `${this.baseUrl}${cartId}/orders`; 
+            //  this.finalUrl = ${this.baseUrl}${cartId}/orders; 
             this.http.post<any>(this.orderUrl, this.order).subscribe({
             error: (err) => console.error("Error al agregar nueva orden:", err)
             });
