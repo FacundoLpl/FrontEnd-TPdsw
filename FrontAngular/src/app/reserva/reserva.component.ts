@@ -13,21 +13,30 @@ import { ReservationService } from '../services/reservation.service.js';
   styleUrls: ['./reserva.component.css']
 })
 export class ReservaComponent {
-  people: number
-  datetime: string
+  people: number;
+  datetime: string;
   reservaForm: FormGroup;
-  constructor(private fb: FormBuilder, private ReservationService: ReservationService) { 
+  minFecha: string;
+  maxFecha: string;
+
+  constructor(private fb: FormBuilder, private ReservationService: ReservationService) {
+    const hoy = new Date();
+    this.minFecha = this.formatFecha(hoy); // Fecha actual
+    this.maxFecha = this.formatFecha(new Date(hoy.setDate(hoy.getDate() + 7))); // 7 días después
+
     // Configurar el formulario reactivo con validaciones
     this.reservaForm = this.fb.group({
-      nombre: ['', [Validators.required, Validators.minLength(3)]],
-      telefono: ['', [Validators.required, Validators.pattern('^[0-9]{10,15}$')]], // Validar número
-      email: ['', [Validators.required, Validators.email]],
       fecha: ['', Validators.required],
       hora: ['', Validators.required],
-      personas: ['', [Validators.required, Validators.min(1)]],
-      mensaje: [''] // Campo opcional
+      personas: ['', [Validators.required, Validators.min(1)]]
     });
-}
+  }
+
+  // Formatear fecha en formato YYYY-MM-DD
+  formatFecha(fecha: Date): string {
+    return fecha.toISOString().split('T')[0];
+  }
+
   getErrorMessage(campo: string): string {
     const control = this.reservaForm.get(campo);
     if (control?.hasError('required')) return 'Este campo es obligatorio';
@@ -38,7 +47,7 @@ export class ReservaComponent {
     return '';
   }
 
-    onSubmit(): void {
+  onSubmit(): void {
     if (this.reservaForm.valid) {
       console.log('Datos del formulario:', this.reservaForm.value);
     } else {
@@ -47,19 +56,24 @@ export class ReservaComponent {
   }
 
   addReservation(): void {
-    alert('Reserva agregada');
-    const people = this.reservaForm.value.personas
     const user = '672d4f6cb48ca087afa73e84';
+    const people = this.reservaForm.value.personas;
 
-    // Combinar fecha y hora
+    // Combinar la fecha y hora ingresada por el usuario
     const fecha = this.reservaForm.value.fecha;
     const hora = this.reservaForm.value.hora;
 
-    // Crear un objeto Date en la zona horaria local
-    const datetimeLocal = '${fecha}T${hora}:00';
-    this.ReservationService.addReservation(user, people, datetimeLocal);
-    // Convertir a formato UTC en ISO 8601
-      console.log('Reserva agregada');
+    // Crear un objeto Date a partir de los valores ingresados
+    const datetimeLocal = new Date(`${fecha}T${hora}:00`);
+
+    // Convertir la fecha local a UTC
+    const datetimeUTC = new Date(
+      datetimeLocal.getTime() - datetimeLocal.getTimezoneOffset() * 60000
+    ).toISOString();
+
+    // Llamar al servicio con datetime en UTC
+    this.ReservationService.addReservation(user, people, datetimeUTC);
+
+    alert(`Reserva creada en UTC: Usuario ${user}, Personas ${people}, Fecha y hora ${datetimeUTC}`);
   }
 }
-;

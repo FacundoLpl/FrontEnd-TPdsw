@@ -7,39 +7,56 @@
         <h1 class="text-center">Reserva tu mesa</h1>
 
         <form [formGroup]="reservaForm" (ngSubmit)="onSubmit()">
-            <div class="form-group">
+        <!--     <div class="form-group">
                 <label for="nombre">Nombre Completo</label>
-                <!-- Enlazamos con formControlName -->
+                
                 <input type="text" id="nombre" formControlName="nombre" placeholder="Ingrese su nombre completo" />
-                <!-- Mensaje de error -->
+               
                 <div *ngIf="reservaForm.get('nombre')?.invalid && reservaForm.get('nombre')?.touched" class="error">
                     {{ getErrorMessage('nombre') }}
                 </div>
-            </div>
-            <div class="form-group">
+            </div> -->
+          <!--  <div class="form-group">
                 <label for="telefono">Teléfono</label>
                 <input type="tel" id="telefono" formControlName="telefono" placeholder="Ingrese su número de teléfono" />
                 <div *ngIf="reservaForm.get('telefono')?.invalid && reservaForm.get('telefono')?.touched" class="error">
                     {{ getErrorMessage('telefono') }}
                 </div>
-            </div>
-            <div class="form-group">
+            </div> -->
+           <!-- <div class="form-group">
                 <label for="email">Correo Electrónico</label>
                 <input type="email" id="email" formControlName="email" placeholder="Ingrese su correo electrónico" />
                 <div *ngIf="reservaForm.get('email')?.invalid && reservaForm.get('email')?.touched" class="error">
                     {{ getErrorMessage('email') }}
                 </div>
-            </div>
+            </div>-->
             <div class="form-group">
                 <label for="fecha">Fecha de la Reserva</label>
-                <input type="date" id="fecha" formControlName="fecha" />
+                <input 
+                    type="date" 
+                    id="fecha" 
+                    formControlName="fecha" 
+                    [min]="minFecha" 
+                    [max]="maxFecha" 
+                />
                 <div *ngIf="reservaForm.get('fecha')?.invalid && reservaForm.get('fecha')?.touched" class="error">
                     {{ getErrorMessage('fecha') }}
                 </div>
-            </div>
+              </div>
+              
+            
+            
+           
             <div class="form-group">
                 <label for="hora">Hora de la Reserva</label>
-                <input type="time" id="hora" formControlName="hora" />
+                <select id="hora" formControlName="hora" class="form-control">
+                    <option value="" disabled selected>Seleccione una hora</option>
+                    <option value="19:00">19:00</option>
+                    <option value="20:00">20:00</option>
+                    <option value="21:00">21:00</option>
+                    <option value="22:00">22:00</option>
+                    <option value="23:00">23:00</option>
+                </select>
                 <div *ngIf="reservaForm.get('hora')?.invalid && reservaForm.get('hora')?.touched" class="error">
                     {{ getErrorMessage('hora') }}
                 </div>
@@ -51,15 +68,13 @@
                     {{ getErrorMessage('personas') }}
                 </div>
             </div>
-            <div class="form-group">
+           <!-- <div class="form-group">
                 <label for="mensaje">Mensaje Adicional</label>
                 <textarea id="mensaje" formControlName="mensaje"
                     placeholder="Escriba cualquier información adicional (opcional)"></textarea>
-            </div>
-            <button type="submit" class="btn-reservar" [disabled]="reservaForm.invalid" (click)=addReservation()>Reservar</button>
+            </div>-->
+            <button type="submit" class="btn-reservar" [disabled]="reservaForm.invalid" (click)=addReservation()>Reservar</button> 
         </form>
-        {{reservaForm.value}}
-        {{reservaForm.value.nombre}}
         </div>
         <app-footer></app-footer>
         </section>
