@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { NavbarComponent } from '../components/navbar/navbar.component.js';
 import { FooterComponent } from '../components/footer/footer/footer.component.js';
 import { CommonModule } from '@angular/common';
+import { ReservationService } from '../services/reservation.service.js';
 
 @Component({
   selector: 'app-reserva',
@@ -12,8 +13,10 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./reserva.component.css']
 })
 export class ReservaComponent {
+  people: number
+  datetime: string
   reservaForm: FormGroup;
-  constructor(private fb: FormBuilder) { 
+  constructor(private fb: FormBuilder, private ReservationService: ReservationService) { 
     // Configurar el formulario reactivo con validaciones
     this.reservaForm = this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(3)]],
@@ -42,4 +45,21 @@ export class ReservaComponent {
       console.log('Formulario inválido');
     }
   }
+
+  addReservation(): void {
+    alert('Reserva agregada');
+    const people = this.reservaForm.value.personas
+    const user = '672d4f6cb48ca087afa73e84';
+
+    // Combinar fecha y hora
+    const fecha = this.reservaForm.value.fecha;
+    const hora = this.reservaForm.value.hora;
+
+    // Crear un objeto Date en la zona horaria local
+    const datetimeLocal = '${fecha}T${hora}:00';
+    this.ReservationService.addReservation(user, people, datetimeLocal);
+    // Convertir a formato UTC en ISO 8601
+      console.log('Reserva agregada');
+  }
 }
+;
