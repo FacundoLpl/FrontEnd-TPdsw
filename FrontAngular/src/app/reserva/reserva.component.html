@@ -58,6 +58,8 @@
             </div>
             <button type="submit" class="btn-reservar" [disabled]="reservaForm.invalid">Reservar</button>
         </form>
+        {{reservaForm.value}}
+        {{reservaForm.value.nombre}}
         </div>
         <app-footer></app-footer>
         </section>
