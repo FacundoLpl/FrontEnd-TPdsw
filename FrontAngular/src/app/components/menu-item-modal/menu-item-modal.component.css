@@ -29,26 +29,26 @@ h2 {
 }
 
 .comment-section {
-  background-color: #f9f9f9; /* Color de fondo claro */
-  border-radius: 10px; /* Esquinas redondeadas */
-  padding: 15px; /* Espaciado interno */
-  margin-top: 15px; /* Espaciado superior */
+  background-color: #f9f9f9; 
+  border-radius: 10px; 
+  padding: 15px; 
+  margin-top: 15px; 
 }
 
 .comment-section label {
-  color: black; /* Color de texto negro para la etiqueta */
-  font-weight: bold; /* Negrita para la etiqueta */
+  color: black; 
+  font-weight: bold; 
 }
 
 .comment-section textarea {
   width: 100%;
   height: 80px;
-  border-radius: 5px; /* Esquinas redondeadas para el textarea */
-  border: 1px solid #ccc; /* Borde claro */
-  padding: 10px; /* Espaciado interno del textarea */
-  color: black; /* Color de texto negro en el textarea */
-  background-color: white; /* Fondo blanco para el textarea */
-  resize: none; /* Deshabilitar el redimensionamiento */
+  border-radius: 5px; 
+  border: 1px solid #ccc;
+  padding: 10px; 
+  color: black; 
+  background-color: white; 
+  resize: none;
 }
 
 img {
@@ -60,59 +60,58 @@ img {
 
 .quantity-display {
   color: #333; 
-  font-size: 1.5em; /* Tamaño más grande para el número */
-  margin: 0 15px; /* Espaciado a los lados */
+  font-size: 1.5em; 
+  margin: 0 15px;
 }
 
 .round-button {
-  width: 40px; /* Aumentar el ancho del botón */
-  height: 40px; /* Aumentar la altura del botón */
-  border: none; /* Sin borde */
-  border-radius: 50%; /* Borde redondeado */
-  font-size: 1.5em; /* Tamaño de la fuente más grande */
-  color: white; /* Color del texto */
-  background-color: #000; /* Color de fondo */
+  width: 40px; 
+  height: 40px; 
+  border: none; 
+  border-radius: 50%; 
+  font-size: 1.5em; 
+  color: white; 
+  background-color: #000; 
   display: flex;
-  justify-content: center; /* Centrar horizontalmente */
-  align-items: center; /* Centrar verticalmente */
-  cursor: pointer; /* Cambiar cursor al pasar por encima */
-  transition: background-color 0.3s; /* Transición suave para el color de fondo */
+  justify-content: center; 
+  align-items: center; 
+  cursor: pointer; 
+  transition: background-color 0.3s;
 }
 
 .round-button:hover {
-  background-color: #313131; /* Color de fondo al pasar el mouse */
+  background-color: #313131;
 }
 
 .round-button:active {
-  background-color: #313131; /* Color de fondo al hacer clic */
+  background-color: #313131;
 }
 span {
-  font-size: 1.5em; /* Tamaño de la fuente más grande */
-  color: #333; /* Color del texto */
-  margin: 0 15px; /* Espaciado a los lados */
+  font-size: 1.5em; 
+  color: #333; 
+  margin: 0 15px; 
 }
 .quantity-control {
-  display: flex; /* Alinear botones y número en fila */
-  align-items: center; /* Alinear verticalmente */
-  justify-content: center; /* Centrar horizontalmente */
-  padding: 10px; /* Espaciado interno */
-  border-radius: 5px; /* Bordes redondeados para la sección de cantidad */
+  display: flex; 
+  align-items: center;
+  justify-content: center; 
+  padding: 10px; 
+  border-radius: 5px; 
 }
 .add-button {
-  width: 200px; /* Aumentar el ancho del botón */
-  height: 40px; /* Aumentar la altura del botón */
-  color: white; /* Color del texto */
-  background-color: #000; /* Color de fondo */
-  border-radius: 10px; /* Borde redondeado */
-  justify-content: center; /* Centrar horizontalmente */
-  align-items: center; /* Centrar verticalmente */
-  margin: 0 auto; /* Margen automático para centrar */
-  display: inline-block; /* Permitir que el margen automático funcione */
+  width: 200px; 
+  height: 40px; 
+  color: white; 
+  background-color: #000;
+  border-radius: 10px; 
+  justify-content: center; 
+  align-items: center; 
+  margin: 0 auto; 
+  display: inline-block; 
 }
 .add-button:hover {
-  background-color: #313131; /* Color de fondo al pasar el mouse */
+  background-color: #313131; 
 }
 
 .add-button:active {
-  background-color: #313131; /* Color de fondo al hacer clic */
-}
+  background-color: #313131; }

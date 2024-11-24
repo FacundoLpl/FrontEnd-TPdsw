@@ -1,23 +1,42 @@
-.flex-container {
-    display: flex;
-    justify-content: space-between; /* Espacio entre columnas */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #2d2d2d; 
+    color: #f9f9f9; 
+    min-height: 100vh; 
 }
 
-.flex-item {
-    background-color: lightgreen;
-    padding: 20px;
-    width: 23%; /* Ajuste del ancho para permitir espacio entre columnas */
+header {
+    background-color: #1b1b1b; 
+    color: #f9c74f; 
+    padding: 20px 10px;
     text-align: center;
 }
-.comunicacionComponentes {
-    background-color: lightblue;
+
+.container {
+    width: 100%; 
+    margin: 0 auto; 
     padding: 20px;
-    width: 100%;
-    text-align: center;
+    background-color: #333; 
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    box-sizing: border-box; 
 }
-.textoDinamico {
-    background-color: rgb(246, 189, 248);
-    padding: 20px;
-    width: 100%;
-    text-align: center;
+
+h1, h2, h3 {
+    color: #f9c74f; 
+    margin-bottom: 10px;
+}
+
+h1 {
+    font-size: 2rem;
+}
+
+.faq h3 {
+    font-size: 1.2rem;
+}
+
+.faq {
+    margin-bottom: 2
 }

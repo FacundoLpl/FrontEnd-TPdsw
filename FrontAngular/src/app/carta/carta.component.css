@@ -1,5 +1,3 @@
-/* Estilos para la carta de restaurante */
-
 /* Fondo general de la carta */
 .restaurant-menu {
   padding: 40px 0;
@@ -53,9 +51,6 @@
   font-style: normal;
   font-family: "Outfit", serif;
   font-optical-sizing: auto;
-  
-  
-
 }
 
 .menu-item:hover {

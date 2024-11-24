@@ -1,6 +1,4 @@
 import { Component, OnInit, HostListener  } from '@angular/core';
-import { RouterModule, RouterOutlet } from '@angular/router';
-import { CartaComponent } from '../carta/carta.component.js';
 import { NavbarComponent } from '../components/navbar/navbar.component.js';
 import { FooterComponent } from '../components/footer/footer/footer.component.js';
 

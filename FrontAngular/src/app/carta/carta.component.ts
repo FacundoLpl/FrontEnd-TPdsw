@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
 import { NavbarComponent } from '../components/navbar/navbar.component.js';
 import { FooterComponent } from '../components/footer/footer/footer.component.js';
-import { UserFormComponent } from '../components/user-form/user-form.component.js';
 import { MenuItemComponent } from '../components/menu-item/menu-item.component.js';
 import { MenuItemModalComponent } from '../components/menu-item-modal/menu-item-modal.component.js';
-import { CarritoComponent } from '../components/carrito/carrito.component.js';
 import { NgFor, NgIf } from '@angular/common';
 import { ProductServiceService } from '../services/product-service.service.js';
 
@@ -12,7 +10,7 @@ import { ProductServiceService } from '../services/product-service.service.js';
 @Component({
   selector: 'app-carta',
   standalone: true,
-  imports: [NavbarComponent, FooterComponent, UserFormComponent, MenuItemComponent, MenuItemModalComponent, CarritoComponent, NgIf, NgFor],
+  imports: [NavbarComponent, FooterComponent, MenuItemComponent, MenuItemModalComponent, NgIf, NgFor],
   templateUrl: './carta.component.html',
   styleUrl: './carta.component.css'
 })
@@ -42,6 +40,7 @@ export class CartaComponent {
   handleOrderAdded(order: { itemTitle: string, price: number, quantity: number, comment: string }) {
     this.orderData = order;  // Guarda los datos del pedido
   }
+
   ngOnInit() {
     this.productService.findAll().subscribe({
       next: (res: any) => {
@@ -49,8 +48,9 @@ export class CartaComponent {
         }
       })
     }
+
 // Método para agrupar los productos en conjuntos de 3
-groupProductsByThree(categoryName: string) {
+ groupProductsByThree(categoryName: string) {
   const categoryProducts = this.products.filter(product => product.category.name === categoryName);
   const groupedProducts = [];
   for (let i = 0; i < categoryProducts.length; i += 3) {
@@ -61,5 +61,4 @@ groupProductsByThree(categoryName: string) {
 getProductsByCategory(categoryName: string) {
   return this.products.filter(product => product.category.name === categoryName);
 }
-
-  }
+}

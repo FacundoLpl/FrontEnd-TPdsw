@@ -1,13 +1,13 @@
 .barra-navegacion {
-    position: relative; /* Cambia a 'fixed' si quieres que permanezca visible mientras se hace scroll */
-    top: 20px; /* Ajusta esta distancia según tus necesidades */
-    margin: 20px auto; /* Centrar la barra horizontalmente */
-    padding: 10px 20px; /* Espacio interno para mejorar el aspecto */
-    background-color: rgb(22, 20, 20); /* Fondo blanco para hacer contraste */
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para efecto de flotación */
-    border-radius: 8px; /* Bordes redondeados */
-    width: 80%; /* Ajusta el ancho según tu diseño */
-    z-index: 1000; /* Asegura que esté por encima de otros elementos si es necesario */
+    position: relative; 
+    top: 20px; 
+    margin: 20px auto; 
+    padding: 10px 20px;
+    background-color: rgb(22, 20, 20);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); 
+    border-radius: 8px;
+    width: 80%; 
+    z-index: 1000; 
 }
 
 .nav-link {
@@ -20,8 +20,8 @@
     font-size: 170%;
     display: flex;
     gap: 50px;
-    padding: 0; /* Remove default padding if necessary */
-    list-style: none; /* Remove default list style if necessary */
+    padding: 0; 
+    list-style: none; 
 }
 .hero{
     background: url('https://www.eldiario.es/fotos/Barcelona_EDIIMA20191218_0001_19.jpg') no-repeat center center/cover;

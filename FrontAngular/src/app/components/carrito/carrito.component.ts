@@ -1,7 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { NavbarComponent } from '../navbar/navbar.component.js';
 import { FooterComponent } from '../footer/footer/footer.component.js';
-import { UserFormComponent } from '../user-form/user-form.component.js';
 import { CartServiceService } from '../../services/cart-service.service.js';
 import { Order } from '../../entities/order.entity.js';
 import { NgFor, NgIf } from '@angular/common';
@@ -12,7 +11,7 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-carrito',
   standalone: true,
-  imports: [NavbarComponent, FooterComponent, NgFor, UserFormComponent,FormsModule, NgIf],
+  imports: [NavbarComponent, FooterComponent, NgFor, FormsModule, NgIf],
   templateUrl: './carrito.component.html',
   styleUrls: ['./carrito.component.css']
 })
@@ -30,7 +29,6 @@ export class CarritoComponent {
   contactNumber: string = '';
   additionalInstructions: string = '';
 
-  removeItem (code: number) {}
   total : number ;
 
   items: { itemTitle: string, price: number, quantity: number, comment: string }[] = [];
@@ -38,7 +36,7 @@ export class CarritoComponent {
   constructor(private cartService: CartServiceService) {}
   cart: Cart[] = []; // Asegura que es un array
   cartId: string = ''; // Add cartId property
- newCart: any;
+  newCart: any;
   
   ngOnInit() {
     this.cartService.findAll({ user: "672d4f6cb48ca087afa73e84", state: 'Pending' }).subscribe({
@@ -65,23 +63,21 @@ export class CarritoComponent {
     });
   }
 
- // Eliminar un producto específico dentro de un carrito
+ 
  removeOrder(order: Order, cart: Cart) {
-  // Llamada al servicio para eliminar la orden del carrito
   this.cartService.deleteOrder(order.id, cart.id).subscribe({
     next: () => {
-      // Si la eliminación fue exitosa, elimina la orden localmente
       const orderIndex = cart.orders.findIndex(o => o.id === order.id);
       if (orderIndex > -1) {
         cart.orders.splice(orderIndex, 1); // Elimina el producto del carrito
       }
-
       // Recalcular el total del carrito después de eliminar el pedido
       this.updateCartTotal(cart);
     },
     error: (err) => console.error("Error deleting order", err)
   });
 }
+
 updateCartTotal(cart: Cart) {
   cart.total = 0; // Reinicia el total
   cart.orders.forEach((order) => {

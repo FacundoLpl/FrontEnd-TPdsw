@@ -1,89 +1,41 @@
-<app-navbar class="barra-navegacion"> </app-navbar>
-<div class="flex-container">
-    <div class="flex-item">Columna 1
-        <!--<pre>{{ users | json }}</pre>
-        <button (click)=loadUsers()>Obtener Usuarios</button> -->
-        <div class="container">
-            <table class="table table-striped" *ngIf="users && users.length > 0">
-            <thead>
-                <tr>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>DNI</th>
-                <th>User Type</th>
-                <th *ngIf="showId">ID</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let user of users">
-                <td>{{ user.firstName }}</td>
-                <td>{{ user.lastName }}</td>
-                <td>{{ user.dni }}</td>
-                <td>{{ user.userType }}</td>
-                <td *ngIf="showId">{{ user.id }}</td>
-                </tr>
-            </tbody>
-            </table>
-            <p *ngIf="users && users.length === 0">No hay usuarios para mostrar.</p>
-            <button (click)="loadUsers()" class="btn btn-primary">Listar Usuarios</button>
-            <div class="button-group">
-                <button (click)="showId = true" [class.active]="showId" class="btn btn-circle">Mostrar ID</button>
-                <button (click)="showId = false" [class.active]="!showId" class="btn btn-circle">No Mostrar ID</button>
-            </div>
+
+<head>
+    <title>Preguntas Frecuentes</title>
+</head>
+<body>
+    <app-navbar class="barra-navegacion"></app-navbar>
+    <div class="container">
+        <div class="faq">
+            <h2>Reservas</h2>
+            <h3>¿Con cuánta anticipación puedo reservar una mesa?</h3>
+            <p>Se puede reservar una mesa con hasta 1 semana de anticipación.</p>
+            
+            <h3>¿En qué horarios puedo realizar una reserva?</h3>
+            <p>Nuestras reservas están disponibles todos los días en los siguientes horarios: 19:00, 20:00, 21:00, 22:00 y 23:00.</p>
+        </div>
+
+        <div class="faq">
+            <h2>Horarios de Atención</h2>
+            <h3>¿Cuáles son los horarios de atención del restaurante?</h3>
+            <p>Abrimos todos los días de 19:00 a 00:00.</p>
+        </div>
+
+        <div class="faq">
+            <h2>Ubicación</h2>
+            <h3>¿Dónde estamos ubicados?</h3>
+            <p>Estamos en Avenida Gourmet 123, Ciudad del Sabor, País Gastronómico.</p>
+        </div>
+
+        <div class="faq">
+            <h2>Opciones de Servicio</h2>
+            <h3>¿Qué opciones tengo para disfrutar de la comida?</h3>
+            <ul>
+                <li>Reservar una mesa para comer en el restaurante.</li>
+                <li>Pedir comida para llevar (Take Away).</li>
+                <li>Solicitar un delivery a tu domicilio.</li>
+            </ul>
         </div>
     </div>
-    <div class="flex-item">Columna 2
-        <input type="text" #idInput>
-        <div *ngIf="userBuscado && userBuscado.id">
-            <div><strong>ID:</strong> {{ userBuscado.id }}</div>
-            <div><strong>First Name:</strong> {{ userBuscado.firstName }}</div>
-            <div><strong>Last Name:</strong> {{ userBuscado.lastName }}</div>
-            <div><strong>DNI:</strong> {{ userBuscado.dni }}</div>
-            <div><strong>User Type:</strong> {{ userBuscado.userType }}</div>
-        </div>
-        <button (click)=loadOneUser(idInput.value)>Obtener Usuario Especifico</button>
-    </div>
-    <div class="flex-item">Columna 3
-        <form (ngSubmit)="postUser()">
-            <label for="dni">DNI:</label>
-            <input id="dni" type="text" [(ngModel)]="user.dni" name="dni" required><br/>
-
-            <label for="firstName">Nombre:</label>
-            <input id="firstName" type="text" [(ngModel)]="user.firstName" name="firstName" required><br/>
-    
-            <label for="lastName">Apelldo:</label>
-            <input id="lastName" type="lastName" [(ngModel)]="user.lastName" name="lastName" required><br/>
-    
-            <label for="userType">Tipo de Usuario:</label>
-            <input id="userType" type="userType" [(ngModel)]="user.userType" name="userType" required><br/>
-    
-            <button type="submit">Crear Usuario</button>
-        </form>
-    </div>
-    <div class="flex-item">Columna 4
-        <input type="text" #idDInput>
-        {{userDeleted}}
-        <button (click)=deleteUser(idDInput.value)>Borrar Usuario</button>
-    </div>
-</div>
-<br/><br/>
-
-
-
-<div class="comunicacionComponentes">
-    <app-user-form></app-user-form>
-    
-<br/><br/><br/>
-
-<div class="textoDinamico">
-Edad del empleado: {{edad<18 ? "Menor de edad" : "Mayor de edad" }}<br/>
-<br/>{{getRegistroUsuario()}} {{textoDeRegistro}} <br/>
-Registrado: <input type="radio" value="si" name="nRegistro" [checked]="usuRegistrado" (click)="setUsuarioRegistrado($event)"><br/>
-No registrado: <input type="radio" value="no" name="nRegistro" [checked]="usuRegistrado" (click)="setUsuarioRegistrado($event)">
-<br/>
-<br/>
-<p>Nombre del empleado: {{nombre.value}}</p>
-<p>Introduce el nombre: <input type="text" #nombre (keyup)="0"></p>
-</div>
-
+   
+</body>
 

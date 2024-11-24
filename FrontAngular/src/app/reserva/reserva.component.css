@@ -1,75 +1,70 @@
-/* https://alegra.meitre.com/?gad_source=1&gclid=Cj0KCQjw28W2BhC7ARIsAPerrcJswrqZ0dWrtCuMo6oh2gkRiAzP3HLrZcNRbw6kmlFNN15Yymn2UVcaAp4NEALw_wcB
-    ^^^^^^ VER PAGINA ^^^^^ */
 
-
-/* Estilos para la sección de reservas */
 .reservas {
-    background-color: #333; /* Fondo oscuro para la sección */
-    color: #fff; /* Texto blanco */
-    padding: 60px 0; /* Espaciado superior e inferior */
+    background-color: #333; 
+    color: #fff; 
+    padding: 60px 0; 
   }
   
   .reservas h1 {
-    font-size: 2.5rem; /* Tamaño del texto igual al de "Nuestra Carta" */
-    text-align: center; /* Centra el texto */
-    color: #f9f9f9; /* Color blanco suave */
-    margin-bottom: 40px; /* Espacio debajo del título */
-    font-family: 'Nunito', sans-serif; /* Fuente consistente */
-    font-weight: 700; /* Peso de la fuente para destacar el título */
-    background-color: #444; /* Fondo negro para el título */
-    padding: 20px; /* Espaciado interno */
-    border-radius: 8px; /* Bordes redondeados */
+    font-size: 2.5rem; 
+    text-align: center; 
+    color: #f9f9f9; 
+    margin-bottom: 40px; 
+    font-family: 'Nunito', sans-serif; 
+    font-weight: 700; 
+    background-color: #444;
+    padding: 20px; 
+    border-radius: 8px; 
   }
   
   /* Estilo para el formulario */
   .reserva-form {
-    background-color: #444; /* Fondo más claro para el formulario */
-    padding: 30px; /* Espaciado interno */
-    border-radius: 8px; /* Bordes redondeados */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para un efecto flotante */
-    max-width: 600px; /* Ancho máximo del formulario */
-    margin: 0 auto; /* Centra el formulario horizontalmente */
+    background-color: #444; 
+    padding: 30px; 
+    border-radius: 8px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+    max-width: 600px; 
+    margin: 0 auto; 
   }
   
   .form-group {
-    margin-bottom: 20px; /* Espacio entre los campos del formulario */
+    margin-bottom: 20px; 
   }
   
   .form-group label {
-    display: block; /* Hace que la etiqueta ocupe toda la línea */
-    margin-bottom: 5px; /* Espacio debajo de la etiqueta */
-    font-size: 1rem; /* Tamaño del texto de la etiqueta */
+    display: block; 
+    margin-bottom: 5px;
+    font-size: 1rem; 
   }
   
   .form-group input,
   .form-group textarea {
-    width: 100%; /* Hace que el campo ocupe todo el ancho disponible */
-    padding: 10px; /* Espaciado interno */
-    border: 1px solid #ccc; /* Borde gris claro */
-    border-radius: 4px; /* Bordes redondeados */
-    background-color: #fff; /* Fondo blanco */
-    color: #333; /* Texto oscuro para mejor legibilidad */
-    font-size: 1rem; /* Tamaño del texto */
+    width: 100%; 
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff; 
+    color: #333; 
+    font-size: 1rem;
   }
   
   .form-group textarea {
-    resize: vertical; /* Permite redimensionar verticalmente */
-    min-height: 100px; /* Altura mínima */
+    resize: vertical; 
+    min-height: 100px; 
   }
   
   .btn-reservar {
-    background-color: #f39c12; /* Color de fondo del botón */
-    color: #fff; /* Texto blanco */
-    border: none; /* Sin borde */
-    padding: 15px 20px; /* Espaciado interno */
-    border-radius: 4px; /* Bordes redondeados */
-    font-size: 1rem; /* Tamaño del texto */
-    cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
-    transition: background-color 0.3s; /* Transición para el cambio de color */
-  }
+    background-color: #f39c12; 
+    color: #fff; 
+    border: none; 
+    padding: 15px 20px; 
+    border-radius: 4px; 
+    font-size: 1rem; 
+    cursor: pointer; 
+    transition: background-color 0.3s; }
   
   .btn-reservar:hover {
-    background-color: #e67e22; /* Color de fondo al pasar el cursor */
+    background-color: #e67e22; 
   }
   
   .error {

@@ -59,19 +59,15 @@ export class ReservaComponent {
     const user = '672d4f6cb48ca087afa73e84';
     const people = this.reservaForm.value.personas;
 
-    // Combinar la fecha y hora ingresada por el usuario
     const fecha = this.reservaForm.value.fecha;
     const hora = this.reservaForm.value.hora;
 
-    // Crear un objeto Date a partir de los valores ingresados
     const datetimeLocal = new Date(`${fecha}T${hora}:00`);
 
-    // Convertir la fecha local a UTC
     const datetimeUTC = new Date(
       datetimeLocal.getTime() - datetimeLocal.getTimezoneOffset() * 60000
     ).toISOString();
 
-    // Llamar al servicio con datetime en UTC
     this.ReservationService.addReservation(user, people, datetimeUTC);
 
     alert(`Reserva creada en UTC: Usuario ${user}, Personas ${people}, Fecha y hora ${datetimeUTC}`);

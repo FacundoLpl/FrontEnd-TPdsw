@@ -40,29 +40,28 @@
 /* Estilos para los textos del carrusel */
 .carousel-caption {
   position: absolute;
-  top: 60%; /* Ajusta para estar más abajo en la página */
+  top: 60%; 
   left: 50%;
-  transform: translate(-50%, -50%); /* Centra el texto horizontal y verticalmente desde el punto top/left */
+  transform: translate(-50%, -50%); 
   text-align: center;
-  width: 80%; /* Ajusta el ancho del contenedor de texto si es necesario */
+  width: 80%; 
 }
 
 .carousel-caption h3 {
   color: white;
-  font-size: 4em; /* Tamaño de la fuente aumentado */
-  font-family: 'Nunito', sans-serif;
+  font-size: 4em; 
   margin: 0;
-  background-color: rgba(0, 0, 0, 0.5); /* Fondo negro semi-transparente */
-  padding: 15px 25px; /* Ajusta el relleno para mayor visibilidad */
+  background-color: rgba(0, 0, 0, 0.5); 
+  padding: 15px 25px; 
   border-radius: 8px;
 }
 
 .carousel-caption p {
   color: white;
-  font-size: 1.5em; /* Tamaño de la fuente ajustado */
+  font-size: 1.5em; 
   font-family: 'Nunito', sans-serif;
   margin-top: 10px;
-  background-color: rgba(0, 0, 0, 0.5); /* Fondo negro semi-transparente */
-  padding: 10px 20px; /* Ajusta el relleno para mayor visibilidad */
+  background-color: rgba(0, 0, 0, 0.5); 
+  padding: 10px 20px; 
   border-radius: 8px;
 }
