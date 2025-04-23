@@ -10,6 +10,7 @@ import { tap } from 'rxjs/operators';
 export class AuthService {
   private LOGIN_URL = 'http://localhost:3000/api/users/login';
   private tokenKey = 'authToken';
+  private currentUserId = 'userId';
 
   constructor(private httpClient: HttpClient, private router: Router ) { }
 
@@ -19,6 +20,7 @@ export class AuthService {
         if (response.token) {
           console.log('Token received:', response.token);
           this.setToken(response.token)
+          this.setId(response.id)
           }
       }) 
     )
@@ -26,6 +28,9 @@ export class AuthService {
 
   private setToken(token: string): void { 
   localStorage.setItem(this.tokenKey, token);
+}
+private setId(id: string): void { 
+  localStorage.setItem(this.currentUserId, id);
 }
 
   private getToken(): string | null {
@@ -52,6 +57,7 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem(this.tokenKey);
+    localStorage.removeItem(this.currentUserId);
     this.router.navigate(['/login']);
   } // redirijo a la pagina de login
   // Eliminar el token del localStorage y redirigir a la página de inicio de sesión.
