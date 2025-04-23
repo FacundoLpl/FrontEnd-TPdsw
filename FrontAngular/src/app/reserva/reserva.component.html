@@ -1,30 +1,32 @@
 <!-- Sección de Reservas -->
-
-<section class="reservas">
+<section class="reservas relative min-h-screen flex flex-col">
     <app-navbar class="barra-navegacion"></app-navbar>
-    <br>
-    <div class="container">
-        <h1 class="text-center">Reserva tu mesa</h1>
 
-        <form [formGroup]="reservaForm" (ngSubmit)="onSubmit()">
-            <div class="form-group">
-                <label for="fecha">Fecha de la Reserva</label>
+    <!-- Fondo con gradiente -->
+    <div class="bg-yellow-500 absolute top-0 left-0 bg-gradient-to-b from-black via-gray-900 to-yellow-600 bottom-0 w-full h-full"></div>
+
+    <div class="container relative z-10 flex-1 flex flex-col items-center justify-center">
+        <h1 class="text-center text-white text-3xl font-bold mb-6">Reserva tu mesa</h1>
+
+        <form [formGroup]="reservaForm" (ngSubmit)="onSubmit()" class="bg-white p-8 rounded-3xl shadow-lg max-w-md w-full">
+            <div class="form-group mb-4">
+                <label for="fecha" class="block text-gray-700 font-medium">Fecha de la Reserva</label>
                 <input 
                     type="date" 
                     id="fecha" 
                     formControlName="fecha" 
                     [min]="minFecha" 
-                    [max]="maxFecha" 
+                    [max]="maxFecha"
+                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-purple-400"
                 />
-                <div *ngIf="reservaForm.get('fecha')?.invalid && reservaForm.get('fecha')?.touched" class="error">
+                <div *ngIf="reservaForm.get('fecha')?.invalid && reservaForm.get('fecha')?.touched" class="text-red-500 text-sm mt-1">
                     {{ getErrorMessage('fecha') }}
                 </div>
-              </div>
-              
-           
-            <div class="form-group">
-                <label for="hora">Hora de la Reserva</label>
-                <select id="hora" formControlName="hora" class="form-control">
+            </div>
+
+            <div class="form-group mb-4">
+                <label for="hora" class="block text-gray-700 font-medium">Hora de la Reserva</label>
+                <select id="hora" formControlName="hora" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-purple-400">
                     <option value="" disabled selected>Seleccione una hora</option>
                     <option value="19:00">19:00</option>
                     <option value="20:00">20:00</option>
@@ -32,19 +34,31 @@
                     <option value="22:00">22:00</option>
                     <option value="23:00">23:00</option>
                 </select>
-                <div *ngIf="reservaForm.get('hora')?.invalid && reservaForm.get('hora')?.touched" class="error">
+                <div *ngIf="reservaForm.get('hora')?.invalid && reservaForm.get('hora')?.touched" class="text-red-500 text-sm mt-1">
                     {{ getErrorMessage('hora') }}
                 </div>
             </div>
-            <div class="form-group">
-                <label for="personas">Número de Personas</label>
-                <input type="number" id="personas" formControlName="personas" placeholder="Número de personas" min="1" />
-                <div *ngIf="reservaForm.get('personas')?.invalid && reservaForm.get('personas')?.touched" class="error">
+
+            <div class="form-group mb-4">
+                <label for="personas" class="block text-gray-700 font-medium">Número de Personas</label>
+                <input 
+                    type="number" 
+                    id="personas" 
+                    formControlName="personas" 
+                    placeholder="Número de personas" 
+                    min="1" 
+                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-purple-400"
+                />
+                <div *ngIf="reservaForm.get('personas')?.invalid && reservaForm.get('personas')?.touched" class="text-red-500 text-sm mt-1">
                     {{ getErrorMessage('personas') }}
                 </div>
             </div>
-            <button type="submit" class="btn-reservar" [disabled]="reservaForm.invalid" (click)=addReservation()>Reservar</button> 
+
+            <button type="submit" class="w-full bg-purple-800 hover:bg-purple-700 text-white py-3 rounded-lg font-semibold cursor-pointer transition ease-in duration-500" [disabled]="reservaForm.invalid" (click)="addReservation()">
+                Reservar
+            </button>
         </form>
-        </div>
-        <app-footer></app-footer>
-        </section>
+    </div>
+
+    <app-footer class="relative z-10"></app-footer>
+</section>

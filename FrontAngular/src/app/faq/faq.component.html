@@ -1,39 +1,43 @@
-<section class="faqbackground">
-<body>
+<!-- Sección de Preguntas Frecuentes (FAQ) -->
+<section class="faqbackground relative min-h-screen flex flex-col">
     <app-navbar class="barra-navegacion"></app-navbar>
-    <div class="container">
-        <div class="faq">
-            <h2>Reservas</h2>
-            <h3>¿Con cuánta anticipación puedo reservar una mesa?</h3>
-            <p>Se puede reservar una mesa con hasta 1 semana de anticipación.</p>
-            
-            <h3>¿En qué horarios puedo realizar una reserva?</h3>
-            <p>Nuestras reservas están disponibles todos los días en los siguientes horarios: 19:00, 20:00, 21:00, 22:00 y 23:00.</p>
-        </div>
 
-        <div class="faq">
-            <h2>Horarios de Atención</h2>
-            <h3>¿Cuáles son los horarios de atención del restaurante?</h3>
-            <p>Abrimos todos los días de 19:00 a 00:00.</p>
-        </div>
+    <!-- Fondo con gradiente -->
+    <div class="bg-yellow-500 absolute top-0 left-0 bg-gradient-to-b from-black via-gray-900 to-yellow-600 bottom-0 w-full h-full"></div>
 
-        <div class="faq">
-            <h2>Ubicación</h2>
-            <h3>¿Dónde estamos ubicados?</h3>
-            <p>Estamos en Avenida Gourmet 123, Ciudad del Sabor, País Gastronómico.</p>
-        </div>
+    <div class="container relative z-10 flex-1 flex flex-col items-center justify-center py-10">
+        <div class="bg-gray-750 p-8 rounded-3xl shadow-lg max-w-3xl w-full">
+            <div class="faq mb-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 text-center">Reservas</h2>
+                <h3 class="text-lg font-semibold text-gray-700">¿Con cuánta anticipación puedo reservar una mesa?</h3>
+                <p class="text-white mb-4">Se puede reservar una mesa con hasta 1 semana de anticipación.</p>
 
-        <div class="faq">
-            <h2>Opciones de Servicio</h2>
-            <h3>¿Qué opciones tengo para disfrutar de la comida?</h3>
-            <ul>
-                <li>Reservar una mesa para comer en el restaurante.</li>
-                <li>Pedir comida para llevar (Take Away).</li>
-                <li>Solicitar un delivery a tu domicilio.</li>
-            </ul>
+                <h3 class="text-lg font-semibold text-gray-700">¿En qué horarios puedo realizar una reserva?</h3>
+                <p class="text-white">Nuestras reservas están disponibles todos los días en los siguientes horarios: 19:00, 20:00, 21:00, 22:00 y 23:00.</p>
+            </div>
+
+            <div class="faq mb-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 text-center">Horarios de Atención</h2>
+                <h3 class="text-lg font-semibold text-gray-700">¿Cuáles son los horarios de atención del restaurante?</h3>
+                <p class="text-white">Abrimos todos los días de 19:00 a 00:00.</p>
+            </div>
+
+            <div class="faq mb-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 text-center" >Ubicación</h2>
+                <h3 class="text-lg font-semibold text-gray-700">¿Dónde estamos ubicados?</h3>
+                <p class="text-white">Estamos en Avenida Gourmet 123, Ciudad del Sabor, País Gastronómico.</p>
+            </div>
+
+            <div class="faq">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 text-center">Opciones de Servicio</h2>
+                <h3 class="text-lg font-semibold text-gray-700">¿Qué opciones tengo para disfrutar de la comida?</h3>
+                <ul class="text-white list-disc pl-6">
+                    <li>Reservar una mesa para comer en el restaurante.</li>
+                    <li>Pedir comida para llevar (Take Away).</li>
+                    <li>Solicitar un delivery a tu domicilio.</li>
+                </ul>
+            </div>
         </div>
     </div>
-   
-</body>
-
 </section>
+<app-footer></app-footer>
