@@ -11,7 +11,7 @@ import { AuthenticatedGuard } from './core/guards/authenticated.guard.js'; // im
 export const routes: Routes = [
 
     {path: '', component: HomeComponent,
-        //canActivate: [AuthGuard], // protejo la ruta de inicio con el guard
+    //canActivate: [AuthGuard], // protejo la ruta de inicio con el guard
     },
     {path: 'carta', component: CartaComponent},
     {path: 'reserva', component: ReservaComponent},
@@ -19,7 +19,7 @@ export const routes: Routes = [
     {path: 'nosotros', component: NosotrosComponent},
     {path: 'carrito', component: CarritoComponent},
     {path: 'login', component: LoginComponent,
-       // canActivate: [AuthenticatedGuard], // protejo la ruta de login con el guard
+    canActivate: [AuthenticatedGuard], // protejo la ruta de login con el guard
     },
     
 ];

@@ -1,6 +1,6 @@
  <!DOCTYPE html>
 <html lang="es">
-<head>
+<head> 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login Page</title>
@@ -39,6 +39,8 @@
             <div class="relative">
               <input [(ngModel)]="password" placeholder="Contrasena" type="password" class="text-sm text-gray-600 px-4 py-3 rounded-lg w-full bg-gray-200 focus:bg-gray-100 border border-gray-200 focus:outline-none focus:border-purple-400">
             </div>
+            @if (!feedback){ 
+            <p style="color: red;">Email o contrasena incorrectos.</p>}
 
             <div class="flex items-center justify-between">
               <div class="text-sm ml-auto">

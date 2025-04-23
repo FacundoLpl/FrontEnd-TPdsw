@@ -17,6 +17,7 @@ export class LoginComponent {
   
   user: string = '';
   password: string = '';
+  feedback: boolean = true;
 
   constructor(private authService: AuthService, private router: Router ) {
 
@@ -24,7 +25,11 @@ export class LoginComponent {
 
   login (): void {
     this.authService.login(this.user, this.password).subscribe({
-      next: ()=> this.router.navigate(['/home']), // si la autenticacion es correcta, redirijo a la pagina de inicio
-      error: (err) => console.error('Login failed', err), // si la autenticacion falla, muestro un error en consola
+      next: ()=> this.router.navigate(['/']), // si la autenticacion es correcta, redirijo a la pagina de inicio
+      error: (err) => {console.error('Login failed', err)
+        this.feedback=false
+      } // si la autenticacion falla, muestro un error en consola
     })
-}}
+}
+  logout(): void {this.authService.logout()}  
+}
