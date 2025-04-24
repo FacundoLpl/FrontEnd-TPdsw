@@ -4,6 +4,8 @@ import { NavbarComponent } from '../components/navbar/navbar.component.js';
 import { FooterComponent } from '../components/footer/footer/footer.component.js';
 import { CommonModule } from '@angular/common';
 import { ReservationService } from '../services/reservation.service.js';
+import { AuthService } from '../core/services/auth.service.js';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-reserva',
@@ -18,8 +20,9 @@ export class ReservaComponent {
   reservaForm: FormGroup;
   minFecha: string;
   maxFecha: string;
+  token: any;
 
-  constructor(private fb: FormBuilder, private ReservationService: ReservationService) {
+  constructor(private fb: FormBuilder, private ReservationService: ReservationService, private AuthService: AuthService, private router:Router) {
     const hoy = new Date();
     this.minFecha = this.formatFecha(hoy); // Fecha actual
     this.maxFecha = this.formatFecha(new Date(hoy.setDate(hoy.getDate() + 7))); // 7 días después
@@ -56,7 +59,10 @@ export class ReservaComponent {
   }
 
   addReservation(): void {
-    const user = '672d4f6cb48ca087afa73e84';
+   // const user = '672d4f6cb48ca087afa73e84';
+    const userId = this.AuthService.getId();
+    if (userId != null) {
+      const user = userId
     const people = this.reservaForm.value.personas;
 
     const fecha = this.reservaForm.value.fecha;
@@ -72,4 +78,8 @@ export class ReservaComponent {
 
     alert(`Reserva creada en UTC: Usuario ${user}, Personas ${people}, Fecha y hora ${datetimeUTC}`);
   }
+  else {this.router.navigate(['/login']),
+    alert("Por favor logearse antes de realizar la reserva.")
+  }
+}
 }

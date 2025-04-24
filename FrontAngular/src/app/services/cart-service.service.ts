@@ -4,6 +4,8 @@ import { Order } from '../entities/order.entity';
 import { catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { of } from 'rxjs';
+import { AuthService } from '../core/services/auth.service';
+import { HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +16,7 @@ export class CartServiceService {
   readonly baseUrl = 'http://localhost:3000/api/carts/';
   readonly orderUrl = 'http://localhost:3000/api/orders/';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private authService:AuthService) { }
 
 // HAY QUE CAMBIAR LA URL POR ORDER URL
   completePurchase(cartId: string, newCart: any): Observable<any> {
@@ -23,24 +25,41 @@ export class CartServiceService {
     return this.http.put(url, newCart);
     }
   // busca todos los carts segun los filtros. (carrito.component.ts)
-  findAll(filter: any) { 
+  findAll(filter: any = {}) {
+    // 1. Configurar headers con el token
+    const token = this.authService.getToken();
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+    // 2. Configurar parámetros de consulta
     let params = new HttpParams();
-    if (filter.state) { // si se pasa un estado como filtro
+    
+    if (filter.state) {
       params = params.set('state', filter.state);
     }
-    if (filter.user) { // si se pasa un usuario como filtro
+    
+    if (filter.user) {
       params = params.set('user', filter.user);
     }
-    return this.http.get(`${this.baseUrl}`, { params });
-  }
-  
+
+    // 3. Realizar la petición con headers y params
+    return this.http.get(`${this.baseUrl}`, { 
+      headers: headers,
+      params: params
+    });
+}
+   // const token = this.authService.getToken(); // Método que obtiene tu token
+   // const headers = new HttpHeaders({
+   //   'Authorization': `Bearer ${token}`});
   deleteOrder(orderId: string, cartId: string) {
     return this.http.delete(`${this.orderUrl}`+ orderId);
   }
   
   
   // agrega una linea al pedido del user. (menu-item-modal.component.ts)
-  addOrder(quantity: number, cartId: string, productId: string) {
+  addOrder(quantity: number, cartId: string, productId: string, userId: string) {
     this.http.get<any>(this.orderUrl)
       .pipe(
         catchError(err => {
@@ -75,7 +94,7 @@ export class CartServiceService {
               "quantity": quantity,
               "product": productId,
               "subtotal": 159,
-              "user": "672d4f6cb48ca087afa73e84"
+              "user": userId
             };
             //  this.finalUrl = ${this.baseUrl}${cartId}/orders; 
             this.http.post<any>(this.orderUrl, this.order).subscribe({

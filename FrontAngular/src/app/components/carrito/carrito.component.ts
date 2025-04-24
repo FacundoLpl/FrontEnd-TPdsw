@@ -6,6 +6,7 @@ import { Order } from '../../entities/order.entity.js';
 import { NgFor, NgIf } from '@angular/common';
 import { Cart } from '../../entities/cart.entity.js';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../core/services/auth.service.js';
 
 
 @Component({
@@ -22,6 +23,7 @@ export class CarritoComponent {
   @Input() quantity: number;
   @Input() comment: string;
   orders:Order[]=[];
+  isLoggedIn: boolean;
   
   deliveryType: string = 'delivery'; // Valor por defecto
   deliveryAddress: string = '';
@@ -33,13 +35,17 @@ export class CarritoComponent {
 
   items: { itemTitle: string, price: number, quantity: number, comment: string }[] = [];
 
-  constructor(private cartService: CartServiceService) {}
+  constructor(private cartService: CartServiceService, private AuthService: AuthService) {}
   cart: Cart[] = []; // Asegura que es un array
   cartId: string = ''; // Add cartId property
   newCart: any;
   
   ngOnInit() {
-    this.cartService.findAll({ user: "672d4f6cb48ca087afa73e84", state: 'Pending' }).subscribe({
+    const userId = this.AuthService.getId()
+    if (userId != null){
+      const user = userId
+      this.isLoggedIn = true
+    this.cartService.findAll({ user: user, state: 'Pending' }).subscribe({
       next: (res: any) => {
         this.cart = res.data; // Asigna todos los carts
         this.cart.forEach(cart => {
@@ -60,7 +66,7 @@ export class CarritoComponent {
         });
       },
       error: (err: any) => console.error("Error fetching carts", err),
-    });
+    });} else { this.isLoggedIn = false}
   }
 
  

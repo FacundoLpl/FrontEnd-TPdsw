@@ -33,10 +33,16 @@ private setId(id: string): void {
   localStorage.setItem(this.currentUserId, id);
 }
 
-  private getToken(): string | null {
+getToken(): string | null {
     if (typeof window !== 'undefined') {
     return localStorage.getItem(this.tokenKey);
   }else return null;
+}
+
+getId(): string | null {
+  if (typeof window !== 'undefined') {
+  return localStorage.getItem(this.currentUserId);
+}else return null;
 }
 
   //validar que el token existe y que no haya expirado

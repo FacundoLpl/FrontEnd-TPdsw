@@ -3,7 +3,9 @@
 
   <div class="container">
     <h1 class="page-title">Carrito</h1>
-
+   <div> @if (!isLoggedIn) {
+      <p>Usted no inicio sesion. Debe hacerlo antes de continuar.</p>
+    }</div>
     <section class="cart-section ">
       <div class="cart-items ">
         <div *ngFor="let cartItem of cart" class="cart-item">
