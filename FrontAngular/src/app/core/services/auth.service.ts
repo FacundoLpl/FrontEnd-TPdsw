@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import {jwtDecode} from 'jwt-decode'
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,6 @@ import { tap } from 'rxjs/operators';
 export class AuthService {
   private LOGIN_URL = 'http://localhost:3000/api/users/login';
   private tokenKey = 'authToken';
-  private currentUserId = 'userId';
 
   constructor(private httpClient: HttpClient, private router: Router ) { }
 
@@ -20,7 +20,6 @@ export class AuthService {
         if (response.token) {
           console.log('Token received:', response.token);
           this.setToken(response.token)
-          this.setId(response.id)
           }
       }) 
     )
@@ -29,9 +28,6 @@ export class AuthService {
   private setToken(token: string): void { 
   localStorage.setItem(this.tokenKey, token);
 }
-private setId(id: string): void { 
-  localStorage.setItem(this.currentUserId, id);
-}
 
 getToken(): string | null {
     if (typeof window !== 'undefined') {
@@ -39,32 +35,44 @@ getToken(): string | null {
   }else return null;
 }
 
-getId(): string | null {
-  if (typeof window !== 'undefined') {
-  return localStorage.getItem(this.currentUserId);
-}else return null;
-}
-
-  //validar que el token existe y que no haya expirado
-  isAuthenticated(): boolean {
+  // Nuevo método para obtener datos del token decodificado
+  getDecodedToken(): any {
     const token = this.getToken();
-    if (!token) {
-      return false;
+    if (!token) return null;
+    
+    try {
+      return jwtDecode(token);
+    } catch (error) {
+      console.error('Error decoding token:', error);
+      return null;
     }
-    //recupero el payload del token y valido la fecha de expiracion
-    // El token JWT tiene tres partes: header, payload y signature, separadas por puntos.
-    // La segunda parte (payload) contiene la información del token, incluyendo la fecha de expiración (exp).
-    const payload = JSON.parse(atob(token.split('.')[1]));
-    // con atob decodifico el payload, que es un string en base64
-    // y lo convierto a un objeto JSON.
-    const expirationDate = new Date(payload.exp * 1000);
-    return expirationDate > new Date();
   }
 
-  logout(): void {
-    localStorage.removeItem(this.tokenKey);
-    localStorage.removeItem(this.currentUserId);
-    this.router.navigate(['/login']);
-  } // redirijo a la pagina de login
-  // Eliminar el token del localStorage y redirigir a la página de inicio de sesión.
-}
+    // Obtener ID del usuario desde el token
+    getId(): string | null {
+      const decodedToken = this.getDecodedToken();
+      return decodedToken?.id || null;
+    }
+  
+    // Obtener tipo de usuario desde el token
+    getUserRole(): string | null {
+      const decodedToken = this.getDecodedToken();
+      return decodedToken?.role || null;
+    }
+  
+
+    isAuthenticated(): boolean {
+      const token = this.getToken();
+      if (!token) return false;
+  
+      const decodedToken = this.getDecodedToken();
+      if (!decodedToken?.exp) return false;
+  
+      return decodedToken.exp * 1000 > Date.now();
+    }
+  
+    logout(): void {
+      localStorage.removeItem(this.tokenKey);
+      this.router.navigate(['/login']);
+    }
+  }

@@ -28,10 +28,7 @@ export class CartServiceService {
   findAll(filter: any = {}) {
     // 1. Configurar headers con el token
     const token = this.authService.getToken();
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    });
+  
 
     // 2. Configurar parámetros de consulta
     let params = new HttpParams();
@@ -46,7 +43,6 @@ export class CartServiceService {
 
     // 3. Realizar la petición con headers y params
     return this.http.get(`${this.baseUrl}`, { 
-      headers: headers,
       params: params
     });
 }
