@@ -1,0 +1,11 @@
+<p>lista-reservas works!</p>
+<div class="lista-reservas">
+  <h2>Lista de Reservas</h2>
+  <ul>
+    <li *ngFor="let reserva of reservas">
+      <strong>{{ reserva.nombre }}</strong> -
+      {{ reserva.fecha }} a las {{ reserva.hora }} -
+      {{ reserva.user }} user
+    </li>
+  </ul>
+</div>

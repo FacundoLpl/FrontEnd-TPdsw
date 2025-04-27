@@ -4,13 +4,14 @@ import { NavbarComponent } from '../components/navbar/navbar.component.js';
 import { FooterComponent } from '../components/footer/footer/footer.component.js';
 import { CommonModule } from '@angular/common';
 import { ReservationService } from '../services/reservation.service.js';
+import { ListaReservasComponent } from '../components/lista-reservas/lista-reservas.component';
 import { AuthService } from '../core/services/auth.service.js';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-reserva',
   standalone: true,
-  imports: [NavbarComponent, FooterComponent, ReactiveFormsModule, CommonModule],
+  imports: [NavbarComponent, FooterComponent, ReactiveFormsModule, CommonModule, ListaReservasComponent],
   templateUrl: './reserva.component.html',
   styleUrls: ['./reserva.component.css']
 })
@@ -81,5 +82,6 @@ export class ReservaComponent {
   else {this.router.navigate(['/login']),
     alert("Por favor logearse antes de realizar la reserva.")
   }
+  
 }
 }

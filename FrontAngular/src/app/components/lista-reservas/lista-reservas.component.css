@@ -1,0 +1,15 @@
+.reservas-lista {
+  padding: 1rem;
+}
+
+.reservas-lista ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.reservas-lista li {
+  background: #f0f0f0;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 5px;
+}
