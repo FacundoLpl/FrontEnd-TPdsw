@@ -70,6 +70,17 @@ getToken(): string | null {
   
       return decodedToken.exp * 1000 > Date.now();
     }
+
+    isAdmin(): boolean {
+      const token = this.getToken();
+
+      const decodedToken = this.getDecodedToken();
+      if (!decodedToken?.exp) return false;
+
+      if (decodedToken.exp * 1000 < Date.now()) return false;
+
+      return decodedToken.userType === 'Admin';
+    }
   
     logout(): void {
       localStorage.removeItem(this.tokenKey);

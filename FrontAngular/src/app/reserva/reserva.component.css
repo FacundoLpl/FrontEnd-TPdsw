@@ -1,74 +1,94 @@
-
+/* Estilos para el componente de reservas */
 .reservas {
-    background-color: #333; 
-    color: #fff; 
-    padding: 60px 0; 
-    min-height: 100vh;
-  }
-  
-  .reservas h1 {
-    font-size: 2.5rem; 
-    text-align: center; 
-    color: #f9f9f9; 
-    margin-bottom: 40px; 
-    font-family: 'Nunito', sans-serif; 
-    font-weight: 700; 
-    background-color: #444;
-    padding: 20px; 
-    border-radius: 8px; 
-  }
-  
-  /* Estilo para el formulario */
-  .reserva-form {
-    background-color: #444; 
-    padding: 30px; 
-    border-radius: 8px; 
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
-    max-width: 600px; 
-    margin: 0 auto; 
-  }
-  
-  .form-group {
-    margin-bottom: 20px; 
-  }
-  
-  .form-group label {
-    display: block; 
-    margin-bottom: 5px;
-    font-size: 1rem; 
-  }
-  
-  .form-group input,
-  .form-group textarea {
-    width: 100%; 
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: #fff; 
-    color: #333; 
-    font-size: 1rem;
-  }
-  
-  .form-group textarea {
-    resize: vertical; 
-    min-height: 100px; 
-  }
-  
-  .btn-reservar {
-    background-color: #f39c12; 
-    color: #fff; 
-    border: none; 
-    padding: 15px 20px; 
-    border-radius: 4px; 
-    font-size: 1rem; 
-    cursor: pointer; 
-    transition: background-color 0.3s; }
-  
-  .btn-reservar:hover {
-    background-color: #e67e22; 
-  }
-  
-  .error {
-    color: red;
-    font-size: 0.9em;
-  }
+  background-color: #333;
+  color: #fff;
+  padding: 60px 0;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.page-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 40px;
+  color: #f9c74f;
+}
+
+.reservation-section {
+  background-color: #2e2e2e;
+  border-radius: 10px;
+  padding: 30px;
+  margin-bottom: 40px;
+}
+
+.reservation-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #555;
+  border-radius: 5px;
+  background-color: #222;
+  color: #fff;
+}
+
+.form-group select option {
+  background-color: #222;
+  color: #fff;
+}
+
+.btn-confirm {
+  width: 100%;
+  background-color: #f9c74f;
+  color: #333;
+  padding: 15px;
+  border-radius: 5px;
+  text-align: center;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 1rem;
+}
+
+.btn-confirm:hover {
+  background-color: #e6b800;
+}
+
+.btn-confirm:disabled {
+  background-color: #666;
+  cursor: not-allowed;
+}
+
+.error {
+  color: #ff6b6b;
+  font-size: 0.9rem;
+  margin-top: 5px;
+}
+
+/* Estilos para la lista de reservas */
+app-lista-reservas {
+  display: block;
+  margin-top: 30px;
+}

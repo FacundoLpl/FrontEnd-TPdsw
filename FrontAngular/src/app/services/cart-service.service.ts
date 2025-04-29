@@ -55,7 +55,8 @@ export class CartServiceService {
   
   
   // agrega una linea al pedido del user. (menu-item-modal.component.ts)
-  addOrder(quantity: number, cartId: string, productId: string, userId: string) {
+  /* addOrder(quantity: number, cartId: string, productId: string, userId: string) {
+    
     this.http.get<any>(this.orderUrl)
       .pipe(
         catchError(err => {
@@ -99,5 +100,42 @@ export class CartServiceService {
           }
         },
       });
+  } */
+ addOrder(quantity: number, cartId: string, productId: string, userId: string, price: number) {
+  // First validate the quantity
+  if (quantity <= 0) {
+    console.error("Invalid quantity");
+    return;
   }
+  const subtotal = quantity * price;
+  
+  const orderPayload = {
+    quantity: quantity,
+    product: productId,
+    user: userId,
+    subtotal: subtotal  // Add calculated subtotal
+  };
+
+  // Send to backend which will handle all the logic
+  this.http.post<any>(`${this.orderUrl}`, orderPayload).subscribe({
+    next: (response) => {
+      // Handle successful order creation
+      console.log("Order processed successfully", response);
+    },
+    error: (err) => {
+      console.error("Error processing order:", err);
+      // Show user-friendly error message based on status code
+      if (err.status === 400) {
+        alert("Invalid order data: " + err.error.message);
+      } else if (err.status === 403) {
+        alert("You don't have permission to perform this action");
+      } else if (err.status === 409) {
+        alert("Not enough stock available");
+      } else {
+        alert("An unexpected error occurred");
+      }
+    }
+  });
+}
+
 }

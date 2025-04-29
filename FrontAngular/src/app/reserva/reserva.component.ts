@@ -22,6 +22,7 @@ export class ReservaComponent {
   minFecha: string;
   maxFecha: string;
   token: any;
+  pendingReservation:any;
 
   constructor(private fb: FormBuilder, private ReservationService: ReservationService, private AuthService: AuthService, private router:Router) {
     const hoy = new Date();
@@ -30,7 +31,7 @@ export class ReservaComponent {
 
     // Configurar el formulario reactivo con validaciones
     this.reservaForm = this.fb.group({
-      fecha: ['', Validators.required],
+      fecha: [this.minFecha, Validators.required],
       hora: ['', Validators.required],
       personas: ['', [Validators.required, Validators.min(1)]]
     });
@@ -62,7 +63,14 @@ export class ReservaComponent {
   addReservation(): void {
    // const user = '672d4f6cb48ca087afa73e84';
     const userId = this.AuthService.getId();
-    if (userId != null) {
+    const isValidated = this.AuthService.isAuthenticated()
+    if (!isValidated || !userId) {
+      console.error("Por favor inicia sesión para continuar.");
+      alert("Por favor inicia sesión para continuar.")
+      this.router.navigate(['/login']);
+      return;
+    }
+  
       const user = userId
     const people = this.reservaForm.value.personas;
 
@@ -75,13 +83,37 @@ export class ReservaComponent {
       datetimeLocal.getTime() - datetimeLocal.getTimezoneOffset() * 60000
     ).toISOString();
 
-    this.ReservationService.addReservation(user, people, datetimeUTC);
+    this.ReservationService.addReservation(user, people, datetimeUTC).subscribe({
+      next: (response) => {
+        alert(`✅ Reserva creada:\nUsuario: ${user}\nPersonas: ${people}\nFecha y hora (UTC): ${datetimeUTC}`);
+        console.log('Reserva creada con éxito:', response);
+        this.router.navigate(['/']);
 
-    alert(`Reserva creada en UTC: Usuario ${user}, Personas ${people}, Fecha y hora ${datetimeUTC}`);
-  }
-  else {this.router.navigate(['/login']),
-    alert("Por favor logearse antes de realizar la reserva.")
-  }
+        this.reservaForm.reset({
+          fecha: this.minFecha,
+          hora: '',
+          personas: ''
+        });
+      },
+      error: (error) => {
+        console.error('Error al crear la reserva:', error);
+        alert('⚠️ No se pudo crear la reserva. Es posible que ya tengas una pendiente.');
+      }
+    });
   
 }
+
+buscarPendiente() {
+  this.ReservationService.findOne().subscribe({
+    next: (res) => {
+      this.pendingReservation = res;
+    },
+    error: (err) => {
+      console.error(err.message);
+      alert(err.message); // o mostrarlo en un toast
+    }
+  });
+}
+
+
 }

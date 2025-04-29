@@ -1,6 +1,8 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthService} from '../core/services/auth.service';
+import { Observable } from 'rxjs';
+import { throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +12,7 @@ export class ReservationService {
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
-  addReservation(user: string, people: number, datetime: string): void {
+  addReservation(user: string, people: number, datetime: string): Observable<any> {
     const body = {
       state: 'Pending',
       user: user,
@@ -18,34 +20,34 @@ export class ReservationService {
       datetime: datetime, // Enviar el valor directamente
     };
 
-    this.http.post(this.apiUrl, body).subscribe(
-      (response) => {
-        console.log('Reserva creada con éxito:', response);
-      },
-      (error) => {
-        console.error('Error al crear la reserva:', error);
-      }
-    );
+    return this.http.post(this.apiUrl, body); // ← Devolver Observable
   }
   findAll(filter: any = {}) {
-      // 1. Configurar headers con el token
       const token = this.authService.getToken();
-    
-  
-      // 2. Configurar parámetros de consulta
       let params = new HttpParams();
-      
       if (filter.state) {
         params = params.set('state', filter.state);
       }
-      
       if (filter.user) {
         params = params.set('user', filter.user);
       }
-  
-      // 3. Realizar la petición con headers y params
       return this.http.get(`${this.apiUrl}`, { 
         params: params
       });
   }
+
+  findOne() {
+    const userId = this.authService.getId();
+    if (userId != null) {
+      let params = new HttpParams()
+        .set('state', 'pending')
+        .set('user', userId);
+  
+      return this.http.get(`${this.apiUrl}`, { params });
+    } else {
+      // Mejor mostrar el error fuera, y devolver un observable vacío
+      return throwError(() => new Error("Log In antes de continuar"));
+    }
+  }
+  
 }

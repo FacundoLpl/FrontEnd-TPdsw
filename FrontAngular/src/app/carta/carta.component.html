@@ -14,7 +14,7 @@
             <div class="carousel-inner">
                 <div class="carousel-item" *ngFor="let productGroup of groupProductsByThree('Bebidas'); let i = index" [class.active]="i === 0">
                     <div class="row">
-                        <div class="col-md-4" *ngFor="let product of productGroup" (click)="openModal(product.name, product.imageUrl, product.id)">
+                        <div class="col-md-4" *ngFor="let product of productGroup" (click)="openModal(product.name, product.imageUrl, product.id, product.price)">
                             <app-menu-item 
                                 [title]="product.name"
                                 [imageUrl]="product.imageUrl"
@@ -43,7 +43,7 @@
             <div class="carousel-inner">
                 <div class="carousel-item" *ngFor="let productGroup of groupProductsByThree('Entradas'); let i = index" [class.active]="i === 0">
                     <div class="row">
-                        <div class="col-md-4" *ngFor="let product of productGroup" (click)="openModal(product.name, product.imageUrl,product.id)">
+                        <div class="col-md-4" *ngFor="let product of productGroup" (click)="openModal(product.name, product.imageUrl,product.id, product.price)">
                             <app-menu-item 
                                 [title]="product.name"
                                 [imageUrl]="product.imageUrl"
@@ -71,7 +71,7 @@
             <div class="carousel-inner">
                 <div class="carousel-item" *ngFor="let productGroup of groupProductsByThree('Guarniciones'); let i = index" [class.active]="i === 0">
                     <div class="row">
-                        <div class="col-md-4" *ngFor="let product of productGroup" (click)="openModal(product.name, product.imageUrl, product.id)">
+                        <div class="col-md-4" *ngFor="let product of productGroup" (click)="openModal(product.name, product.imageUrl, product.id, product.price)">
                             <app-menu-item 
                                 [title]="product.name"
                                 [imageUrl]="product.imageUrl"
@@ -99,7 +99,7 @@
             <div class="carousel-inner">
                 <div class="carousel-item" *ngFor="let productGroup of groupProductsByThree('Principales'); let i = index" [class.active]="i === 0">
                     <div class="row">
-                        <div class="col-md-4" *ngFor="let product of productGroup" (click)="openModal(product.name, product.imageUrl, product.id)">
+                        <div class="col-md-4" *ngFor="let product of productGroup" (click)="openModal(product.name, product.imageUrl, product.id, product.price)">
                             <app-menu-item 
                                 [title]="product.name"
                                 [imageUrl]="product.imageUrl"
@@ -128,7 +128,7 @@
             <div class="carousel-inner">
                 <div class="carousel-item" *ngFor="let productGroup of groupProductsByThree('Postres'); let i = index" [class.active]="i === 0">
                     <div class="row">
-                        <div class="col-md-4" *ngFor="let product of productGroup" (click)="openModal(product.name, product.imageUrl,  product.id)">
+                        <div class="col-md-4" *ngFor="let product of productGroup" (click)="openModal(product.name, product.imageUrl,  product.id, product.price)">
                             <app-menu-item 
                                 [title]="product.name"
                                 [imageUrl]="product.imageUrl"
@@ -155,6 +155,7 @@
                 [itemTitle]="selectedItemTitle"
                 [imageUrl]="selectedImageUrl"
                 [productId]="selectedProductId"
+                [price]="selectedPrice"
                 (close)="closeModal()"
                 >
             </app-menu-item-modal>

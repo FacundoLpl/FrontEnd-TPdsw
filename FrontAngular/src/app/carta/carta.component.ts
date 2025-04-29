@@ -23,13 +23,15 @@ export class CartaComponent {
   selectedItemTitle: string = '';
   selectedImageUrl: string = '';
   selectedProductId: string = '';
+  selectedPrice: number;
   orderData: { itemTitle: string, price: number, quantity: number, comment: string };  // Aquí se almacenarán los datos del pedido
   products: any[] = [];
 
-  openModal(itemTitle: string, imageUrl: string, productId: string) {
+  openModal(itemTitle: string, imageUrl: string, productId: string, price:number) {
     this.selectedItemTitle = itemTitle;
     this.selectedImageUrl = imageUrl;
     this.selectedProductId = productId;
+    this.selectedPrice = price;
     this.isModalOpen = true;
   }
 

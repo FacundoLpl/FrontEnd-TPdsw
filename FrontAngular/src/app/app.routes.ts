@@ -8,6 +8,8 @@ import { CarritoComponent } from './components/carrito/carrito.component';
 import { LoginComponent } from './authentication/login/login.component.js';
 import { AuthGuard } from './core/guards/auth.guard.js'; // importo el guard de autenticacion
 import { AuthenticatedGuard } from './core/guards/authenticated.guard.js'; // importo el guard de autenticacion
+import { AdminComponent } from './components/admin/admin.component';
+import { adminGuard } from './core/guards/admin.guard';
 export const routes: Routes = [
 
     {path: '', component: HomeComponent,
@@ -21,5 +23,6 @@ export const routes: Routes = [
     {path: 'login', component: LoginComponent,
     canActivate: [AuthenticatedGuard], // protejo la ruta de login con el guard
     },
+    {path: 'admin', component: AdminComponent, canActivate: [adminGuard]},
     
 ];
