@@ -10,6 +10,7 @@ import { AuthGuard } from './core/guards/auth.guard.js'; // importo el guard de 
 import { AuthenticatedGuard } from './core/guards/authenticated.guard.js'; // importo el guard de autenticacion
 import { AdminComponent } from './components/admin/admin.component';
 import { adminGuard } from './core/guards/admin.guard';
+import { RegisterComponent } from './authentication/register/register.component';
 export const routes: Routes = [
 
     {path: '', component: HomeComponent,
@@ -20,9 +21,12 @@ export const routes: Routes = [
     {path: 'faq', component: FaqComponent},
     {path: 'nosotros', component: NosotrosComponent},
     {path: 'carrito', component: CarritoComponent},
+
     {path: 'login', component: LoginComponent,
-    canActivate: [AuthenticatedGuard], // protejo la ruta de login con el guard
+        canActivate: [AuthenticatedGuard], // protejo la ruta de login con el guard
     },
+    {path: 'register', component: RegisterComponent},
+
     {path: 'admin', component: AdminComponent, canActivate: [adminGuard]},
     
 ];
