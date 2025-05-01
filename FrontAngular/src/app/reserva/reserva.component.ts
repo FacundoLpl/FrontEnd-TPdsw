@@ -23,7 +23,7 @@ export class ReservaComponent {
   maxFecha: string;
   token: any;
   pendingReservation:any;
-
+  noTieneReserva: boolean = false
   constructor(private fb: FormBuilder, private ReservationService: ReservationService, private AuthService: AuthService, private router:Router) {
     const hoy = new Date();
     this.minFecha = this.formatFecha(hoy); // Fecha actual
@@ -78,10 +78,8 @@ export class ReservaComponent {
     const hora = this.reservaForm.value.hora;
 
     const datetimeLocal = new Date(`${fecha}T${hora}:00`);
+const datetimeUTC = datetimeLocal.toISOString();
 
-    const datetimeUTC = new Date(
-      datetimeLocal.getTime() - datetimeLocal.getTimezoneOffset() * 60000
-    ).toISOString();
 
     this.ReservationService.addReservation(user, people, datetimeUTC).subscribe({
       next: (response) => {
@@ -105,8 +103,19 @@ export class ReservaComponent {
 
 buscarPendiente() {
   this.ReservationService.findOne().subscribe({
-    next: (res) => {
-      this.pendingReservation = res;
+    next: (reservation) => {
+      if (reservation) {
+        this.pendingReservation = {
+          date: new Date(reservation.datetime).toLocaleDateString(),
+          time: new Date(reservation.datetime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          people: reservation.people,
+          userFullName: `${reservation.user.firstName} ${reservation.user.lastName}`,
+        };
+
+      } else {
+        this.noTieneReserva = true
+        this.pendingReservation = null;
+      }
     },
     error: (err) => {
       console.error(err.message);

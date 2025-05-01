@@ -61,8 +61,17 @@
           >
             Reservar
           </button>
-          <button (click)="buscarPendiente()">Buscar Pendientes</button>
-          <pre>{{ pendingReservation | json }}</pre>
+          <button class="btn-confirm" (click)="buscarPendiente()">Buscar Pendientes</button>
+          <div *ngIf="pendingReservation">
+            <h3>Tu reserva pendiente</h3>
+            <p><strong>Fecha:</strong> {{ pendingReservation.date }}</p>
+            <p><strong>Hora:</strong> {{ pendingReservation.time }}</p>
+            <p><strong>Personas:</strong> {{ pendingReservation.people }}</p>
+            <p><strong>Reservado por:</strong> {{ pendingReservation.userFullName }}</p>
+          </div>
+          <div *ngIf="noTieneReserva">
+            <h3>No tienes reservas pendientes</h3>
+          </div>
 
         </form>
       </div>
