@@ -1,32 +1,80 @@
-import { Routes} from '@angular/router';
-import { HomeComponent } from './home/home.component';
-import { CartaComponent } from './carta/carta.component';
-import { ReservaComponent } from './reserva/reserva.component';
-import { FaqComponent } from './faq/faq.component';
-import { NosotrosComponent } from './nosotros/nosotros.component';
-import { CarritoComponent } from './components/carrito/carrito.component';
-import { LoginComponent } from './authentication/login/login.component.js';
-import { AuthGuard } from './core/guards/auth.guard.js'; // importo el guard de autenticacion
-import { AuthenticatedGuard } from './core/guards/authenticated.guard.js'; // importo el guard de autenticacion
-import { AdminComponent } from './components/admin/admin.component';
-import { adminGuard } from './core/guards/admin.guard';
-import { RegisterComponent } from './authentication/register/register.component';
+import type { Routes } from "@angular/router"
+import { HomeComponent } from "./home/home.component"
+import { CartaComponent } from "./carta/carta.component"
+import { ReservaComponent } from "./reserva/reserva.component"
+import { FaqComponent } from "./faq/faq.component"
+import { NosotrosComponent } from "./nosotros/nosotros.component"
+import { CarritoComponent } from "./components/carrito/carrito.component"
+import { LoginComponent } from "./authentication/login/login.component"
+import { RegisterComponent } from "./authentication/register/register.component"
+import { AdminComponent } from "./components/admin/admin.component"
+import { AdminDashboardComponent } from "./admin/admin-dashboard.component"
+import { MisPedidosComponent } from "./components/mis-pedidos/mis-pedidos.component"
+
+// Guards
+import { AuthGuard } from "./core/guards/auth.guard"
+import { AuthenticatedGuard } from "./core/guards/authenticated.guard"
+import { AdminGuard } from "./core/guards/admin.guard"
+
 export const routes: Routes = [
+  // Página principal
+  {
+    path: "",
+    component: HomeComponent,
+    // canActivate: [AuthGuard], // descomentado si quieres proteger la home
+  },
 
-    {path: '', component: HomeComponent,
-    //canActivate: [AuthGuard], // protejo la ruta de inicio con el guard
-    },
-    {path: 'carta', component: CartaComponent},
-    {path: 'reserva', component: ReservaComponent},
-    {path: 'faq', component: FaqComponent},
-    {path: 'nosotros', component: NosotrosComponent},
-    {path: 'carrito', component: CarritoComponent},
+  // Páginas públicas
+  { path: "carta", component: CartaComponent },
+  { path: "reserva", component: ReservaComponent },
+  { path: "faq", component: FaqComponent },
+  { path: "nosotros", component: NosotrosComponent },
 
-    {path: 'login', component: LoginComponent,
-        canActivate: [AuthenticatedGuard], // protejo la ruta de login con el guard
-    },
-    {path: 'register', component: RegisterComponent},
+  // Páginas que requieren autenticación
+  {
+    path: "carrito",
+    component: CarritoComponent,
+    canActivate: [AuthGuard], // Proteger carrito para usuarios autenticados
+  },
+  
+  // 👈 MIS PEDIDOS - MOVIDO AQUÍ
+  {
+    path: 'mis-pedidos',
+    component: MisPedidosComponent,
+    canActivate: [AuthGuard]
+  },
 
-    {path: 'admin', component: AdminComponent, canActivate: [adminGuard]},
-    
-];
+  // Autenticación (solo para usuarios no autenticados)
+  {
+    path: "login",
+    component: LoginComponent,
+    canActivate: [AuthenticatedGuard], // Redirige si ya está logueado
+  },
+  {
+    path: "register",
+    component: RegisterComponent,
+    canActivate: [AuthenticatedGuard], // Redirige si ya está logueado
+  },
+
+  // Rutas de administración
+  {
+    path: "admin",
+    component: AdminComponent,
+    canActivate: [AdminGuard],
+  },
+  {
+    path: "admin/dashboard",
+    component: AdminDashboardComponent,
+    canActivate: [AdminGuard],
+  },
+
+   //Rutas para diferentes roles (opcional)
+  {
+    path: "mozo/panel",
+   loadComponent: () => import("./mozo/mozo-panel.component").then((m) => m.MozoPanelComponent),
+    canActivate: [AuthGuard], // Puedes crear un guard específico para mozos
+  },
+
+  // 👈 WILDCARD - SIEMPRE AL FINAL
+  { path: "**", redirectTo: "/carta" }
+]

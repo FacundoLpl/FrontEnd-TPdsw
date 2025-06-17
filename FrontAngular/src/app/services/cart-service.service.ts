@@ -1,141 +1,256 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Order } from '../entities/order.entity';
-import { catchError } from 'rxjs/operators';
-import { Observable } from 'rxjs';
-import { of } from 'rxjs';
-import { AuthService } from '../core/services/auth.service';
-import { HttpHeaders } from '@angular/common/http';
+import { Injectable } from "@angular/core"
+import { HttpClient, HttpParams, HttpHeaders } from "@angular/common/http"
+import { Observable, throwError, of } from "rxjs"
+import { catchError } from "rxjs/operators"
+import  { Order } from "../entities/order.entity"
+import  { AuthService } from "../core/services/auth.service"
+import { Router } from "@angular/router"
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class CartServiceService {
-  order: any;
-  finalUrl: string;
-  readonly baseUrl = 'http://localhost:3000/api/carts/';
-  readonly orderUrl = 'http://localhost:3000/api/orders/';
+  private baseUrl = "http://localhost:3000/api/carts/"
+  private orderUrl = "http://localhost:3000/api/orders/"
 
-  constructor(private http: HttpClient, private authService:AuthService) { }
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService,
+    private router: Router,
+  ) {}
 
-// HAY QUE CAMBIAR LA URL POR ORDER URL
-  completePurchase(cartId: string, newCart: any): Observable<any> {
-    const url = `${this.baseUrl}${cartId}`;
-    
-    return this.http.put(url, newCart);
+  findAll(filter: any = {}): Observable<any> {
+    // Check authentication first
+    if (!this.authService.isAuthenticated()) {
+      console.error("User not authenticated")
+      this.router.navigate(["/login"], { queryParams: { returnUrl: this.router.url } })
+      return of({ error: "Authentication required" })
     }
-  // busca todos los carts segun los filtros. (carrito.component.ts)
-  findAll(filter: any = {}) {
-    // 1. Configurar headers con el token
-    const token = this.authService.getToken();
-  
 
-    // 2. Configurar parámetros de consulta
-    let params = new HttpParams();
-    
+    let params = new HttpParams()
+
     if (filter.state) {
-      params = params.set('state', filter.state);
+      params = params.set("state", filter.state)
     }
-    
+
     if (filter.user) {
-      params = params.set('user', filter.user);
+      params = params.set("user", filter.user)
     }
 
-    // 3. Realizar la petición con headers y params
-    return this.http.get(`${this.baseUrl}`, { 
-      params: params
-    });
-}
-   // const token = this.authService.getToken(); // Método que obtiene tu token
-   // const headers = new HttpHeaders({
-   //   'Authorization': `Bearer ${token}`});
-  deleteOrder(orderId: string, cartId: string) {
-    return this.http.delete(`${this.orderUrl}`+ orderId);
+    return this.http.get(this.baseUrl, { params }).pipe(catchError(this.handleError.bind(this)))
   }
-  
-  
-  // agrega una linea al pedido del user. (menu-item-modal.component.ts)
-  /* addOrder(quantity: number, cartId: string, productId: string, userId: string) {
-    
-    this.http.get<any>(this.orderUrl)
-      .pipe(
-        catchError(err => {
-          return of({ data: [] }); // Retorna un objeto con data vacío en caso de error
-        }))
-      .subscribe({
-        next: (response) => {
-          const orders = response.data; // Accede al array en la propiedad data
-  
-          // Verificamos que orders sea un array válido
-          if (!Array.isArray(orders)) {
-            console.error("Respuesta inválida: 'orders' no es un array.");
-            return;
-          }
 
-          // Buscamos si ya hay una orden con el mismo productId
-          const existingOrder = orders.find(order => order.product === productId);
-  
-          if (existingOrder) {
-            // Si ya existe, sumamos la cantidad
-            const updatedQuantity = existingOrder.quantity + quantity;
-            const updateUrl = `${this.orderUrl}${existingOrder.id}`;
+  create(cartData: any): Observable<any> {
+    // Check authentication first
+    if (!this.authService.isAuthenticated()) {
+      console.error("User not authenticated")
+      this.router.navigate(["/login"], { queryParams: { returnUrl: this.router.url } })
+      return of({ error: "Authentication required" })
+    }
 
-
-  
-            this.http.put(updateUrl, { quantity: updatedQuantity }).subscribe({
-              error: (err) => console.error("Error al actualizar la cantidad:", err)
-            });
-          } else {
-            // Si no existe, creamos una nueva orden
-            this.order = {
-              "quantity": quantity,
-              "product": productId,
-              "subtotal": 159,
-              "user": userId
-            };
-            //  this.finalUrl = ${this.baseUrl}${cartId}/orders; 
-            this.http.post<any>(this.orderUrl, this.order).subscribe({
-            error: (err) => console.error("Error al agregar nueva orden:", err)
-            });
-          }
-        },
-      });
-  } */
- addOrder(quantity: number, cartId: string, productId: string, userId: string, price: number) {
-  // First validate the quantity
-  if (quantity <= 0) {
-    console.error("Invalid quantity");
-    return;
+    return this.http.post(this.baseUrl, cartData).pipe(catchError(this.handleError.bind(this)))
   }
-  const subtotal = quantity * price;
-  
-  const orderPayload = {
-    quantity: quantity,
-    product: productId,
-    user: userId,
-    subtotal: subtotal  // Add calculated subtotal
-  };
 
-  // Send to backend which will handle all the logic
-  this.http.post<any>(`${this.orderUrl}`, orderPayload).subscribe({
-    next: (response) => {
-      // Handle successful order creation
-      console.log("Order processed successfully", response);
-    },
-    error: (err) => {
-      console.error("Error processing order:", err);
-      // Show user-friendly error message based on status code
-      if (err.status === 400) {
-        alert("Invalid order data: " + err.error.message);
-      } else if (err.status === 403) {
-        alert("You don't have permission to perform this action");
-      } else if (err.status === 409) {
-        alert("Not enough stock available");
-      } else {
-        alert("An unexpected error occurred");
+  getCartWithOrders(cartId: string): Observable<any> {
+    // Check authentication first
+    if (!this.authService.isAuthenticated()) {
+      console.error("User not authenticated")
+      this.router.navigate(["/login"], { queryParams: { returnUrl: this.router.url } })
+      return of({ error: "Authentication required" })
+    }
+
+    return this.http.get(`${this.baseUrl}${cartId}`).pipe(catchError(this.handleError.bind(this)))
+  }
+
+  updateOrder(orderId: string, updatedOrder: Partial<Order>): Observable<any> {
+    // Check authentication first
+    if (!this.authService.isAuthenticated()) {
+      console.error("User not authenticated")
+      this.router.navigate(["/login"], { queryParams: { returnUrl: this.router.url } })
+      return of({ error: "Authentication required" })
+    }
+
+    // Ensure quantity is sent as a number
+    if (updatedOrder.quantity !== undefined) {
+      updatedOrder = {
+        ...updatedOrder,
+        quantity: Number(updatedOrder.quantity),
       }
     }
-  });
+
+    return this.http.put(`${this.orderUrl}${orderId}`, updatedOrder).pipe(catchError(this.handleError.bind(this)))
+  }
+
+  deleteOrder(orderId: string, cartId: string): Observable<any> {
+  console.log('🔍 Service: Deleting order with ID:', orderId);
+  console.log('🔍 Service: Cart ID:', cartId);
+  
+  // Validar que el orderId sea válido
+  if (!orderId || orderId === 'undefined') {
+    console.log('❌ Invalid order ID in service');
+    return throwError(() => ({ message: 'ID de orden inválido' }));
+  }
+
+  // Check authentication first
+  if (!this.authService.isAuthenticated()) {
+    console.error("User not authenticated");
+    this.router.navigate(["/login"], { queryParams: { returnUrl: this.router.url } });
+    return of({ error: "Authentication required" });
+  }
+
+  console.log('🔍 Making DELETE request to:', `${this.orderUrl}${orderId}`);
+  
+  return this.http.delete(`${this.orderUrl}${orderId}`).pipe(
+    catchError((error) => {
+      console.log('❌ DELETE request failed:', error);
+      return this.handleError(error);
+    })
+  );
 }
 
+  completePurchase(cartId: string, cartData: any): Observable<any> {
+    // Check authentication first
+    if (!this.authService.isAuthenticated()) {
+      console.error("User not authenticated")
+      this.router.navigate(["/login"], { queryParams: { returnUrl: this.router.url } })
+      return of({ error: "Authentication required" })
+    }
+
+    return this.http.put(`${this.baseUrl}${cartId}`, cartData).pipe(catchError(this.handleError.bind(this)))
+  }
+
+  // Method to add order to cart
+
+addOrderToCart(orderData: {
+  productName: string
+  quantity: string | number
+  subtotal: number
+  comment?: string
+  product: string
+}): Observable<any> {
+  // Debug authentication
+  console.log('🔍 Auth check:', this.authService.isAuthenticated());
+  console.log('🔑 Token exists:', !!this.authService.getToken());
+  console.log('👤 User ID:', this.authService.getId());
+
+  // Check authentication first
+  if (!this.authService.isAuthenticated()) {
+    console.error("User not authenticated")
+    this.router.navigate(["/login"], { queryParams: { returnUrl: this.router.url } })
+    return of({ error: "Authentication required" })
+  }
+
+  // Create a new object with quantity converted to number
+  const orderToSend = {
+    ...orderData,
+    quantity: Number(orderData.quantity),
+  }
+
+  // TEMPORAL: Forzar el header manualmente
+  const token = this.authService.getToken();
+  const headers = new HttpHeaders();
+  
+  if (token) {
+    headers.set('Authorization', `Bearer ${token}`);
+    console.log('🔧 MANUAL - Adding Authorization header:', `Bearer ${token.substring(0, 20)}...`);
+  }
+
+  console.log('📤 MANUAL - Request headers:', headers.keys());
+
+  return this.http.post<any>(`${this.orderUrl}`, orderToSend, { headers }).pipe(
+    catchError((err) => {
+      console.error("❌ Error adding order to cart:", err)
+      return this.handleError(err)
+    }),
+  )
+  console.log('📤 Sending order data:', orderToSend);
+  console.log('🎯 Request URL:', this.orderUrl);
+
+  return this.http.post<any>(`${this.orderUrl}`, orderToSend).pipe(
+    catchError((err) => {
+      console.error("❌ Error adding order to cart:", err)
+      return this.handleError(err)
+    }),
+  )
+
+  
+}
+  // Method to get all orders (for admin dashboard)
+  getAllOrders(filter: any = {}): Observable<any> {
+    // Check authentication first
+    if (!this.authService.isAuthenticated()) {
+      console.error("User not authenticated")
+      this.router.navigate(["/login"], { queryParams: { returnUrl: this.router.url } })
+      return of({ error: "Authentication required" })
+    }
+
+    let params = new HttpParams()
+
+    if (filter?.state) {
+      params = params.set("state", filter.state)
+    }
+    if (filter?.user) {
+      params = params.set("user", filter.user)
+    }
+    if (filter?.startDate) {
+      params = params.set("startDate", filter.startDate)
+    }
+    if (filter?.endDate) {
+      params = params.set("endDate", filter.endDate)
+    }
+
+    return this.http.get(`${this.orderUrl}`, { params }).pipe(
+      catchError((error) => {
+        console.error("Error fetching orders:", error)
+        return this.handleError(error)
+      }),
+    )
+  }
+
+  getUserOrders(): Observable<any> {
+  if (!this.authService.isAuthenticated()) {
+    console.error("User not authenticated");
+    this.router.navigate(["/login"], { queryParams: { returnUrl: this.router.url } });
+    return of({ error: "Authentication required" });
+  }
+
+  return this.http.get(`${this.baseUrl}my-orders`).pipe(
+    catchError(this.handleError.bind(this))
+  );
+}
+  // Method to update order status
+  updateOrderStatus(orderId: string, newStatus: string): Observable<any> {
+    // Check authentication first
+    if (!this.authService.isAuthenticated()) {
+      console.error("User not authenticated")
+      this.router.navigate(["/login"], { queryParams: { returnUrl: this.router.url } })
+      return of({ error: "Authentication required" })
+    }
+
+    return this.http.patch(`${this.orderUrl}${orderId}/status`, { state: newStatus }).pipe(
+      catchError((error) => {
+        console.error("Error updating order status:", error)
+        return this.handleError(error)
+      }),
+    )
+  }
+
+  private handleError(error: any) {
+    console.error("API error:", error)
+
+    let errorMessage = "Ha ocurrido un error"
+
+    if (error.error?.message) {
+      errorMessage = error.error.message
+    } else if (error.status === 401) {
+      errorMessage = "Tu sesión ha expirado. Por favor, inicia sesión nuevamente."
+      this.authService.logout() // Log out the user if unauthorized
+    } else if (error.status === 404) {
+      errorMessage = "Recurso no encontrado"
+    } else if (error.status === 500) {
+      errorMessage = "Error en el servidor. Por favor intenta más tarde."
+    }
+
+    return throwError(() => ({ message: errorMessage, originalError: error }))
+  }
 }

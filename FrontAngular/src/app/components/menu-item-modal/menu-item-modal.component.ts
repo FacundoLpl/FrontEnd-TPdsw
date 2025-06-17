@@ -1,62 +1,90 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { CartServiceService } from '../../services/cart-service.service.js';
-import { Cart } from '../../entities/cart.entity.js';
-import { AuthService } from '../../core/services/auth.service.js';
-
+import { Component, Input, Output, EventEmitter,  OnInit } from "@angular/core"
+import { CommonModule } from "@angular/common"
+import { FormsModule } from "@angular/forms"
+import  { CartServiceService } from "../../services/cart-service.service"
+import { AuthService } from "../../core/services/auth.service"
 
 @Component({
-  selector: 'app-menu-item-modal',
+  selector: "app-menu-item-modal",
   standalone: true,
-  imports: [FormsModule],
-  templateUrl: './menu-item-modal.component.html', 
-  styleUrl: './menu-item-modal.component.css'
+  imports: [CommonModule, FormsModule],
+  templateUrl: "./menu-item-modal.component.html",
+  styleUrls: ["./menu-item-modal.component.css"],
 })
-export class MenuItemModalComponent {
-  @Input() itemTitle: string = '';
-  @Input() imageUrl: string = '';
-  @Input() productId: string = '';
-  @Input() price: number  ; // checkear que recib el precio
-  quantity: number = 1;
-  comment: string = '';
-  cartItem: any;
-  newOrder: any;
-  cart: Cart[] = []; // Asegura que es un array 
-  cartId: string;
-  userId: string;
+export class MenuItemModalComponent implements OnInit {
+  // Inputs que coinciden con tu carta.component.html
+  @Input() itemTitle = ""
+  @Input() imageUrl = ""
+  @Input() productId = ""
+  @Input() price = 0
 
-  @Output() close = new EventEmitter<void>();
+  // Output para cerrar el modal
+  @Output() close = new EventEmitter<void>()
 
-  @Output() agregarAlCarrito = new EventEmitter<any>();
-  constructor(private cartService: CartServiceService, private AuthService: AuthService) {}
+  // Propiedades del formulario
+  quantity = 1
+  comment = ""
+  isProcessing = false
+
+  constructor(
+    private cartService: CartServiceService,
+    private authService: AuthService,
+  ) {}
+
   ngOnInit() {
-    const user = this.AuthService.getId()
-    if (user != null){
-      this.userId = user
-    this.cartService.findAll({ user: this.userId, state: 'Pending' }).subscribe({
-    next: (res: any) => {
-      this.cart = res.data; // Asigna todos los carts
-      this.cartId = this.cart[0].id;
-    },
-    error: (err) => console.error("Error fetching carts", err),
-  });}
+    // Inicialización si es necesaria
+  }
+
+  onQuantityChange() {
+    if (this.quantity < 1) this.quantity = 1
+  }
+
+  getTotalPrice(): number {
+    return this.price * this.quantity
+  }
+
+  // Update the onAddToCart method to include product name
+  onAddToCart() {
+    const userId = this.authService.getId()
+    if (!userId) {
+      alert("Debes iniciar sesión para agregar productos al carrito")
+      return
+    }
+
+    this.isProcessing = true
+
+    // Crear el objeto de pedido con quantity como número explícitamente
+    const orderData = {
+      productName: this.itemTitle, // Make sure this is set correctly
+      quantity: Number(this.quantity), // Convertir explícitamente a número
+      subtotal: this.getTotalPrice(),
+      comment: this.comment || undefined,
+      product: this.productId,
+    }
+
+    console.log("Adding to cart:", orderData)
+
+    // Usar el método correcto del servicio
+    this.cartService.addOrderToCart(orderData).subscribe({
+      next: (response: any) => {
+        this.isProcessing = false
+
+        if (response.error) {
+          alert("Error: " + response.error)
+        } else {
+          alert("¡Producto agregado al carrito!")
+          this.onClose()
+        }
+      },
+      error: (err: any) => {
+        console.error("Error adding order", err)
+        this.isProcessing = false
+        alert("Error al agregar el producto al carrito")
+      },
+    })
+  }
+
+  onClose() {
+    this.close.emit()
+  }
 }
-  addToCart(quantity:number,productId: string) {
-  
-    this.cartService.addOrder(quantity,this.cartId, productId, this.userId, this.price);
-    this.closeModal();
-
-  }
-  increaseQuantity() {
-    this.quantity++;
-  }
-
-  decreaseQuantity() {
-    if (this.quantity > 1) this.quantity--;
-  }
-
-  closeModal() {
-    this.close.emit();
-  }
-
-  }

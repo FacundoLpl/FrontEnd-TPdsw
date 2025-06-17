@@ -1,65 +1,267 @@
-<!-- Carousel -->
-<div class="carousel-container">
-  <app-navbar class="barra-navegacion"></app-navbar>
+<div class="home-page">
+  <app-navbar></app-navbar>
 
-  <div id="carousel" class="carousel slide" data-bs-ride="carousel">
-    <div class="carousel-indicators">
-      <button type="button" data-bs-target="#carousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-      <button type="button" data-bs-target="#carousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-      <button type="button" data-bs-target="#carousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
-      <button type="button" data-bs-target="#carousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
+  <!-- Hero Section Innovador -->
+  <section class="hero-section">
+    <div class="hero-background">
+      <div class="floating-shapes">
+        <div class="floating-shape shape-1"></div>
+        <div class="floating-shape shape-2"></div>
+        <div class="floating-shape shape-3"></div>
+        <div class="floating-shape shape-4"></div>
+        <div class="floating-shape shape-5"></div>
+        <div class="floating-shape shape-6"></div>
+      </div>
+      <div class="gradient-overlay"></div>
     </div>
-
-    <div class="carousel-inner">
-      <div class="carousel-item active">
-        <a href="/carta">
-          <img src="https://rockandfellers.com.ar/front/images/bg/ryf1.jpg" alt="Menu" class="d-block w-100">
-          <div class="carousel-caption d-none d-md-block">
-            <h3>Menú</h3>
-            <p>Mira nuestra variedad de productos!</p>
-          </div>
-        </a>
+    
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1 class="hero-title">
+          <span class="title-line">Experiencia</span>
+          <span class="title-line highlight">Gastronómica</span>
+          <span class="title-line">Excepcional</span>
+        </h1>
+        <p class="hero-subtitle">
+          Donde la tradición culinaria se encuentra con la innovación moderna. 
+          Descubre sabores únicos en un ambiente diseñado para crear momentos inolvidables.
+        </p>
+        <div class="hero-actions">
+          <a routerLink="/reserva" class="hero-button primary">
+            <i class="fas fa-calendar-check"></i>
+            Reservar Mesa
+          </a>
+          <a routerLink="/carta" class="hero-button secondary">
+            <i class="fas fa-utensils"></i>
+            Ver Menú
+          </a>
+        </div>
       </div>
-      <div class="carousel-item">
-        <a href="/reserva">
-          <img src="https://rockandfellers.com.ar/front/images/bg/ryf2.jpg" alt="Reserva" class="d-block w-100">
-          <div class="carousel-caption d-none d-md-block">
-            <h3>Reserva</h3>
-            <p>No te quedes sin venir a visitarnos!</p>
+      
+      <div class="hero-stats">
+        <div *ngFor="let stat of stats" class="stat-item">
+          <div class="stat-icon">
+            <i class="fas fa-{{stat.icon}}"></i>
           </div>
-        </a>
-      </div>
-      <div class="carousel-item">
-        <a href="/faq">
-          <img src="https://rockandfellers.com.ar/front/images/bg/ryf3.jpg" alt="FaQ" class="d-block w-100">
-          <div class="carousel-caption d-none d-md-block">
-            <h3>FaQ</h3>
-            <p>Preguntas frecuentes de nuestros clientes!</p>
+          <div class="stat-content">
+            <span class="stat-number">{{stat.number}}</span>
+            <span class="stat-label">{{stat.label}}</span>
           </div>
-        </a>
-      </div>
-      <div class="carousel-item">
-        <a href="/nosotros">
-          <img src="https://rockandfellers.com.ar/front/images/bg/ryf4.png" alt="Nosotros" class="d-block w-100">
-          <div class="carousel-caption d-none d-md-block">
-            <h3>Nosotros</h3>
-            <p>Conoce nuestra familia!</p>
-          </div>
-        </a>
+        </div>
       </div>
     </div>
+  </section>
 
-    <button class="carousel-control-prev" type="button" data-bs-target="#carousel" data-bs-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carousel" data-bs-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Next</span>
-    </button>
-  </div>
+  <!-- Sección de Servicios Principales -->
+  <section class="services-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Nuestros Servicios</h2>
+        <p class="section-subtitle">Todo lo que necesitas para una experiencia gastronómica completa</p>
+      </div>
+      
+      <div class="services-grid">
+        <div *ngFor="let service of mainServices; let i = index" 
+             class="service-card animate-on-scroll"
+             [style.animation-delay]="i * 0.1 + 's'">
+          <div class="service-header" [ngClass]="'bg-gradient-to-r ' + service.color">
+            <div class="service-icon">
+              <i class="fas fa-{{service.icon}}"></i>
+            </div>
+            <h3 class="service-title">{{service.title}}</h3>
+          </div>
+          
+          <div class="service-content">
+            <p class="service-description">{{service.description}}</p>
+            
+            <ul class="service-features">
+              <li *ngFor="let feature of service.features" class="feature-item">
+                <i class="fas fa-check"></i>
+                <span>{{feature}}</span>
+              </li>
+            </ul>
+            
+            <a [routerLink]="service.route" class="service-button">
+              Explorar
+              <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección de Características -->
+  <section class="features-section">
+    <div class="container">
+      <h2 class="section-title">¿Por qué elegirnos?</h2>
+      <p class="section-subtitle">Descubre lo que hace especial a nuestro restaurante</p>
+      
+      <div class="features-grid">
+        <div *ngFor="let feature of features; let i = index" 
+             class="feature-card animate-on-scroll"
+             [style.animation-delay]="i * 0.1 + 's'">
+          <div class="feature-icon" [ngClass]="'bg-gradient-to-r ' + feature.color">
+            <i class="fas fa-{{feature.icon}}"></i>
+          </div>
+          <h3 class="feature-title">{{feature.title}}</h3>
+          <p class="feature-description">{{feature.description}}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección de Platos Destacados -->
+  <section class="featured-dishes-section">
+    <div class="container">
+      <h2 class="section-title">Nuestros Platos Destacados</h2>
+      <p class="section-subtitle">Especialidades preparadas por nuestros chefs</p>
+      
+      <div class="dishes-grid">
+        <div *ngFor="let dish of featuredDishes; let i = index" 
+             class="dish-card animate-on-scroll"
+             [style.animation-delay]="i * 0.1 + 's'">
+          <div class="dish-image">
+            <img [src]="dish.image" [alt]="dish.name">
+            <div class="dish-overlay">
+              <span class="dish-category">{{dish.category}}</span>
+            </div>
+          </div>
+          <div class="dish-content">
+            <h3 class="dish-name">{{dish.name}}</h3>
+            <p class="dish-description">{{dish.description}}</p>
+            <div class="dish-footer">
+              <span class="dish-price">{{dish.price}}</span>
+              <a routerLink="/carta" class="dish-button">
+                <i class="fas fa-plus"></i>
+                Ordenar
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección de Testimonios -->
+  <section class="testimonials-section">
+    <div class="container">
+      <h2 class="section-title">Lo que dicen nuestros clientes</h2>
+      <p class="section-subtitle">Experiencias de quienes nos han visitado</p>
+      
+      <div class="testimonials-grid">
+        <div *ngFor="let testimonial of testimonials; let i = index" 
+             class="testimonial-card animate-on-scroll"
+             [style.animation-delay]="i * 0.1 + 's'">
+          <div class="testimonial-content">
+            <div class="quote-icon">
+              <i class="fas fa-quote-left"></i>
+            </div>
+            <p class="testimonial-text">{{testimonial.comment}}</p>
+            <div class="testimonial-rating">
+              <span *ngFor="let star of generateRatingArray(testimonial.rating)" class="star">
+                <i class="fas fa-star"></i>
+              </span>
+            </div>
+          </div>
+          <div class="testimonial-author">
+            <img [src]="testimonial.image" [alt]="testimonial.name" class="author-image">
+            <div class="author-info">
+              <h4 class="author-name">{{testimonial.name}}</h4>
+              <p class="author-role">{{testimonial.role}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección de Información y Horarios -->
+  <section class="info-section">
+    <div class="container">
+      <div class="info-grid">
+        <div class="info-card hours-card animate-on-scroll">
+          <div class="card-header">
+            <i class="fas fa-clock"></i>
+            <h3 class="info-title">Horarios de Atención</h3>
+          </div>
+          <ul class="hours-list">
+            <li *ngFor="let schedule of businessHours" class="hours-item">
+              <span class="day">{{schedule.day}}</span>
+              <span class="hours">{{schedule.hours}}</span>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="info-card location-card animate-on-scroll">
+          <div class="card-header">
+            <i class="fas fa-map-marker-alt"></i>
+            <h3 class="info-title">Ubicación</h3>
+          </div>
+          <p class="location-address">
+            Av. Siempreviva 742, Springfield
+          </p>
+          <div class="location-map">
+            <div class="map-placeholder">
+              <i class="fas fa-map"></i>
+              <span>Ver en el mapa</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="info-card contact-card animate-on-scroll">
+          <div class="card-header">
+            <i class="fas fa-phone"></i>
+            <h3 class="info-title">Contacto</h3>
+          </div>
+          <ul class="contact-list">
+            <li class="contact-item">
+              <i class="fas fa-phone"></i>
+              <span>+54 11 1234-5678</span>
+            </li>
+            <li class="contact-item">
+              <i class="fas fa-envelope"></i>
+            </li>
+            <li class="contact-item">
+              <i class="fas fa-globe"></i>
+              <span>www.restaurantdsw.com</span>
+            </li>
+          </ul>
+          <div class="social-links">
+            <a href="#" class="social-link">
+              <i class="fab fa-facebook"></i>
+            </a>
+            <a href="#" class="social-link">
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a href="#" class="social-link">
+              <i class="fab fa-twitter"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección de Llamada a la Acción -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-content">
+        <h2 class="cta-title">¿Listo para una experiencia gastronómica inolvidable?</h2>
+        <p class="cta-description">Reserva tu mesa ahora y disfruta de nuestra cocina de autor</p>
+        <div class="cta-actions">
+          <a routerLink="/reserva" class="cta-button primary">
+            <i class="fas fa-calendar-check"></i>
+            Reservar Mesa
+          </a>
+          <a routerLink="/delivery" class="cta-button secondary">
+            <i class="fas fa-truck"></i>
+            Pedir Delivery
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <app-footer></app-footer>
 </div>
-<!-- Fin Carousel -->
-a

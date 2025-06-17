@@ -1,107 +1,167 @@
-<section class="carrito">
-  <app-navbar class="barra-navegacion"></app-navbar>
+<app-navbar></app-navbar>
 
-  <div class="container">
-    <h1 class="page-title">Carrito</h1>
-   <div> @if (!isLoggedIn) {
-      <p>Usted no inicio sesion. Debe hacerlo antes de continuar.</p>
-    }</div>
-    <section class="cart-section ">
-      <div class="cart-items ">
-        <div *ngFor="let cartItem of cart" class="cart-item">
-       
-
-          <table class="cart-table">
-            <thead>
-              <tr>
-                <th>Producto</th>
-                <th>Precio Unitario</th>
-                <th>Cantidad</th>
-                <th>Subtotal</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody >
-              <tr *ngFor="let order of cartItem.orders">
-                <td>{{ order.product.name }}</td>
-                <td>${{ order.product.price }}</td>
-                <td>{{ order.quantity }}</td>
-                <td>${{ order.subtotal }}</td>
-                <td>
-                  <button (click)="removeOrder(order, cartItem)" class="btn-delete">Eliminar</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-
-          <div class="total-container">
-            <strong class="total-amount">Total: ${{ cartItem.total }}</strong>
-          </div>
-        </div>
+<div class="cart-container">
+  <div class="cart-header">
+    <h1>Mi Carrito</h1>
+    
+    <!-- Display User and Cart IDs -->
+    <div class="cart-info">
+      <div class="info-item">
+        <span class="info-label">ID Cliente:</span>
+        <span class="info-value">{{ userId }}</span>
       </div>
-    </section>
-
-    <div class="checkout-form">
-      <h2 class="form-title">Datos de Entrega y Pago</h2>
-      <form (ngSubmit)="submitData()" class="form">
-        <div class="form-group">
-          <label for="deliveryType">Forma de Entrega</label>
-          <select id="deliveryType" [(ngModel)]="deliveryType" name="deliveryType" required>
-            <option value="delivery">Delivery</option>
-            <option value="pickup">Retiro en el local</option>
-          </select>
-        </div>
-
-        <div *ngIf="deliveryType === 'delivery'" class="form-group">
-          <label for="deliveryAddress">Dirección de Entrega</label>
-          <input
-            id="deliveryAddress"
-            type="text"
-            [(ngModel)]="deliveryAddress"
-            name="deliveryAddress"
-            placeholder="Ingrese su dirección"
-            required
-          />
-        </div>
-
-        <div class="form-group">
-          <label for="paymentMethod">Forma de Pago</label>
-          <select id="paymentMethod" [(ngModel)]="paymentMethod" name="paymentMethod" required>
-            <option value="cash">Efectivo</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="contactNumber">Teléfono de Contacto</label>
-          <input
-            id="contactNumber"
-            type="tel"
-            [(ngModel)]="contactNumber"
-            name="contactNumber"
-            placeholder="Ingrese su número de teléfono"
-            required
-          />
-        </div>
-
-        <div class="form-group">
-          <label for="additionalInstructions">Instrucciones Adicionales</label>
-          <textarea
-            id="additionalInstructions"
-            [(ngModel)]="additionalInstructions"
-            name="additionalInstructions"
-            placeholder="Agregue alguna instrucción especial (opcional)"
-          ></textarea>
-        </div>
-
-        <button 
-          (click)="finalizarCompra(cart[0], deliveryType, deliveryAddress, paymentMethod, contactNumber, additionalInstructions)" 
-          class="btn-confirm"
-        >
-          Finalizar Compra
-        </button>
-      </form>
+      <div class="info-item" *ngIf="cartId">
+        <span class="info-label">ID Carrito:</span>
+        <span class="info-value">{{ cartId }}</span>
+      </div>
     </div>
   </div>
 
-  <app-footer></app-footer>
-</section>
+  <!-- Error message display -->
+  <div class="error-message" *ngIf="errorMessage">
+    <div class="error-content">
+      <i class="fas fa-exclamation-circle"></i>
+      <span>{{ errorMessage }}</span>
+      <button class="close-error" (click)="errorMessage = ''">×</button>
+    </div>
+  </div>
+
+  <!-- Loading indicator -->
+  <div class="loading-indicator" *ngIf="isLoading">
+    <div class="spinner"></div>
+    <p>Cargando carrito...</p>
+  </div>
+
+  <div class="empty-cart-message" *ngIf="!isLoading && (cart.length === 0 || !cart[0]?.orders?.length)">
+    <div class="empty-cart-icon">
+      <i class="fas fa-shopping-cart"></i>
+    </div>
+    <h2>Tu carrito está vacío</h2>
+    <p>Agrega productos desde nuestro menú para comenzar tu pedido.</p>
+    <a routerLink="/menu" class="browse-menu-btn">Ver Menú</a>
+  </div>
+
+  <div class="cart-content" *ngIf="!isLoading && cart.length > 0 && cart[0]?.orders?.length">
+    <div class="cart-items">
+      <div class="cart-item" *ngFor="let order of cart[0].orders">
+        <div class="item-image">
+          <!-- Use a placeholder image if product image is not available -->
+          <img [src]="order.product?.imageUrl || '/assets/images/placeholder-food.jpg'" [alt]="order.product?.name || order.productName || 'Producto'">
+        </div>
+        <div class="item-details">
+          <h3 class="item-name">{{ order.product?.name || order.productName || 'Producto' }}</h3>
+          <p class="item-description" *ngIf="order.comment">{{ order.comment }}</p>
+          <div class="item-price">${{ getUnitPrice(order) | number:'1.2-2' }} c/u</div>
+          <div class="item-id">ID: {{ order.id }}</div>
+        </div>
+        <div class="item-quantity">
+          <button class="quantity-btn" (click)="updateOrderQuantity(order, cart[0], getQuantityAsNumber(order) - 1)" [disabled]="getQuantityAsNumber(order) <= 1 || isUpdating">-</button>
+          <input type="number" [(ngModel)]="order.quantity" min="1" (change)="updateOrderQuantity(order, cart[0], getQuantityAsNumber(order))" [disabled]="isUpdating">
+          <button class="quantity-btn" (click)="updateOrderQuantity(order, cart[0], getQuantityAsNumber(order) + 1)" [disabled]="isUpdating">+</button>
+          <div class="updating-indicator" *ngIf="isUpdating">
+            <i class="fas fa-spinner fa-spin"></i>
+          </div>
+        </div>
+        <div class="item-subtotal">${{ order.subtotal | number:'1.2-2' }}</div>
+        <button class="remove-btn" (click)="removeOrder(order, cart[0])" [disabled]="isUpdating">
+          <i class="fas fa-trash"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="cart-summary">
+      <h2>Resumen del Pedido</h2>
+      <div class="summary-row">
+        <span>Subtotal ({{ cart[0].orders.length }} items):</span>
+        <span>${{ cart[0].total | number:'1.2-2' }}</span>
+      </div>
+      <div class="summary-row">
+        <span>Impuestos (10%):</span>
+        <span>${{ cart[0].total * 0.1 | number:'1.2-2' }}</span>
+      </div>
+      <div class="summary-row total">
+        <span>Total:</span>
+        <span>${{ cart[0].total * 1.1 | number:'1.2-2' }}</span>
+      </div>
+      <div class="cart-actions">
+        <button class="clear-cart-btn" (click)="clearCart(cart[0])" [disabled]="isUpdating">Vaciar Carrito</button>
+        <button class="checkout-btn" (click)="toggleCheckoutForm()" [disabled]="isUpdating">
+          {{ showCheckoutForm ? 'Cancelar' : 'Proceder al Pago' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Checkout Form -->
+    <div class="checkout-form" *ngIf="showCheckoutForm">
+      <h2>Información de Entrega y Pago</h2>
+      <div class="form-group">
+        <label>Tipo de Entrega</label>
+        <div class="radio-group">
+          <label>
+            <input type="radio" [(ngModel)]="deliveryType" value="delivery" name="deliveryType">
+            Delivery
+          </label>
+          <label>
+            <input type="radio" [(ngModel)]="deliveryType" value="pickup" name="deliveryType">
+            Recoger en Tienda
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group" *ngIf="deliveryType === 'delivery'">
+        <label for="deliveryAddress">Dirección de Entrega</label>
+        <textarea id="deliveryAddress" [(ngModel)]="deliveryAddress" rows="3" placeholder="Ingresa tu dirección completa"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="contactNumber">Número de Contacto</label>
+        <input type="tel" id="contactNumber" [(ngModel)]="contactNumber" placeholder="Ej: +56 9 1234 5678">
+      </div>
+
+      <div class="form-group">
+        <label>Método de Pago</label>
+        <div class="radio-group">
+          <label>
+            <input type="radio" [(ngModel)]="paymentMethod" value="cash" name="paymentMethod">
+            Efectivo
+          </label>
+          <label>
+            <input type="radio" [(ngModel)]="paymentMethod" value="card" name="paymentMethod">
+            Tarjeta (al entregar)
+          </label>
+          <label>
+            <input type="radio" [(ngModel)]="paymentMethod" value="transfer" name="paymentMethod">
+            Transferencia
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="additionalInstructions">Instrucciones Adicionales</label>
+        <textarea id="additionalInstructions" [(ngModel)]="additionalInstructions" rows="3" placeholder="Instrucciones especiales para la entrega o preparación"></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button class="cancel-btn" (click)="toggleCheckoutForm()">Cancelar</button>
+        <button class="submit-btn" [disabled]="isProcessing" (click)="finalizarCompra(cart[0])">
+          <span *ngIf="!isProcessing">Confirmar Pedido</span>
+          <span *ngIf="isProcessing"><i class="fas fa-spinner fa-spin"></i> Procesando...</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="login-prompt" *ngIf="!isLoggedIn">
+  <div class="login-prompt-content">
+    <div class="login-icon">
+      <i class="fas fa-user-lock"></i>
+    </div>
+    <h2>Inicia sesión para ver tu carrito</h2>
+    <p>Necesitas iniciar sesión para ver y gestionar tu carrito de compras.</p>
+    <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+    <button class="login-btn" (click)="goToLogin()">Iniciar Sesión</button>
+  </div>
+</div>
+
+<app-footer></app-footer>

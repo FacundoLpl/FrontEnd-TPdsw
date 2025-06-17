@@ -19,4 +19,5 @@ export class ListaReservasComponent {
     constructor(private ReservationService: ReservationService) {}
 
 ngOnInit() {    this.ReservationService.findAll({state: 'Pending'})
+
 }}

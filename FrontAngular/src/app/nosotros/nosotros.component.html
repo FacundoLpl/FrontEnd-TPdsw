@@ -1,34 +1,205 @@
-<section class="about-us ">
-<app-navbar class="barra-navegacion"> </app-navbar>
-<!-- nosotros.component.html -->
+<div class="nosotros-page">
+  <app-navbar></app-navbar>
 
-    <div class="container">
-        <h1>Sobre Nosotros</h1>
-        <p>
-            Bienvenidos a Rock and Fellers. Somos una empresa dedicada a ofrecer la mejor experiencia gastronómica, combinando un ambiente único con una exquisita selección de platos y bebidas. Desde nuestros inicios, hemos trabajado arduamente para convertirnos en un referente de calidad y buen servicio.
-        </p>
-        <h2>Nuestra Historia</h2>
-        <p>
-            Fundada en [año de fundación], Rock and Fellers comenzó con la visión de crear un espacio donde los amantes de la buena comida y la música puedan reunirse y disfrutar de momentos inolvidables. A lo largo de los años, hemos crecido y evolucionado, manteniendo siempre nuestra pasión por ofrecer lo mejor a nuestros clientes.
-        </p>
-        <h2>Misión</h2>
-        <p>
-            Nuestra misión es brindar una experiencia gastronómica única, donde cada plato y cada detalle refleje nuestra dedicación y amor por lo que hacemos. Nos esforzamos por crear un ambiente acogedor y memorable para cada uno de nuestros visitantes.
-        </p>
-        <h2>Visión</h2>
-        <p>
-            Aspiramos a ser reconocidos como líderes en la industria de la gastronomía, conocidos por nuestro compromiso con la excelencia y la innovación. Queremos expandir nuestra presencia, llevando la experiencia de Rock and Fellers a nuevas ubicaciones y a un público más amplio.
-        </p>
-        <h2>Nuestro Equipo</h2>
-        <div class="team-members">
-            <div class="team-member">
-                <img src="ruta/a/la-imagen.jpg" alt="Nombre del Miembro">
-                <h3>Nombre del Miembro</h3>
-                <p>Posición del Miembro</p>
-                <p>Breve descripción del miembro del equipo y su rol en la empresa.</p>
-            </div>
-            <!-- Repite este bloque para más miembros del equipo -->
-        </div>
+  <div class="nosotros-container">
+    <!-- Fondo con formas animadas -->
+    <div class="animated-background">
+      <div class="shape shape-1"></div>
+      <div class="shape shape-2"></div>
+      <div class="shape shape-3"></div>
     </div>
-    <app-footer></app-footer>
-</section>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="hero-content">
+        <h1>Nuestra Historia</h1>
+        <p class="hero-subtitle">Más que un restaurante, somos una familia que comparte la pasión por la buena comida</p>
+        <button class="scroll-button" (click)="scrollToSection('historia')">
+          <span>Descubre más</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <polyline points="19 12 12 19 5 12"></polyline>
+          </svg>
+        </button>
+      </div>
+      <div class="hero-image">
+        <img src="https://rockandfellers.com.ar/front/images/franquicias/local6.png" alt="Restaurante Bella Vista" />
+      </div>
+    </section>
+
+    <!-- Restaurant Story Section -->
+    <section id="historia" class="story-section">
+      <div class="container">
+        <div class="section-header">
+          <h2>La Historia de Bella Vista</h2>
+          <p class="section-subtitle">Un viaje culinario que comenzó con un sueño</p>
+        </div>
+
+        <div class="story-grid">
+          <div class="story-card">
+            <div class="story-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9h18v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z"></path>
+                <path d="m3 9 2.45-4.9A2 2 0 0 1 7.24 3h9.52a2 2 0 0 1 1.8 1.1L21 9"></path>
+                <path d="M12 3v6"></path>
+              </svg>
+            </div>
+            <h3>Nuestros Inicios</h3>
+            <p>Fundado en 2024 como parte de un proyecto académico de Desarrollo de Software Web, Bella Vista nació de la pasión por crear experiencias culinarias excepcionales combinadas con tecnología innovadora.</p>
+          </div>
+
+          <div class="story-card">
+            <div class="story-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+              </svg>
+            </div>
+            <h3>Nuestra Misión</h3>
+            <p>Brindar una experiencia gastronómica única, donde la calidad de nuestros platos se combina con un servicio excepcional y tecnología de vanguardia para la gestión integral del restaurante.</p>
+          </div>
+
+          <div class="story-card">
+            <div class="story-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+              </svg>
+            </div>
+            <h3>Nuestra Visión</h3>
+            <p>Ser reconocidos como el restaurante líder en innovación tecnológica aplicada a la gastronomía, estableciendo nuevos estándares en la industria de la hospitalidad.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Values Section -->
+    <section class="values-section">
+      <div class="container">
+        <div class="section-header">
+          <h2>Nuestros Valores</h2>
+          <p class="section-subtitle">Los principios que guían nuestra pasión por la gastronomía</p>
+        </div>
+        
+        <div class="values-grid">
+          <div class="value-item">
+            <div class="value-icon">🍽️</div>
+            <h4>Calidad</h4>
+            <p>Ingredientes frescos y preparación artesanal en cada plato</p>
+          </div>
+          <div class="value-item">
+            <div class="value-icon">💻</div>
+            <h4>Innovación</h4>
+            <p>Tecnología de vanguardia para mejorar la experiencia del cliente</p>
+          </div>
+          <div class="value-item">
+            <div class="value-icon">🤝</div>
+            <h4>Servicio</h4>
+            <p>Atención personalizada y calidez humana en cada interacción</p>
+          </div>
+          <div class="value-item">
+            <div class="value-icon">🌱</div>
+            <h4>Sostenibilidad</h4>
+            <p>Compromiso con el medio ambiente y prácticas responsables</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Team Section -->
+    <section class="team-section">
+      <div class="container">
+        <div class="section-header">
+          <h2>Equipo de Desarrollo</h2>
+          <p class="section-subtitle">Los desarrolladores detrás de Bella Vista</p>
+        </div>
+
+        <div class="team-grid">
+          <div class="team-member" *ngFor="let member of teamMembers">
+            <div class="member-photo">
+              <img [src]="member.photo" [alt]="member.name" />
+            </div>
+            <div class="member-info">
+              <h3>{{ member.name }}</h3>
+              <p class="member-role">{{ member.role }}</p>
+              <p class="member-description">{{ member.description }}</p>
+              <div class="member-skills">
+                <span class="skill-tag" *ngFor="let skill of member.skills">{{ skill }}</span>
+              </div>
+              <div class="member-links">
+                <a [href]="member.github" class="social-link" *ngIf="member.github" target="_blank" rel="noopener noreferrer">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+                  </svg>
+                </a>
+                <a [href]="member.linkedin" class="social-link" *ngIf="member.linkedin" target="_blank" rel="noopener noreferrer">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                    <rect x="2" y="9" width="4" height="12"></rect>
+                    <circle cx="4" cy="4" r="2"></circle>
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tech Stack Section -->
+    <section class="tech-section">
+      <div class="container">
+        <div class="section-header">
+          <h2>Tecnologías Utilizadas</h2>
+          <p class="section-subtitle">Las herramientas que hacen posible nuestra plataforma</p>
+        </div>
+        
+        <div class="tech-grid">
+          <div class="tech-item" *ngFor="let tech of techStack">
+            <div class="tech-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"></polygon>
+                <line x1="12" y1="22" x2="12" y2="15.5"></line>
+                <polyline points="22,8.5 12,15.5 2,8.5"></polyline>
+              </svg>
+            </div>
+            <h4>{{ tech.name }}</h4>
+            <p>{{ tech.description }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+      <div class="container">
+        <div class="section-header">
+          <h2>Proyecto en Números</h2>
+          <p class="section-subtitle">El resultado de nuestro esfuerzo y dedicación</p>
+        </div>
+        
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-number">{{ projectStats.developers }}</div>
+            <div class="stat-label">Desarrolladores</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">{{ projectStats.components }}+</div>
+            <div class="stat-label">Componentes</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">{{ projectStats.modules }}</div>
+            <div class="stat-label">Módulos Principales</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">{{ projectStats.responsive }}%</div>
+            <div class="stat-label">Responsive</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <app-footer></app-footer>
+</div>

@@ -1,6 +1,6 @@
 export interface Order {
     id: string;
     productName: string;
-    quantity: string;
+    quantity: number;
     subtotal: number;
 }

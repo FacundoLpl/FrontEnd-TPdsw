@@ -1,49 +1,59 @@
-import { Injectable } from '@angular/core';
-import {
-  HttpHandler,
-  HttpInterceptor,
-  HttpRequest,
-  HttpEvent,
-  HttpResponse,
-  HttpErrorResponse
-} from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpInterceptorFn, HttpRequest, HttpHandlerFn, HttpErrorResponse } from "@angular/common/http"
+import { inject } from "@angular/core"
+import { catchError, throwError } from "rxjs"
+import { AuthService } from "../../core/services/auth.service"
+import { Router } from "@angular/router"
 
-@Injectable({
-  providedIn: 'root'
-})
-export class TokenInterceptorService implements HttpInterceptor {
-  intercept(
-    req: HttpRequest<any>,
-    next: HttpHandler
-  ): Observable<HttpEvent<any>> {
-    // 1. Obtener el token
-    const token = localStorage.getItem('token');
-    
-    // 2. Verificar si la request necesita token
-    if (!token || this.shouldSkipToken(req)) {
-      return next.handle(req);
-    }
+// En tu interceptor, añade más debugging:
+export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, next: HttpHandlerFn) => {
+  const authService = inject(AuthService)
+  const router = inject(Router)
 
-    // 3. Clonar la request con el token
-    const tokenizedReq = req.clone({
+  console.log('🚀 INTERCEPTOR - Processing URL:', req.url);
+
+  // Skip adding token for login and register requests
+  if (isAuthEndpoint(req.url)) {
+    console.log('✅ SKIPPING token for auth endpoint:', req.url);
+    return next(req)
+  }
+
+  // Get the auth token
+  const token = authService.getToken()
+  console.log('🔑 INTERCEPTOR - Token exists:', !!token);
+
+  // Clone the request and add the token if it exists
+  if (token) {
+    console.log('📤 INTERCEPTOR - ADDING token to:', req.url);
+    const clonedReq = req.clone({
       setHeaders: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
-
-    // 4. Continuar con la request modificada
-    return next.handle(tokenizedReq);
-  }
-
-  /**
-   * Determina si la request no requiere token
-   */
-  private shouldSkipToken(req: HttpRequest<any>): boolean {
-    // Lista de endpoints públicos que no requieren token
-    const publicUrls = ['/auth/login', '/auth/register'];
     
-    // Verificar si la URL está en la lista de públicas
-    return publicUrls.some(url => req.url.includes(url));
+    // Verificar que el header se añadió
+    console.log('🔍 INTERCEPTOR - Authorization header added:', clonedReq.headers.get('Authorization') ? 'YES' : 'NO');
+    
+    return next(clonedReq).pipe(
+      catchError((error: HttpErrorResponse) => {
+        console.log('❌ INTERCEPTOR - Error for URL:', req.url, error);
+        // resto del manejo de errores...
+        return throwError(() => error)
+      }),
+    )
+  } else {
+    console.log('🚫 INTERCEPTOR - NO TOKEN for:', req.url);
   }
+
+  return next(req).pipe(
+    catchError((error: HttpErrorResponse) => {
+      // manejo de errores...
+      return throwError(() => error)
+    }),
+  )
+}
+
+function isAuthEndpoint(url: string): boolean {
+  const isAuth = url.includes("/api/users/login") || url.includes("/api/users/register");
+  console.log(`🔍 INTERCEPTOR - isAuthEndpoint("${url}") = ${isAuth}`);
+  return isAuth;
 }

@@ -1,10 +1,53 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Estilos globales - Agregar esto para evitar conflictos */
 
-#app-root {
-    min-height: 100vh; /* Ocupa toda la altura de la ventana */
-    display: flex;
-    flex-direction: column;
-  }
-  
+/* Reset básico para evitar conflictos con Bootstrap */
+* {
+  box-sizing: border-box;
+}
+
+/* Asegurar que el navbar no tenga conflictos */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
+    "Droid Sans", "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Override específico para evitar conflictos con Bootstrap navbar */
+.bella-navbar {
+  font-family: inherit !important;
+}
+
+.bella-navbar * {
+  font-family: inherit !important;
+}
+
+/* Asegurar que no haya conflictos con clases de Bootstrap */
+.bella-navbar .nav,
+.bella-navbar .navbar,
+.bella-navbar .navbar-nav,
+.bella-navbar .nav-item,
+.bella-navbar .nav-link,
+.bella-navbar .navbar-brand {
+  all: unset !important;
+  display: revert !important;
+}
+
+/* Espaciado para el contenido principal */
+main {
+  padding-top: 70px;
+}
+
+.container {
+  padding-top: 0 !important;
+}
+
+/* Override para cualquier estilo de Bootstrap que pueda interferir */
+.bella-navbar .btn,
+.bella-navbar .button {
+  all: unset !important;
+  display: revert !important;
+  cursor: pointer !important;
+}

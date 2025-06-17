@@ -1,0 +1,18 @@
+<div 
+  class="notification" 
+  [class.success]="type === 'success'" 
+  [class.error]="type === 'error'"
+  [class.info]="type === 'info'"
+  [@notificationAnimation]="visible ? 'visible' : 'void'"
+  *ngIf="visible"
+>
+  <div class="notification-icon">
+    <i [class]="getIcon()"></i>
+  </div>
+  <div class="notification-content">
+    {{ message }}
+  </div>
+  <button class="notification-close" (click)="close()">
+    <i class="fas fa-times"></i>
+  </button>
+</div>

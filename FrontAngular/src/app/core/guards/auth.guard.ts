@@ -1,16 +1,35 @@
-import { CanActivateFn } from '@angular/router';
-import { inject } from '@angular/core';
-import { AuthService } from '../services/auth.service.js';  
-import { Router } from '@angular/router';
+import { Injectable } from "@angular/core"
+import  { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from "@angular/router"
+import { AuthService } from "../services/auth.service"
 
-export const AuthGuard: CanActivateFn = (route, state) => {
-  const authService = inject(AuthService);
-  const router = inject(Router);
+@Injectable({
+  providedIn: "root",
+})
+export class AuthGuard implements CanActivate {
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+  ) {}
 
-  if(authService.isAuthenticated ()) {
-    return true; // Si el usuario está autenticado, permite el acceso a la ruta
-  }else {
-    router.navigate(['/login']); // Si no está autenticado, redirige a la página de inicio de sesión
-    return false; // Bloquea el acceso a la ruta
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+    if (this.authService.isAuthenticated()) {
+      // Check if user type is required for this route
+      const requiredUserType = route.data["requiredUserType"]
+      if (requiredUserType) {
+        const userType = this.authService.getUserType()
+        if (userType !== requiredUserType) {
+          // Redirect to unauthorized page or home
+          this.router.navigate(["/unauthorized"])
+          return false
+        }
+      }
+      return true
+    }
+
+    // Store the attempted URL for redirecting after login
+    this.router.navigate(["/login"], {
+      queryParams: { returnUrl: state.url },
+    })
+    return false
   }
-};
+}

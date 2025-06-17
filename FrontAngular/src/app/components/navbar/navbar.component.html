@@ -1,31 +1,177 @@
-<nav class="navbar navbar-expand-sm barra-navegacion">
-    <ul class="nav navbar-nav">
-        <li class="nav-item">
-            <a class="nav-link" href="/"><img src="https://rockandfellers.com.ar/front/images/logo2.png" alt="Home"
-                    style="height: 40px;" /></a>
+<nav class="bella-navbar">
+  <div class="bella-navbar-container">
+    <!-- Logo y nombre del restaurante -->
+    <div class="bella-navbar-brand">
+      <a routerLink="/" class="bella-brand-link" (click)="closeMenu()">
+        <div class="bella-logo-container">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="bella-logo-icon">
+            <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"></path>
+            <path d="M7 2v20"></path>
+            <path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path>
+          </svg>
+          <span class="bella-brand-name">Bella Vista</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- Botón hamburguesa para móvil -->
+    <button 
+      class="bella-mobile-menu-btn" 
+      [class.active]="isMenuOpen"
+      (click)="toggleMenu()"
+      aria-label="Toggle menu"
+    >
+      <span class="bella-hamburger-line"></span>
+      <span class="bella-hamburger-line"></span>
+      <span class="bella-hamburger-line"></span>
+    </button>
+
+    <!-- Menú de navegación -->
+    <div class="bella-navbar-menu" [class.active]="isMenuOpen">
+      <ul class="bella-navbar-nav">
+        
+        <li class="bella-nav-item">
+          <a routerLink="/carta" routerLinkActive="active" class="bella-nav-link" (click)="closeMenu()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
+            Carta
+          </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="/carta">Carta</a>
+        <li class="bella-nav-item">
+          <a routerLink="/reserva" routerLinkActive="active" class="bella-nav-link" (click)="closeMenu()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+            Reserva
+          </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="/reserva">Reserva</a>
+        <li class="bella-nav-item">
+          <a routerLink="/nosotros" routerLinkActive="active" class="bella-nav-link" (click)="closeMenu()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+            Nosotros
+          </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="/faq">FaQ</a>
+        <li class="bella-nav-item">
+          <a routerLink="/faq" routerLinkActive="active" class="bella-nav-link" (click)="closeMenu()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+            FAQ
+          </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="/nosotros">Nosotros</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="/carrito"><i class="fas fa-shopping-cart"></i>
-            </a>
-        </li>
-        <li>
-            @if (authService.isAuthenticated()) {
-                <a class="nav-link" (click)="logout()">Logout</a>
-              } @else {
-                <a class="nav-link" href="/login">Login</a>
+      </ul>
+
+      <!-- Sección de usuario -->
+      <div class="bella-navbar-user">
+        @if (authService.isAuthenticated()) {
+          <!-- Carrito (solo para usuarios autenticados) -->
+          <a routerLink="/carrito" routerLinkActive="active" class="bella-nav-link bella-cart-link" (click)="closeMenu()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="9" cy="21" r="1"></circle>
+              <circle cx="20" cy="21" r="1"></circle>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+            </svg>
+            <span class="bella-cart-text">Carrito</span>
+          </a>
+
+          <!-- 👈 MIS PEDIDOS - CORREGIDO -->
+          <a routerLink="/mis-pedidos" routerLinkActive="active" class="bella-nav-link bella-orders-link" (click)="closeMenu()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14,2 14,8 20,8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10,9 9,9 8,9"></polyline>
+            </svg>
+            <span class="bella-orders-text">Mis Pedidos</span>
+          </a>
+
+          <!-- Menú de usuario -->
+          <div class="bella-user-menu">
+            <button class="bella-user-btn">
+              <div class="bella-user-avatar">
+                {{ getUserName().charAt(0).toUpperCase() }}
+              </div>
+              <span class="bella-user-name">{{ getUserName() }}</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6,9 12,15 18,9"></polyline>
+              </svg>
+            </button>
+            
+            <div class="bella-user-dropdown">
+              <div class="bella-user-info">
+                <p class="bella-user-name-full">{{ getUserName() }}</p>
+                <p class="bella-user-role">{{ getUserRole() }}</p>
+              </div>
+              
+              @if (authService.isAdmin()) {
+                <a routerLink="/admin/dashboard" class="bella-dropdown-item" (click)="closeMenu()">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="3" width="7" height="7"></rect>
+                    <rect x="14" y="14" width="7" height="7"></rect>
+                    <rect x="3" y="14" width="7" height="7"></rect>
+                  </svg>
+                  Panel Admin
+                </a>
               }
-        </li>
-    </ul>
+              
+              @if (authService.isMozo()) {
+                <a routerLink="/mozo/panel" class="bella-dropdown-item" (click)="closeMenu()">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <path d="M16 10a4 4 0 0 1-8 0"></path>
+                  </svg>
+                  Panel Mozo
+                </a>
+              }
+              
+              <button class="bella-dropdown-item bella-logout-btn" (click)="logout()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                  <polyline points="16,17 21,12 16,7"></polyline>
+                  <line x1="21" y1="12" x2="9" y2="12"></line>
+                </svg>
+                Cerrar Sesión
+              </button>
+            </div>
+          </div>
+        } @else {
+          <!-- Botones para usuarios no autenticados -->
+          <div class="bella-auth-buttons">
+            <a routerLink="/login" class="bella-nav-link bella-login-btn" (click)="closeMenu()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                <polyline points="10,17 15,12 10,7"></polyline>
+                <line x1="15" y1="12" x2="3" y2="12"></line>
+              </svg>
+              Iniciar Sesión
+            </a>
+            <a routerLink="/register" class="bella-nav-link bella-register-btn" (click)="closeMenu()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <line x1="19" y1="8" x2="19" y2="14"></line>
+                <line x1="22" y1="11" x2="16" y2="11"></line>
+              </svg>
+              Registrarse
+            </a>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
 </nav>

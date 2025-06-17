@@ -1,43 +1,194 @@
-<!-- Sección de Preguntas Frecuentes (FAQ) -->
-<section class="faqbackground relative min-h-screen flex flex-col">
-    <app-navbar class="barra-navegacion"></app-navbar>
+<app-navbar></app-navbar>
 
-    <!-- Fondo con gradiente -->
-    <div class="bg-yellow-500 absolute top-0 left-0 bg-gradient-to-b from-black via-gray-900 to-yellow-600 bottom-0 w-full h-full"></div>
-
-    <div class="container relative z-10 flex-1 flex flex-col items-center justify-center py-10">
-        <div class="bg-gray-750 p-8 rounded-3xl shadow-lg max-w-3xl w-full">
-            <div class="faq mb-6">
-                <h2 class="text-2xl font-bold text-gray-800 mb-4 text-center">Reservas</h2>
-                <h3 class="text-lg font-semibold text-gray-700">¿Con cuánta anticipación puedo reservar una mesa?</h3>
-                <p class="text-white mb-4">Se puede reservar una mesa con hasta 1 semana de anticipación.</p>
-
-                <h3 class="text-lg font-semibold text-gray-700">¿En qué horarios puedo realizar una reserva?</h3>
-                <p class="text-white">Nuestras reservas están disponibles todos los días en los siguientes horarios: 19:00, 20:00, 21:00, 22:00 y 23:00.</p>
-            </div>
-
-            <div class="faq mb-6">
-                <h2 class="text-2xl font-bold text-gray-800 mb-4 text-center">Horarios de Atención</h2>
-                <h3 class="text-lg font-semibold text-gray-700">¿Cuáles son los horarios de atención del restaurante?</h3>
-                <p class="text-white">Abrimos todos los días de 19:00 a 00:00.</p>
-            </div>
-
-            <div class="faq mb-6">
-                <h2 class="text-2xl font-bold text-gray-800 mb-4 text-center" >Ubicación</h2>
-                <h3 class="text-lg font-semibold text-gray-700">¿Dónde estamos ubicados?</h3>
-                <p class="text-white">Estamos en Avenida Gourmet 123, Ciudad del Sabor, País Gastronómico.</p>
-            </div>
-
-            <div class="faq">
-                <h2 class="text-2xl font-bold text-gray-800 mb-4 text-center">Opciones de Servicio</h2>
-                <h3 class="text-lg font-semibold text-gray-700">¿Qué opciones tengo para disfrutar de la comida?</h3>
-                <ul class="text-white list-disc pl-6">
-                    <li>Reservar una mesa para comer en el restaurante.</li>
-                    <li>Pedir comida para llevar (Take Away).</li>
-                    <li>Solicitar un delivery a tu domicilio.</li>
-                </ul>
-            </div>
-        </div>
+<div class="faq-page">
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-background">
+      <div class="floating-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+        <div class="shape shape-4"></div>
+      </div>
     </div>
-</section>
+    
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1 class="hero-title">
+          <span class="title-line">¿Tienes</span>
+          <span class="title-line highlight">Preguntas?</span>
+          <span class="title-line">¡Tenemos respuestas!</span>
+        </h1>
+        <p class="hero-subtitle">
+          Encuentra toda la información que necesitas sobre nuestro restaurante, 
+          desde reservas hasta nuestras especialidades culinarias.
+        </p>
+      </div>
+      
+      <!-- Buscador principal -->
+      <div class="search-container">
+        <div class="search-box">
+          <div class="search-icon">🔍</div>
+          <input 
+            type="text" 
+            [(ngModel)]="searchTerm"
+            (input)="onSearchChange()"
+            placeholder="Busca tu pregunta aquí..."
+            class="search-input"
+          >
+          <button *ngIf="searchTerm" (click)="clearSearch()" class="clear-button">✕</button>
+        </div>
+        <div class="search-suggestions">
+          <span class="suggestion-label">Búsquedas populares:</span>
+          <button class="suggestion-tag" (click)="setSearchTerm('reserva')">reserva</button>
+          <button class="suggestion-tag" (click)="setSearchTerm('horarios')">horarios</button>
+          <button class="suggestion-tag" (click)="setSearchTerm('delivery')">delivery</button>
+          <button class="suggestion-tag" (click)="setSearchTerm('menú')">menú</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección de Categorías -->
+  <section class="categories-section">
+    <div class="container">
+      <h2 class="section-title">Explora por categorías</h2>
+      <div class="categories-grid">
+        <button 
+          *ngFor="let category of categories" 
+          class="category-card"
+          [class.active]="selectedCategory === category.id"
+          (click)="selectCategory(category.id)"
+        >
+          <div class="category-icon">{{ category.icon }}</div>
+          <div class="category-info">
+            <h3>{{ category.name }}</h3>
+            <span class="category-count">{{ category.count }} preguntas</span>
+          </div>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Preguntas Populares -->
+  <section *ngIf="!showSearchResults && selectedCategory === 'all'" class="popular-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">⭐ Preguntas más frecuentes</h2>
+        <p class="section-subtitle">Las consultas que más recibimos de nuestros clientes</p>
+      </div>
+      
+      <div class="popular-grid">
+        <div *ngFor="let item of popularItems" class="popular-card">
+          <div class="popular-icon">{{ item.icon }}</div>
+          <h3 class="popular-question">{{ item.question }}</h3>
+          <p class="popular-answer" *ngIf="!item.isList">{{ getAnswerString(item.answer) }}</p>
+          <ul class="popular-list" *ngIf="item.isList">
+            <li *ngFor="let point of getAnswerArray(item.answer)">{{ point }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Resultados de búsqueda o categoría -->
+  <section class="results-section">
+    <div class="container">
+      <div class="results-header" *ngIf="showSearchResults">
+        <h2 class="section-title">
+          🔍 Resultados para "{{ searchTerm }}"
+        </h2>
+        <p class="results-count">{{ filteredItems.length }} resultado(s) encontrado(s)</p>
+      </div>
+      
+      <div class="results-header" *ngIf="!showSearchResults && selectedCategory !== 'all'">
+        <h2 class="section-title">
+          {{ getSelectedCategoryInfo()?.icon }} 
+          {{ getSelectedCategoryInfo()?.name }}
+        </h2>
+        <p class="results-count">{{ filteredItems.length }} pregunta(s) en esta categoría</p>
+      </div>
+
+      <!-- Grid de preguntas -->
+      <div class="faq-grid" *ngIf="filteredItems.length > 0">
+        <div *ngFor="let item of filteredItems; let i = index" 
+             class="faq-card"
+             [style.animation-delay]="getAnimationDelay(i)">
+          <div class="card-header" [ngClass]="getCardClasses(item)">
+            <div class="card-icon">{{ item.icon }}</div>
+            <span class="card-badge" *ngIf="item.isPopular">Popular</span>
+          </div>
+          
+          <div class="card-content">
+            <h3 class="card-question">{{ item.question }}</h3>
+            
+            <div class="card-answer" *ngIf="!item.isList">
+              <p>{{ getAnswerString(item.answer) }}</p>
+            </div>
+            
+            <div class="card-answer" *ngIf="item.isList">
+              <ul class="answer-list">
+                <li *ngFor="let point of getAnswerArray(item.answer)">{{ point }}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sin resultados -->
+      <div *ngIf="filteredItems.length === 0" class="no-results">
+        <div class="no-results-icon">🤔</div>
+        <h3>No encontramos resultados</h3>
+        <p>Intenta con otros términos de búsqueda o explora nuestras categorías</p>
+        <button class="reset-button" (click)="resetFilters()">
+          Ver todas las preguntas
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección de contacto -->
+  <section class="contact-section">
+    <div class="container">
+      <div class="contact-card">
+        <div class="contact-content">
+          <h2>¿Aún tienes dudas?</h2>
+          <p>Nuestro equipo está listo para ayudarte con cualquier consulta adicional</p>
+          
+          <div class="contact-methods">
+            <a href="tel:+123456789" class="contact-method phone">
+              <div class="method-icon">📞</div>
+              <div class="method-info">
+                <span class="method-title">Llámanos</span>
+                <span class="method-detail">+54 11 1234-5678</span>
+              </div>
+            </a>
+            
+            <a href="https://wa.me/123456789" class="contact-method whatsapp">
+              <div class="method-icon">💬</div>
+              <div class="method-info">
+                <span class="method-title">WhatsApp</span>
+                <span class="method-detail">Respuesta inmediata</span>
+              </div>
+            </a>
+            
+            <a href="mailto:info@restaurantdsw.com" class="contact-method email">
+              <div class="method-icon">✉️</div>
+              <div class="method-info">
+                <span class="method-title">Email</span>
+              </div>
+            </a>
+          </div>
+        </div>
+        
+        <div class="contact-illustration">
+          <div class="illustration-circle">
+            <div class="chef-emoji">👨‍🍳</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
 <app-footer></app-footer>

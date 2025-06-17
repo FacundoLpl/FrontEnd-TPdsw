@@ -8,46 +8,75 @@ import { throwError } from 'rxjs';
   providedIn: 'root',
 })
 export class ReservationService {
-  private apiUrl = 'http://localhost:3000/api/reservations'; // Cambia según la configuración de tu API
+  private apiUrl = 'http://localhost:3000/api/reservations';
 
   constructor(private http: HttpClient, private authService: AuthService) {}
+  
+ addReservation(user: string, people: number, datetime: string): Observable<any> {
+  console.log('🚀 ReservationService received:', { user, people, datetime });
+  console.log('🚀 Types in service:', {
+    user: typeof user,
+    people: typeof people,
+    datetime: typeof datetime
+  });
 
-  addReservation(user: string, people: number, datetime: string): Observable<any> {
-    const body = {
-      state: 'Pending',
-      user: user,
-      people: people,
-      datetime: datetime, // Enviar el valor directamente
-    };
+  const body = {
+    state: 'Pending',
+    user: user,
+    people: people,
+    datetime: datetime,
+  };
 
-    return this.http.post(this.apiUrl, body); // ← Devolver Observable
-  }
+  console.log('🚀 ReservationService sending body:', body);
+  console.log('🚀 Body types:', {
+    state: typeof body.state,
+    user: typeof body.user,
+    people: typeof body.people,
+    datetime: typeof body.datetime
+  });
+  console.log('🚀 Datetime value:', body.datetime);
+
+  return this.http.post(this.apiUrl, body);
+}
+
   findAll(filter: any = {}) {
-      const token = this.authService.getToken();
-      let params = new HttpParams();
-      if (filter.state) {
-        params = params.set('state', filter.state);
-      }
-      if (filter.user) {
-        params = params.set('user', filter.user);
-      }
-      return this.http.get(`${this.apiUrl}`, { 
-        params: params
-      });
+    let params = new HttpParams();
+    if (filter.state) {
+      params = params.set('state', filter.state);
+    }
+    if (filter.user) {
+      params = params.set('user', filter.user);
+    }
+    return this.http.get(`${this.apiUrl}`, { params });
   }
 
   findOne() {
     const userId = this.authService.getId();
     if (userId != null) {
       let params = new HttpParams()
-        .set('state', 'pending')
+        .set('state', 'Pending') // ← Cambié 'pending' por 'Pending' (mayúscula)
         .set('user', userId);
-  
+
       return this.http.get(`${this.apiUrl}`, { params });
     } else {
-      // Mejor mostrar el error fuera, y devolver un observable vacío
       return throwError(() => new Error("Log In antes de continuar"));
     }
   }
-  
+
+  // ✅ CORREGIDO: URL correcta
+  cancelReservation(reservationId: string): Observable<any> {
+  console.log('🔍 Service: Canceling reservation with ID:', reservationId);
+  return this.http.delete(`${this.apiUrl}/${reservationId}`);
+}
+  // Obtener reserva pendiente del usuario
+getPendingReservation(): Observable<any> {
+  return this.http.get(`${this.apiUrl}/user/pending`);
+}
+
+// Obtener todas las reservas del usuario
+getUserReservations(): Observable<any> {
+  return this.http.get(`${this.apiUrl}/user/all`);
+}
+
+
 }

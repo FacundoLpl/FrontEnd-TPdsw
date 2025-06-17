@@ -1,162 +1,161 @@
-<section class="restaurant-menu">
-    
-    <app-navbar class="barra-navegacion"> </app-navbar>
-    
-    
-    <div class="container">
-        <h1 class="text-center" >Nuestra Carta</h1>
+<div class="menu-page">
+  <app-navbar></app-navbar>
 
-
-    <!-- Sección de Bebidas -->
-    <div class="menu-category">
-        <h2 class="text-center">Bebidas</h2>
-        <div id="carouselBebidas" class="carousel slide">
-            <div class="carousel-inner">
-                <div class="carousel-item" *ngFor="let productGroup of groupProductsByThree('Bebidas'); let i = index" [class.active]="i === 0">
-                    <div class="row">
-                        <div class="col-md-4" *ngFor="let product of productGroup" (click)="openModal(product.name, product.imageUrl, product.id, product.price)">
-                            <app-menu-item 
-                                [title]="product.name"
-                                [imageUrl]="product.imageUrl"
-                                [altText]="product.name">
-                            </app-menu-item>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <button class="carousel-control-prev custom-carousel-control" type="button" data-bs-target="#carouselBebidas" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next custom-carousel-control" type="button" data-bs-target="#carouselBebidas" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
-        </div>
+  <!-- Hero Section -->
+  <section class="menu-hero">
+    <div class="hero-background">
+      <div class="floating-shapes">
+        <div class="floating-shape shape-1"></div>
+        <div class="floating-shape shape-2"></div>
+        <div class="floating-shape shape-3"></div>
+        <div class="floating-shape shape-4"></div>
+      </div>
+      <div class="gradient-overlay"></div>
     </div>
     
-
-<!-- Sección de Entradas -->
-    <div class="menu-category">
-        <h2 class="text-center">Entradas</h2>
-        <div id="carouselEntradas" class="carousel slide">
-            <div class="carousel-inner">
-                <div class="carousel-item" *ngFor="let productGroup of groupProductsByThree('Entradas'); let i = index" [class.active]="i === 0">
-                    <div class="row">
-                        <div class="col-md-4" *ngFor="let product of productGroup" (click)="openModal(product.name, product.imageUrl,product.id, product.price)">
-                            <app-menu-item 
-                                [title]="product.name"
-                                [imageUrl]="product.imageUrl"
-                                [altText]="product.name">
-                            </app-menu-item>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <button class="carousel-control-prev custom-carousel-control" type="button" data-bs-target="#carouselEntradas" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next custom-carousel-control" type="button" data-bs-target="#carouselEntradas" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
+    <div class="hero-content">
+      <h1 class="hero-title">
+        <span class="title-line">Nuestra</span>
+        <span class="title-line highlight">Carta</span>
+      </h1>
+      <p class="hero-subtitle">
+        Descubre nuestra selección de platillos preparados con ingredientes frescos y de la mejor calidad
+      </p>
+      
+      <!-- Buscador principal -->
+      <div class="search-container">
+        <div class="search-box">
+          <i class="fas fa-search search-icon"></i>
+          <input 
+            type="text" 
+            [(ngModel)]="searchTerm"
+            (input)="filterProducts()"
+            (focus)="toggleSearchSuggestions()"
+            placeholder="Busca tu platillo favorito..."
+            class="search-input"
+          >
+          <button *ngIf="searchTerm" (click)="clearSearch()" class="clear-button">
+            <i class="fas fa-times"></i>
+          </button>
         </div>
-    </div>
-
-    <!-- Sección de Guarniciones -->
-    <div class="menu-category">
-        <h2 class="text-center">Guarniciones</h2>
-        <div id="carouselGuarniciones" class="carousel slide">
-            <div class="carousel-inner">
-                <div class="carousel-item" *ngFor="let productGroup of groupProductsByThree('Guarniciones'); let i = index" [class.active]="i === 0">
-                    <div class="row">
-                        <div class="col-md-4" *ngFor="let product of productGroup" (click)="openModal(product.name, product.imageUrl, product.id, product.price)">
-                            <app-menu-item 
-                                [title]="product.name"
-                                [imageUrl]="product.imageUrl"
-                                [altText]="product.name">
-                            </app-menu-item>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <button class="carousel-control-prev custom-carousel-control" type="button" data-bs-target="#carouselGuarniciones" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next custom-carousel-control" type="button" data-bs-target="#carouselGuarniciones" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
-        </div>
-    </div>
-
-    <!-- Sección de Principales -->
-    <div class="menu-category">
-        <h2 class="text-center">Principales</h2>
-        <div id="carouselPrincipales" class="carousel slide">
-            <div class="carousel-inner">
-                <div class="carousel-item" *ngFor="let productGroup of groupProductsByThree('Principales'); let i = index" [class.active]="i === 0">
-                    <div class="row">
-                        <div class="col-md-4" *ngFor="let product of productGroup" (click)="openModal(product.name, product.imageUrl, product.id, product.price)">
-                            <app-menu-item 
-                                [title]="product.name"
-                                [imageUrl]="product.imageUrl"
-                                [altText]="product.name">
-                            </app-menu-item>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <button class="carousel-control-prev custom-carousel-control" type="button" data-bs-target="#carouselPrincipales" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next custom-carousel-control" type="button" data-bs-target="#carouselPrincipales" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
-        </div>
-    </div>
-
-
-    <!-- Sección de Postres -->
-    <div class="menu-category">
-        <h2 class="text-center">Postres</h2>
-        <div id="carouselPostres" class="carousel slide">
-            <div class="carousel-inner">
-                <div class="carousel-item" *ngFor="let productGroup of groupProductsByThree('Postres'); let i = index" [class.active]="i === 0">
-                    <div class="row">
-                        <div class="col-md-4" *ngFor="let product of productGroup" (click)="openModal(product.name, product.imageUrl,  product.id, product.price)">
-                            <app-menu-item 
-                                [title]="product.name"
-                                [imageUrl]="product.imageUrl"
-                                [altText]="product.name">
-                            </app-menu-item>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <button class="carousel-control-prev custom-carousel-control" type="button" data-bs-target="#carouselPostres" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next custom-carousel-control" type="button" data-bs-target="#carouselPostres" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
-        </div>
-    </div>
         
-    <!-- Modal de productos-->
-                <app-menu-item-modal
-                *ngIf="isModalOpen"
-                [itemTitle]="selectedItemTitle"
-                [imageUrl]="selectedImageUrl"
-                [productId]="selectedProductId"
-                [price]="selectedPrice"
-                (close)="closeModal()"
-                >
-            </app-menu-item-modal>
-    <app-footer></app-footer>
+        <div class="search-suggestions" *ngIf="showSearchSuggestions">
+          <span class="suggestion-label">Búsquedas populares:</span>
+          <div class="suggestion-tags">
+            <button 
+              *ngFor="let suggestion of popularSearches" 
+              class="suggestion-tag"
+              (click)="applySearchSuggestion(suggestion)"
+            >
+              {{ suggestion }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="menu-content">
+    <div class="container">
+      <!-- Categorías -->
+      <div class="categories-section">
+        <div class="categories-scroll">
+          <button 
+            class="category-button" 
+            [class.active]="activeCategory === 'all'"
+            (click)="setActiveCategory('all')"
+          >
+            <div class="category-icon">
+              <i class="fas fa-th-large"></i>
+            </div>
+            <span>Todos</span>
+          </button>
+          
+          <button 
+            *ngFor="let category of categories" 
+            class="category-button" 
+            [class.active]="activeCategory === category"
+            [class]="getCategoryColor(category)"
+            (click)="setActiveCategory(category)"
+          >
+            <div class="category-icon">
+              <i class="fas fa-{{getCategoryIcon(category)}}"></i>
+            </div>
+            <span>{{ category }}</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mensaje de carga -->
+      <div *ngIf="isLoading" class="loading-container">
+        <div class="spinner"></div>
+        <p>Cargando deliciosos platillos...</p>
+      </div>
+
+      <!-- Mensaje de error -->
+      <div *ngIf="loadingError" class="error-container">
+        <div class="error-icon">
+          <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <h3>¡Ups! Algo salió mal</h3>
+        <p>No pudimos cargar el menú en este momento. Por favor, intenta nuevamente.</p>
+        <button (click)="loadProducts()" class="retry-button">
+          <i class="fas fa-redo"></i>
+          Reintentar
+        </button>
+      </div>
+
+      <!-- Mensaje de no resultados -->
+      <div *ngIf="!isLoading && filteredProducts.length === 0" class="no-results">
+        <div class="no-results-icon">
+          <i class="fas fa-search"></i>
+        </div>
+        <h3>No encontramos resultados</h3>
+        <p *ngIf="searchTerm">No hay platillos que coincidan con "{{ searchTerm }}"</p>
+        <button (click)="clearSearch()" class="clear-search-button">
+          <i class="fas fa-times-circle"></i>
+          Limpiar búsqueda
+        </button>
+      </div>
+
+      <!-- Resultados -->
+      <div *ngIf="!isLoading && filteredProducts.length > 0" class="results-section">
+        <div class="results-header">
+          <h2 *ngIf="activeCategory === 'all' && !searchTerm">Nuestro Menú Completo</h2>
+          <h2 *ngIf="activeCategory !== 'all' && !searchTerm">{{ activeCategory }}</h2>
+          <h2 *ngIf="searchTerm">Resultados para "{{ searchTerm }}"</h2>
+          <p class="results-count">{{ filteredProducts.length }} platillos encontrados</p>
+        </div>
+        
+        <!-- Grid de productos -->
+        <div class="products-grid">
+          <app-menu-item
+            *ngFor="let product of filteredProducts; let i = index"
+            [title]="product.name"
+            [imageUrl]="product.imageUrl"
+            [altText]="product.name"
+            [description]="product.description"
+            [price]="product.price"
+            [featured]="product.featured"
+            [productId]="product.id"
+            [style.animation-delay]="getAnimationDelay(i)"
+            (itemClick)="openModal(product.name, product.imageUrl, product.id, product.price)"
+            (addToCart)="quickAddToCart(product.id, product.name, product.price)"
+          ></app-menu-item>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de productos -->
+  <app-menu-item-modal
+    *ngIf="isModalOpen"
+    [itemTitle]="selectedItemTitle"
+    [imageUrl]="selectedImageUrl"
+    [productId]="selectedProductId"
+    [price]="selectedPrice"
+    (close)="closeModal()"
+  ></app-menu-item-modal>
+
+  <app-footer></app-footer>
+</div>

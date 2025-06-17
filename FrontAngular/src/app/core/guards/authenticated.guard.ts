@@ -1,15 +1,22 @@
-import { CanActivateFn } from '@angular/router';
-import { inject } from '@angular/core';
-import { AuthService } from '../services/auth.service.js';
-import { Router } from '@angular/router';
+import { Injectable } from "@angular/core"
+import { CanActivate, Router } from "@angular/router"
+import { AuthService } from "../services/auth.service"
 
-export const AuthenticatedGuard: CanActivateFn = (route, state) => {
-  const authService = inject(AuthService);
-  const router = inject(Router);
+@Injectable({
+  providedIn: "root",
+})
+export class AuthenticatedGuard implements CanActivate {
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+  ) {}
 
-  if(authService.isAuthenticated ()) {
-    return router.navigate(['/']); // Si está autenticado, permite el acceso a la ruta
-  }else {
-    return true; // Si no está autenticado, redirige a la página de inicio de sesión 
+  canActivate(): boolean {
+    if (this.authService.isAuthenticated()) {
+      // If already authenticated, redirect to home
+      this.router.navigate(["/inicio"])
+      return false
+    }
+    return true
   }
-};
+}

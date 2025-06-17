@@ -1,75 +1,202 @@
- <!DOCTYPE html>
-<html lang="es">
-<head> 
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login Page</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-</head>
-<body class="flex flex-col min-h-screen bg-yellow-500 bg-gradient-to-b from-black via-gray-900 to-yellow-600">
-  <!-- Navbar -->
-  <app-navbar>
-    <nav class="bg-transparent p-4 text-white">
-      <div class="container mx-auto">Navbar Placeholder</div>
-    </nav>
-  </app-navbar>
+<div class="auth-page">
+  <app-navbar></app-navbar>
 
-  <!-- Contenedor principal--> 
-  <div class="flex-1 flex items-center justify-center">
-    <div class="relative z-10 flex flex-col sm:flex-row justify-center max-w-5xl w-full px-4">
-      <!-- Texto de bienvenida--> 
-      <div class="flex-col flex self-center lg:px-14 sm:max-w-4xl xl:max-w-md text-gray-300 hidden lg:flex">
-        <h1 class="my-3 font-semibold text-4xl text-white">Rock & Fellers</h1>
-        <p class="pr-3 text-sm opacity-75 text-white">Registrate para poder continuar, o inicia sesion</p>
+  <!-- Hero Section con diseño moderno -->
+  <section class="auth-hero">
+    <div class="hero-background">
+      <div class="floating-shapes">
+        <div class="floating-shape shape-1"></div>
+        <div class="floating-shape shape-2"></div>
+        <div class="floating-shape shape-3"></div>
+        <div class="floating-shape shape-4"></div>
       </div>
-
-      <!-- Formulario -->
-      <div class="flex justify-center self-center">
-        <div class="p-6 sm:p-12 bg-white mx-auto rounded-3xl w-full max-w-md shadow-lg">
-          <div class="mb-7">
-            <h3 class="font-semibold text-2xl text-gray-800">Iniciar Sesion</h3>
-            <p class="text-gray-400">
-              No tienes cuenta?
-              <a href="/register" class="text-sm text-purple-700 hover:text-purple-700">Registrarse</a>
-            </p>
-            
+      <div class="gradient-overlay"></div>
+    </div>
+    
+    <div class="auth-container">
+      <div class="auth-content">
+        <!-- Lado izquierdo - Información del restaurante -->
+        <div class="auth-info">
+          <div class="restaurant-branding">
+            <div class="brand-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"></path>
+                <path d="M7 2v20"></path>
+                <path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path>
+              </svg>
+            </div>
+            <h1 class="brand-name">Restaurant DSW</h1>
+            <p class="brand-tagline">Experiencia gastronómica excepcional</p>
           </div>
-
-        
-
-          <div class="space-y-6">
-            <div>
-              <input  [(ngModel)]="user" class="w-full text-sm px-4 py-3 bg-gray-200 focus:bg-gray-100 border border-gray-200 rounded-lg focus:outline-none focus:border-purple-400" type="text" placeholder="Usuario">
-            </div>
-
-            <div class="relative">
-              <input [(ngModel)]="password" placeholder="Contrasena" type="password" class="text-sm text-gray-600 px-4 py-3 rounded-lg w-full bg-gray-200 focus:bg-gray-100 border border-gray-200 focus:outline-none focus:border-purple-400">
-            </div>
-            @if (!feedback){ 
-            <p style="color: red;">Email o contrasena incorrectos.</p>}
-
-            <div class="flex items-center justify-between">
-              <div class="text-sm ml-auto">
-                <a href="#" class="text-purple-700 hover:text-purple-600">Olvidaste tu contrasena?</a>
+          
+          <div class="auth-features">
+            <div class="feature-item">
+              <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="16" y1="2" x2="16" y2="6"></line>
+                  <line x1="8" y1="2" x2="8" y2="6"></line>
+                  <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+              </div>
+              <div class="feature-content">
+                <h3>Reservas Online</h3>
+                <p>Reserva tu mesa de forma rápida y sencilla</p>
               </div>
             </div>
-
-            <div>
-              <button (click)="login()" type="submit" class="w-full flex justify-center bg-purple-800 hover:bg-purple-700 text-gray-100 p-3 rounded-lg tracking-wide font-semibold cursor-pointer transition ease-in duration-500">
-                Entrar
-              </button>
+            
+            <div class="feature-item">
+              <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 9h18v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9Z"></path>
+                  <path d="m3 9 2.45-4.9A2 2 0 0 1 7.24 3h9.52a2 2 0 0 1 1.8 1.1L21 9"></path>
+                  <path d="M12 3v6"></path>
+                </svg>
+              </div>
+              <div class="feature-content">
+                <h3>Menú Exclusivo</h3>
+                <p>Descubre nuestras especialidades culinarias</p>
+              </div>
             </div>
+            
+            <div class="feature-item">
+              <div class="feature-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                </svg>
+              </div>
+              <div class="feature-content">
+                <h3>Experiencia Premium</h3>
+                <p>Servicio de calidad y atención personalizada</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lado derecho - Formulario de login -->
+        <div class="auth-form-section">
+          <div class="form-container">
+            <div class="form-header">
+              <h2>Bienvenido de vuelta</h2>
+              <p>Ingresa tus credenciales para continuar</p>
+            </div>
+
+            <form class="auth-form" (ngSubmit)="login()">
+              <!-- Campo Email/Usuario -->
+              <div class="form-group">
+                <label for="username" class="form-label">Email</label>
+                <div class="input-wrapper">
+                  <div class="input-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                      <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                  </div>
+                  <input 
+                    type="email" 
+                    id="username" 
+                    [(ngModel)]="user" 
+                    name="username"
+                    placeholder="tu@email.com"
+                    class="form-input"
+                    [class.error]="!feedback"
+                    (input)="clearError()"
+                    required
+                  >
+                </div>
+              </div>
+
+              <!-- Campo Contraseña -->
+              <div class="form-group">
+                <label for="password" class="form-label">Contraseña</label>
+                <div class="input-wrapper">
+                  <div class="input-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                      <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                  </div>
+                  <input 
+                    [type]="showPassword ? 'text' : 'password'" 
+                    id="password" 
+                    [(ngModel)]="password" 
+                    name="password"
+                    placeholder="Ingresa tu contraseña"
+                    class="form-input"
+                    [class.error]="!feedback"
+                    (input)="clearError()"
+                    required
+                  >
+                  <button 
+                    type="button" 
+                    class="password-toggle"
+                    (click)="togglePasswordVisibility()"
+                  >
+                    <svg *ngIf="!showPassword" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                      <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                    <svg *ngIf="showPassword" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                      <line x1="1" y1="1" x2="23" y2="23"></line>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Mensaje de error -->
+              <div class="error-message" *ngIf="!feedback">
+                <div class="error-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                  </svg>
+                </div>
+                <span>{{ errorMessage }}</span>
+              </div>
+
+              <!-- Opciones adicionales -->
+              <div class="form-options">
+                <div class="remember-option">
+                  <input type="checkbox" id="remember" class="checkbox-input">
+                  <label for="remember" class="checkbox-label">Recordarme</label>
+                </div>
+                <a href="#" class="forgot-link">¿Olvidaste tu contraseña?</a>
+              </div>
+
+              <!-- Botón de login -->
+              <button 
+                type="submit"
+                class="auth-button primary" 
+                [disabled]="isLoading"
+              >
+                <span *ngIf="!isLoading" class="button-content">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                    <polyline points="10,17 15,12 10,7"></polyline>
+                    <line x1="15" y1="12" x2="3" y2="12"></line>
+                  </svg>
+                  Iniciar Sesión
+                </span>
+                <div class="loading-spinner" *ngIf="isLoading">
+                  <div class="spinner"></div>
+                  <span>Iniciando sesión...</span>
+                </div>
+              </button>
+
+              <!-- Link de registro -->
+              <div class="auth-switch">
+                <p>¿No tienes una cuenta? 
+                  <a routerLink="/register" class="switch-link">Regístrate aquí</a>
+                </p>
+              </div>
+            </form>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
-  <!-- Footer -->
-  <app-footer class="mt-auto">
-    <footer class="bg-transparent p-4 text-white">
-      <div class="container mx-auto">Footer Placeholder</div>
-    </footer>
-  </app-footer>
-</body>
-</html>
+  <app-footer></app-footer>
+</div>

@@ -1,65 +1,299 @@
-<!DOCTYPE html>
-<html lang="es">
-<head> 
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Registro</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-</head>
-<body class="flex flex-col min-h-screen bg-yellow-500 bg-gradient-to-b from-black via-gray-900 to-yellow-600">
+<div class="auth-page">
+  <app-navbar></app-navbar>
 
-  <!-- Navbar -->
-  <app-navbar>
-    <nav class="bg-transparent p-4 text-white">
-      <div class="container mx-auto">Navbar Placeholder</div>
-    </nav>
-  </app-navbar>
-
-  <!-- Registro -->
-  <div class="flex-1 flex items-center justify-center">
-    <div class="relative z-10 flex flex-col sm:flex-row justify-center max-w-5xl w-full px-4">
-      <div class="flex-col flex self-center lg:px-14 sm:max-w-4xl xl:max-w-md text-gray-300 hidden lg:flex">
-        <h1 class="my-3 font-semibold text-4xl text-white">Rock & Fellers</h1>
-        <p class="pr-3 text-sm opacity-75 text-white">Completa los datos para registrarte</p>
+  <!-- Hero Section con diseño moderno -->
+  <section class="auth-hero">
+    <div class="hero-background">
+      <div class="floating-shapes">
+        <div class="floating-shape shape-1"></div>
+        <div class="floating-shape shape-2"></div>
+        <div class="floating-shape shape-3"></div>
+        <div class="floating-shape shape-4"></div>
       </div>
-
-      <div class="flex justify-center self-center">
-        <div class="p-6 sm:p-12 bg-white mx-auto rounded-3xl w-full max-w-md shadow-lg">
-          <div class="mb-7">
-            <h3 class="font-semibold text-2xl text-gray-800">Registrarse</h3>
-            <p class="text-gray-400">Ya tienes cuenta?
-              <a href="/login" class="text-sm text-purple-700 hover:text-purple-700">Inicia sesión</a>
-            </p>
+      <div class="gradient-overlay"></div>
+    </div>
+    
+    <div class="auth-container">
+      <div class="auth-content register-layout">
+        <!-- Lado izquierdo - Información del restaurante -->
+        <div class="auth-info">
+          <div class="restaurant-branding">
+            <div class="brand-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"></path>
+                <path d="M7 2v20"></path>
+                <path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path>
+              </svg>
+            </div>
+            <h1 class="brand-name">Restaurant DSW</h1>
+            <p class="brand-tagline">Únete a nuestra familia gastronómica</p>
           </div>
+          
+          <div class="auth-benefits">
+            <h3 class="benefits-title">Al registrarte podrás:</h3>
+            <div class="benefit-list">
+              <div class="benefit-item">
+                <div class="benefit-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20,6 9,17 4,12"></polyline>
+                  </svg>
+                </div>
+                <span>Hacer reservas online</span>
+              </div>
+              <div class="benefit-item">
+                <div class="benefit-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20,6 9,17 4,12"></polyline>
+                  </svg>
+                </div>
+                <span>Acceder a ofertas exclusivas</span>
+              </div>
+              <div class="benefit-item">
+                <div class="benefit-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20,6 9,17 4,12"></polyline>
+                  </svg>
+                </div>
+                <span>Ver tu historial de pedidos</span>
+              </div>
+              <div class="benefit-item">
+                <div class="benefit-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20,6 9,17 4,12"></polyline>
+                  </svg>
+                </div>
+                <span>Recibir notificaciones personalizadas</span>
+              </div>
+            </div>
+          </div>
+        </div>
 
-          <div class="space-y-4">
-            <input [(ngModel)]="userData.firstName" type="text" placeholder="Nombre" class="form-input w-full text-sm px-4 py-3 bg-gray-200 border rounded-lg focus:outline-none focus:border-purple-400" />
-            <input [(ngModel)]="userData.lastName" type="text" placeholder="Apellido" class="form-input w-full text-sm px-4 py-3 bg-gray-200 border rounded-lg focus:outline-none focus:border-purple-400" />
-            <input [(ngModel)]="userData.dni" type="text" placeholder="DNI" class="form-input w-full text-sm px-4 py-3 bg-gray-200 border rounded-lg focus:outline-none focus:border-purple-400" />
-            <input [(ngModel)]="userData.address" type="text" placeholder="Dirección" class="form-input w-full text-sm px-4 py-3 bg-gray-200 border rounded-lg focus:outline-none focus:border-purple-400" />
-            <input [(ngModel)]="userData.email" type="email" placeholder="Email" class="form-input w-full text-sm px-4 py-3 bg-gray-200 border rounded-lg focus:outline-none focus:border-purple-400" />
-            <input [(ngModel)]="userData.password" type="password" placeholder="Contraseña" class="form-input w-full text-sm px-4 py-3 bg-gray-200 border rounded-lg focus:outline-none focus:border-purple-400" />
-            
-
-            <div *ngIf="!feedback">
-              <p class="text-red-600 text-sm">Registro fallido. Verifica los datos.</p>
+        <!-- Lado derecho - Formulario de registro -->
+        <div class="auth-form-section">
+          <div class="form-container">
+            <div class="form-header">
+              <h2>Crear tu cuenta</h2>
+              <p>Completa tus datos para unirte a nosotros</p>
             </div>
 
-            <button (click)="register()" class="w-full bg-purple-800 hover:bg-purple-700 text-white p-3 rounded-lg font-semibold transition ease-in duration-500">
-              Registrarme
-            </button>
+            <form class="auth-form register-form" (ngSubmit)="register()">
+              <!-- Primera fila: Nombre y Apellido -->
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="firstName" class="form-label">Nombre</label>
+                  <div class="input-wrapper">
+                    <div class="input-icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                      </svg>
+                    </div>
+                    <input 
+                      type="text" 
+                      id="firstName" 
+                      [(ngModel)]="userData.firstName" 
+                      name="firstName"
+                      placeholder="Tu nombre"
+                      class="form-input"
+                      [class.error]="!feedback"
+                      (input)="clearError()"
+                      required
+                    >
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="lastName" class="form-label">Apellido</label>
+                  <div class="input-wrapper">
+                    <div class="input-icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                      </svg>
+                    </div>
+                    <input 
+                      type="text" 
+                      id="lastName" 
+                      [(ngModel)]="userData.lastName" 
+                      name="lastName"
+                      placeholder="Tu apellido"
+                      class="form-input"
+                      [class.error]="!feedback"
+                      (input)="clearError()"
+                      required
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <!-- Segunda fila: DNI y Dirección -->
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="dni" class="form-label">DNI</label>
+                  <div class="input-wrapper">
+                    <div class="input-icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                        <line x1="8" y1="21" x2="16" y2="21"></line>
+                        <line x1="12" y1="17" x2="12" y2="21"></line>
+                      </svg>
+                    </div>
+                    <input 
+                      type="text" 
+                      id="dni" 
+                      [(ngModel)]="userData.dni" 
+                      name="dni"
+                      placeholder="12345678"
+                      class="form-input"
+                      [class.error]="!feedback"
+                      (input)="clearError()"
+                      maxlength="8"
+                      required
+                    >
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="address" class="form-label">Dirección</label>
+                  <div class="input-wrapper">
+                    <div class="input-icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                      </svg>
+                    </div>
+                    <input 
+                      type="text" 
+                      id="address" 
+                      [(ngModel)]="userData.address" 
+                      name="address"
+                      placeholder="Tu dirección"
+                      class="form-input"
+                      [class.error]="!feedback"
+                      (input)="clearError()"
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <!-- Email -->
+              <div class="form-group">
+                <label for="email" class="form-label">Email</label>
+                <div class="input-wrapper">
+                  <div class="input-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                      <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                  </div>
+                  <input 
+                    type="email" 
+                    id="email" 
+                    [(ngModel)]="userData.email" 
+                    name="email"
+                    placeholder="tu@email.com"
+                    class="form-input"
+                    [class.error]="!feedback"
+                    (input)="clearError()"
+                    required
+                  >
+                </div>
+              </div>
+
+              <!-- Contraseña -->
+              <div class="form-group">
+                <label for="password" class="form-label">Contraseña</label>
+                <div class="input-wrapper">
+                  <div class="input-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                      <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                  </div>
+                  <input 
+                    [type]="showPassword ? 'text' : 'password'" 
+                    id="password" 
+                    [(ngModel)]="userData.password" 
+                    name="password"
+                    placeholder="Mínimo 6 caracteres"
+                    class="form-input"
+                    [class.error]="!feedback"
+                    (input)="clearError()"
+                    required
+                  >
+                  <button 
+                    type="button" 
+                    class="password-toggle"
+                    (click)="togglePasswordVisibility()"
+                  >
+                    <svg *ngIf="!showPassword" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                      <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                    <svg *ngIf="showPassword" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                      <line x1="1" y1="1" x2="23" y2="23"></line>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Mensaje de error -->
+              <div class="error-message" *ngIf="!feedback">
+                <div class="error-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                  </svg>
+                </div>
+                <span>{{ errorMessage }}</span>
+              </div>
+
+              <!-- Términos y condiciones -->
+              <div class="terms-section">
+                <div class="terms-checkbox">
+                  <input type="checkbox" id="terms" [(ngModel)]="acceptTerms" name="terms" class="checkbox-input">
+                  <label for="terms" class="checkbox-label">
+                    Acepto los <a href="#" class="terms-link">términos y condiciones</a> y la 
+                    <a href="#" class="terms-link">política de privacidad</a>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Botón de registro -->
+              <button 
+                type="submit"
+                class="auth-button primary" 
+                [disabled]="isLoading || !acceptTerms"
+              >
+                <span *ngIf="!isLoading" class="button-content">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="8.5" cy="7" r="4"></circle>
+                    <line x1="20" y1="8" x2="20" y2="14"></line>
+                    <line x1="23" y1="11" x2="17" y2="11"></line>
+                  </svg>
+                  Crear Cuenta
+                </span>
+                <div class="loading-spinner" *ngIf="isLoading">
+                  <div class="spinner"></div>
+                  <span>Creando cuenta...</span>
+                </div>
+              </button>
+
+              <!-- Link de login -->
+              <div class="auth-switch">
+                <p>¿Ya tienes una cuenta? 
+                  <a routerLink="/login" class="switch-link">Inicia sesión aquí</a>
+                </p>
+              </div>
+            </form>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
-  <!-- Footer -->
-  <app-footer class="mt-auto">
-    <footer class="bg-transparent p-4 text-white">
-      <div class="container mx-auto">Footer Placeholder</div>
-    </footer>
-  </app-footer>
-
-</body>
-</html>
+  <app-footer></app-footer>
+</div>

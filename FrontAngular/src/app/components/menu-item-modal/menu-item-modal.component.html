@@ -1,27 +1,108 @@
-<div class="modal-overlay" (click)="closeModal()"></div>
-<div class="modal-content">
-  <h2>{{ itemTitle }}</h2>
-  <h2> precio: {{ price }}</h2>
+<!-- Modal Overlay -->
+<div class="modal-overlay" (click)="onClose()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <!-- Header -->
+    <div class="modal-header">
+      <div class="header-content">
+        <h2 class="modal-title">{{ itemTitle }}</h2>
+        <div class="price-badge">${{ price }}</div>
+      </div>
+      <button class="close-btn" (click)="onClose()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
 
-  <figure>
-    <img [src]="imageUrl" class="custom-img-size mx-auto d-block">
-  </figure>
+    <!-- Content -->
+    <div class="modal-body">
+      <!-- Image -->
+      <div class="item-image-container">
+        <img [src]="imageUrl || '/assets/images/placeholder-food.jpg'" [alt]="itemTitle" class="item-image" />
+        <div class="image-overlay">
+          <div class="image-badge">
+            <i class="fas fa-utensils"></i>
+            Especialidad
+          </div>
+        </div>
+      </div>
 
-  <!-- Control de cantidad -->
-  <div class="quantity-control">
-    <button class="round-button" (click)="decreaseQuantity()">-</button>
-    <span class="quantity-display">{{ quantity }}</span>
-    <button class="round-button" (click)="increaseQuantity()">+</button>
+      <!-- Details -->
+      <div class="item-details">
+        <!-- Quantity Section -->
+        <div class="quantity-section">
+          <h4 class="section-title">
+            <i class="fas fa-calculator"></i>
+            Cantidad
+          </h4>
+          <div class="quantity-controls">
+            <button 
+              (click)="quantity = quantity - 1; onQuantityChange()" 
+              [disabled]="quantity <= 1" 
+              class="quantity-btn decrease"
+            >
+              <i class="fas fa-minus"></i>
+            </button>
+            <div class="quantity-display">
+              <span class="quantity-number">{{ quantity }}</span>
+              <span class="quantity-label">unidad{{ quantity > 1 ? 'es' : '' }}</span>
+            </div>
+            <button 
+              (click)="quantity = quantity + 1; onQuantityChange()" 
+              class="quantity-btn increase"
+            >
+              <i class="fas fa-plus"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Customization Section -->
+        <div class="customization-section">
+          <h4 class="section-title">
+            <i class="fas fa-comment-alt"></i>
+            Comentarios especiales
+          </h4>
+          <div class="textarea-container">
+            <textarea 
+              [(ngModel)]="comment"
+              placeholder="¿Alguna instrucción especial? (ej: sin cebolla, extra queso, etc.)"
+              rows="3"
+              class="comment-textarea"
+            ></textarea>
+            <div class="textarea-footer">
+              <span class="char-count">{{ comment.length }}/200</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="modal-footer">
+      <div class="price-summary">
+        <div class="price-breakdown">
+          <div class="price-line total">
+            <span>Total:</span>
+            <span>${{ getTotalPrice().toFixed(2) }}</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="action-buttons">
+        <button class="cancel-btn" (click)="onClose()">
+          <i class="fas fa-times"></i>
+          Cancelar
+        </button>
+        <button 
+          class="add-to-cart-btn" 
+          (click)="onAddToCart()"
+          [disabled]="isProcessing"
+          [class.processing]="isProcessing"
+        >
+          <i class="fas fa-shopping-cart" *ngIf="!isProcessing"></i>
+          <i class="fas fa-spinner fa-spin" *ngIf="isProcessing"></i>
+          <span *ngIf="!isProcessing">Agregar al Carrito</span>
+          <span *ngIf="isProcessing">Agregando...</span>
+        </button>
+      </div>
+    </div>
   </div>
-
-  <!-- Campo para agregar comentarios -->
-  <div class="comment-section">
-    <label for="comment">Comentario:</label>
-    <textarea id="comment" [(ngModel)]="comment"></textarea>
-  </div>
-
-  <!-- Botón para agregar al pedido -->
-   {{ cartId}}
-  <button class="add-button"(click)="addToCart(quantity, productId)">Agregar al carrito</button>
-  <div>  
 </div>
