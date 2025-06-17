@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { AuthService} from '../core/services/auth.service';
 import { Observable } from 'rxjs';
 import { throwError } from 'rxjs';
+import { map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -54,10 +55,12 @@ export class ReservationService {
     const userId = this.authService.getId();
     if (userId != null) {
       let params = new HttpParams()
-        .set('state', 'Pending') // ← Cambié 'pending' por 'Pending' (mayúscula)
+        .set('state', 'Pending') // ← Cambié 'Pending' por 'Pending' (mayúscula)
         .set('user', userId);
-
-      return this.http.get(`${this.apiUrl}`, { params });
+    
+        return this.http.get<{ message: string, data: any[] }>(`${this.apiUrl}`, { params }).pipe(
+          map(response => response.data[0] || null) // devolvemos la primera reserva o null
+        );
     } else {
       return throwError(() => new Error("Log In antes de continuar"));
     }
