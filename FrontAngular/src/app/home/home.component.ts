@@ -4,6 +4,7 @@ import { RouterModule } from "@angular/router"
 import { NavbarComponent } from "../components/navbar/navbar.component"
 import { FooterComponent } from "../components/footer/footer/footer.component"
 
+
 interface ServiceCard {
   title: string
   description: string
@@ -18,15 +19,6 @@ interface FeatureCard {
   description: string
   icon: string
   color: string
-}
-
-interface MenuItem {
-  name: string
-  description: string
-  price: string
-  image: string
-  category: string
-  featured: boolean
 }
 
 interface Testimonial {
@@ -86,7 +78,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       features: ["Salones privados", "Menús personalizados", "Decoración incluida", "Servicio especializado"],
     },
   ]
-
   // Características del restaurante
   features: FeatureCard[] = [
     {
@@ -114,35 +105,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       color: "from-indigo-500 to-indigo-600",
     },
   ]
-
-  // Platos destacados
-  featuredDishes: MenuItem[] = [
-    {
-      name: "Parrillada Signature",
-      description: "Selección premium de cortes argentinos con guarnición gourmet",
-      price: "$3500",
-      image: "https://rockandfellers.com.ar/front/images/bg/ryf1.jpg",
-      category: "Especialidades",
-      featured: true,
-    },
-    {
-      name: "Risotto Trufa Negra",
-      description: "Arroz carnaroli con trufa negra, parmesano 24 meses y manteca de hierbas",
-      price: "$2800",
-      image: "https://rockandfellers.com.ar/front/images/bg/ryf2.jpg",
-      category: "Pastas",
-      featured: true,
-    },
-    {
-      name: "Salmón Patagónico",
-      description: "Filete grillado con reducción de vino blanco y vegetales de estación",
-      price: "$3200",
-      image: "https://rockandfellers.com.ar/front/images/bg/ryf3.jpg",
-      category: "Pescados",
-      featured: true,
-    },
-  ]
-
   // Testimonios
   testimonials: Testimonial[] = [
     {
@@ -167,7 +129,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       image: "https://rockandfellers.com.ar/front/images/bg/ryf4.png",
     },
   ]
-
   // Estadísticas
   stats: Stat[] = [
     { number: "500+", label: "Clientes Satisfechos", icon: "users" },
@@ -175,7 +136,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
     { number: "5★", label: "Calificación Promedio", icon: "star" },
     { number: "3", label: "Años de Experiencia", icon: "calendar" },
   ]
-
   // Horarios
   businessHours = [
     { day: "Lunes - Jueves", hours: "12:00 - 23:00" },
@@ -185,9 +145,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   constructor() {}
 
-  ngOnInit(): void {
-    // Inicialización
-  }
+   ngOnInit(): void {
+
+}
+
 
   ngAfterViewInit(): void {
     this.initializeAnimations()

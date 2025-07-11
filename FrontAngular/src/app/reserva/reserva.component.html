@@ -12,16 +12,8 @@
     <div class="reserva-content">
       <!-- Sidebar de navegación -->
       <div class="reserva-sidebar">
-        <div class="sidebar-header">
-          <div class="user-profile">
-            <div class="user-avatar">{{ getUserInitial() }}</div>
-            <div class="user-info">
-              <h3 class="user-name">{{ getUserName() }}</h3>
-              <p class="user-role">Cliente</p>
-            </div>
-          </div>
+        <div class="sidebar-header"> 
         </div>
-
         <nav class="sidebar-nav">
           <button 
             class="nav-item" 
@@ -379,13 +371,7 @@
               </div>
               
               <div class="reservation-actions">
-  <!-- Debug temporal -->
-  <div *ngIf="pendingReservation" style="background: #f0f0f0; padding: 10px; margin: 10px 0; font-family: monospace;">
-    <strong>DEBUG:</strong><br>
-    ID: {{ pendingReservation.id }}<br>
-    _ID: {{ pendingReservation._id }}<br>
-    Object keys: {{ getObjectKeys(pendingReservation) }}
-  </div>
+
 
   <!-- Botón corregido con SVG completo -->
   <button class="cancel-button" (click)="cancelarReserva(pendingReservation.id)">

@@ -3,6 +3,7 @@
   margin: 0 auto;
   padding: 20px;
   min-height: calc(100vh - 200px);
+  margin-top : 80px; /* Adjusted for header */
 }
 
 .orders-header {
@@ -111,9 +112,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
+  padding: 50px;
   background-color: #f8f9fa;
   border-bottom: 1px solid #e9ecef;
+
 }
 
 .order-info h3 {

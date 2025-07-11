@@ -55,7 +55,7 @@ export class ReservationService {
     const userId = this.authService.getId();
     if (userId != null) {
       let params = new HttpParams()
-        .set('state', 'Pending') // ← Cambié 'Pending' por 'Pending' (mayúscula)
+        .set('state', 'Pending')
         .set('user', userId);
     
         return this.http.get<{ message: string, data: any[] }>(`${this.apiUrl}`, { params }).pipe(
@@ -66,7 +66,6 @@ export class ReservationService {
     }
   }
 
-  // ✅ CORREGIDO: URL correcta
   cancelReservation(reservationId: string): Observable<any> {
   console.log('🔍 Service: Canceling reservation with ID:', reservationId);
   return this.http.delete(`${this.apiUrl}/${reservationId}`);

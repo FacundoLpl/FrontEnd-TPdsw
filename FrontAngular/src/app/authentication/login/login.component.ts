@@ -45,24 +45,8 @@ export class LoginComponent implements OnInit {
   }
 */ 
 ngOnInit(): void {
-  console.log('🎯 Login component init');
-  
   this.returnUrl = this.route.snapshot.queryParams["returnUrl"] || "/inicio"
-
-  // FORZAR limpieza completa
-  console.log('🧹 Force clearing all auth state...');
   this.authService.logout();
-  
-  // Verificar después de un momento
-  setTimeout(() => {
-    console.log('🔍 DIRECT localStorage check:');
-    console.log('- token:', localStorage.getItem('token'));
-    console.log('- userId:', localStorage.getItem('userId'));
-    console.log('- userType:', localStorage.getItem('userType'));
-    console.log('- expires_at:', localStorage.getItem('expires_at'));
-    
-    console.log('🔍 ALL localStorage keys:', Object.keys(localStorage));
-  }, 100);
 }
   login(): void {
     if (!this.user || !this.password) {

@@ -8,11 +8,13 @@ import { FormsModule } from "@angular/forms"
 import { AuthService } from "../../core/services/auth.service.js"
 import { RouterLink } from "@angular/router"
 import { Cart } from "../../entities/cart.entity.js"
+import { NotificationComponent } from "../notification/notification/notification.component.js"
+import { NotificationService } from "../../services/notification.service.js"
 
 @Component({
   selector: "app-carrito",
   standalone: true,
-  imports: [NavbarComponent, FooterComponent, NgFor, FormsModule, NgIf, NgClass, DecimalPipe, RouterLink],
+  imports: [NavbarComponent, FooterComponent, NgFor, FormsModule, NgIf, NgClass, DecimalPipe, RouterLink , NotificationComponent],
   templateUrl: "./carrito.component.html",
   styleUrls: ["./carrito.component.css"],
 })
@@ -47,6 +49,7 @@ export class CarritoComponent implements OnInit {
   constructor(
     private cartService: CartServiceService,
     private authService: AuthService,
+    private notificationService: NotificationService, 
   ) {}
 
   cart: any[] = []
@@ -109,60 +112,6 @@ export class CarritoComponent implements OnInit {
       },
     })
   }
-
-  updateOrderQuantity(order: Order, cart: Cart, newQuantity: number) {
-  console.log('🔍 Updating order:', order);
-  console.log('🔍 Order ID:', order.id);
-  
-  // Ensure newQuantity is a number for validation
-  newQuantity = Number(newQuantity);
-
-  if (isNaN(newQuantity) || newQuantity <= 0) {
-    if (newQuantity <= 0) {
-      this.removeOrder(order, cart);
-    } else {
-      this.handleError("Por favor ingresa una cantidad válida");
-    }
-    return;
-  }
-
-  // Usar el ID correcto
-  const orderId = order.id 
-  if (!orderId) {
-    this.handleError('ID de orden inválido');
-    return;
-  }
-
-  // Show loading state
-  this.isUpdating = true;
-
-  // Create updated order with quantity as number
-  const updatedOrder = {
-    quantity: newQuantity,
-    productName: order.productName,
-    subtotal: order.subtotal,
-  };
-
-  this.cartService.updateOrder(orderId, updatedOrder).subscribe({
-    next: (response: any) => {
-      console.log('✅ Order updated successfully:', response);
-      // Update the local order object
-      order.quantity = newQuantity;
-      if (response && response.subtotal) {
-        order.subtotal = response.subtotal;
-      }
-      this.updateCartTotal(cart);
-      this.isUpdating = false;
-    },
-    error: (error: any) => {
-      console.error("❌ Error updating quantity", error);
-      this.handleApiError(error);
-      this.isUpdating = false;
-      // Reset to previous quantity
-      order.quantity = this.getQuantityAsNumber(order);
-    },
-  });
-}
 
   removeOrder(order: Order, cart: Cart) {
     console.log("🔍 DEBUGGING - Full order object:", order)
@@ -244,46 +193,44 @@ export class CarritoComponent implements OnInit {
     this.showCheckoutForm = !this.showCheckoutForm
   }
 
-  finalizarCompra(cart: Cart) {
-    if (!this.contactNumber.trim()) {
-      alert("Por favor ingresa un número de contacto")
-      return
-    }
-
-    if (this.deliveryType === "delivery" && !this.deliveryAddress.trim()) {
-      alert("Por favor ingresa una dirección de entrega")
-      return
-    }
-
-    this.isProcessing = true
-
-    const newCart = {
-      state: "Completed",
-      deliveryType: this.deliveryType,
-      deliveryAddress: this.deliveryType === "delivery" ? this.deliveryAddress : null,
-      paymentMethod: this.paymentMethod,
-      contactNumber: this.contactNumber,
-      additionalInstructions: this.additionalInstructions,
-    }
-
-    this.cartService.completePurchase(cart.id, newCart).subscribe({
-      next: () => {
-        console.log(newCart, "Compra finalizada y carrito actualizado")
-        cart.state = "Completed"
-        this.updateCartTotal(cart)
-        this.isProcessing = false
-        this.showCheckoutForm = false
-        this.resetCheckoutForm()
-        alert("¡Pedido realizado con éxito! Te contactaremos pronto.")
-        this.loadUserCart()
-      },
-      error: (err: any) => {
-        console.error("Error completing purchase", err)
-        this.handleApiError(err)
-        this.isProcessing = false
-      },
-    })
+finalizarCompra(cart: Cart) {
+  if (!this.contactNumber.trim()) {
+    this.notificationService.error("Por favor ingresa un número de contacto")
+    return
   }
+
+  if (this.deliveryType === "delivery" && !this.deliveryAddress.trim()) {
+    this.notificationService.error("Por favor ingresa una dirección de entrega")
+    return
+  }
+
+  this.isProcessing = true
+
+  const newCart = {
+    state: "Completed",
+    deliveryType: this.deliveryType,
+    deliveryAddress: this.deliveryType === "delivery" ? this.deliveryAddress : null,
+    paymentMethod: this.paymentMethod,
+    contactNumber: this.contactNumber,
+    additionalInstructions: this.additionalInstructions,
+  }
+
+  this.cartService.completePurchase(cart.id, newCart).subscribe({
+    next: () => {
+      cart.state = "Completed"
+      this.updateCartTotal(cart)
+      this.isProcessing = false
+      this.showCheckoutForm = false
+      this.resetCheckoutForm()
+      this.notificationService.success("¡Pedido realizado con éxito! Te contactaremos pronto.")
+      this.loadUserCart()
+    },
+    error: (err: any) => {
+      this.handleApiError(err)
+      this.isProcessing = false
+    },
+  })
+}
 
   resetCheckoutForm() {
     this.deliveryType = "delivery"

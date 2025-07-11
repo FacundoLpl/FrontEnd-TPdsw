@@ -236,10 +236,7 @@ addReservation(): void {
       }, 5000)
     },
     error: (error) => {
-      console.error('❌ Reservation error details:', error);
-      console.error('❌ Error status:', error.status);
-      console.error('❌ Error body:', error.error);
-      console.error('❌ Full error object:', error);
+
       
       this.isLoading = false
       

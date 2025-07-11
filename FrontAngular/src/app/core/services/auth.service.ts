@@ -50,19 +50,14 @@ export class AuthService {
     private http: HttpClient,
     private router: Router,
   ) {
-  console.log('🔧 AuthService keys:', {
-    TOKEN_KEY: this.TOKEN_KEY,
-    USER_ID_KEY: this.USER_ID_KEY,
-    USER_TYPE_KEY: this.USER_TYPE_KEY,
-    EXPIRES_AT_KEY: this.EXPIRES_AT_KEY
-  });
+  
 }
 
   // Method to check if user is authenticated (for template usage)
   isAuthenticated(): boolean {
   const token = this.getToken();
   const isAuth = !!token;
-  console.log('🔍 isAuthenticated check:', { token: !!token, result: isAuth });
+
   return isAuth;
 }
 
@@ -134,33 +129,49 @@ export class AuthService {
 
   // Method to get user info
   getUserInfo(): UserInfo | null {
-    const storedInfo = localStorage.getItem(this.USER_INFO_KEY)
-    if (storedInfo) {
-      try {
-        return JSON.parse(storedInfo)
-      } catch (e) {
-        console.error("Error parsing user info:", e)
-      }
+  const storedInfo = localStorage.getItem(this.USER_INFO_KEY);
+  if (storedInfo) {
+    try {
+      const parsed = JSON.parse(storedInfo);
+      return parsed;  // Devuelve lo que haya en localStorage (incluyendo email)
+    } catch (e) {
+      console.error("Error parsing user info:", e);
     }
-
-    // If no stored info, return basic info from token
-    const decodedToken = this.getDecodedToken()
-    if (decodedToken) {
-      // Create a basic user info object from token data
-      const userInfo: UserInfo = {
-        id: decodedToken.id,
-        userType: decodedToken.userType,
-        firstName: decodedToken.firstName,
-        lastName: decodedToken.lastName,
-      }
-
-      // Store this info for future use
-      localStorage.setItem(this.USER_INFO_KEY, JSON.stringify(userInfo))
-      return userInfo
-    }
-
-    return null
   }
+
+  // Si no hay localStorage, buscar en token (pero NO guardar en localStorage para no perder email)
+  const decodedToken = this.getDecodedToken();
+  if (decodedToken) {
+    const userInfo: UserInfo = {
+      id: decodedToken.id,
+      userType: decodedToken.userType,
+      firstName: decodedToken.firstName,
+      lastName: decodedToken.lastName,
+      // No ponemos email porque no está en token
+    };
+    // NO hacer localStorage.setItem aquí
+    return userInfo;
+  }
+
+  console.log('No user info found');
+  return null;
+}
+
+getUserName(): string {
+  const userInfo = this.getUserInfo();
+  if (userInfo) {
+    if (userInfo.firstName && userInfo.lastName) {
+      return `${userInfo.firstName} ${userInfo.lastName}`;
+    }
+    if (userInfo.email) {
+      return userInfo.email;
+    }
+  }
+  return 'User';
+}
+
+
+
 
   // Updated login method to use the correct endpoint and handle different input formats
   login(credentialsOrEmail: { email: string; password: string } | string, password?: string): Observable<any> {
@@ -273,18 +284,15 @@ register(userData: any): Observable<any> {
   }
 
   getToken(): string | null {
-  console.log('🔑 getToken called with key:', this.TOKEN_KEY);
+
   const token = localStorage.getItem(this.TOKEN_KEY);
-  console.log('🔍 getToken result:', token ? 'TOKEN_EXISTS' : 'NO_TOKEN');
   
   if (token) {
     // Verificar expiración
     const expiresAt = localStorage.getItem(this.EXPIRES_AT_KEY);
     if (expiresAt) {
       const isExpired = new Date() > new Date(expiresAt);
-      console.log('⏰ Token expired check:', isExpired);
       if (isExpired) {
-        console.log('🗑️ Token expired, clearing...');
         this.clearToken();
         return null;
       }
@@ -333,8 +341,7 @@ register(userData: any): Observable<any> {
   }
 
   private setSession(authResult: AuthResponse): void {
-  console.log('🔄 setSession called with:', authResult);
-  console.log('🔑 TOKEN_KEY constant:', this.TOKEN_KEY);
+
   
   const expiresAt = new Date()
   // Parse expiresIn (e.g., "1h" to milliseconds)
@@ -352,15 +359,14 @@ register(userData: any): Observable<any> {
 
   // Verificar inmediatamente que se guardó
   const storedToken = localStorage.getItem(this.TOKEN_KEY);
-  console.log('✅ Token stored successfully:', !!storedToken);
-  console.log('🔍 Stored token preview:', storedToken?.substring(0, 20) + '...');
+
 
   this.isAuthenticatedSubject.next(true)
-  console.log('📡 isAuthenticatedSubject updated to true');
+
 }
 
   private parseExpiresIn(expiresIn: string): number {
-  console.log('⏰ Parsing expiresIn:', expiresIn);
+
   
   // Remove any whitespace
   const cleanExpiresIn = expiresIn.trim().toLowerCase();

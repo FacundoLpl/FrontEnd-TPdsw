@@ -8,7 +8,9 @@
 .cart-header {
   margin-bottom: 2rem;
   text-align: center;
+  margin-top: 80px; 
 }
+
 
 .cart-header h1 {
   font-size: 2rem;
@@ -225,7 +227,7 @@
 }
 
 .cart-actions {
-  display: grid;
+  display: flex;
   grid-template-columns: 1fr 2fr;
   gap: 1rem;
   margin-top: 1.5rem;
@@ -309,7 +311,8 @@
 
 .radio-group {
   display: flex;
-  gap: 1.5rem;
+  flex-wrap: wrap;
+  gap: 2rem;
   margin-top: 0.5rem;
 }
 
@@ -317,10 +320,13 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-weight: normal;
+  white-space: nowrap;
+  font-weight: 500;
   cursor: pointer;
 }
-
+.radio-group input[type="radio"] {
+  accent-color: #b45309; /* color del botón de radio */
+}
 .form-actions {
   display: grid;
   grid-template-columns: 1fr 2fr;

@@ -100,7 +100,8 @@
 
           <!-- Menú de usuario -->
           <div class="bella-user-menu">
-            <button class="bella-user-btn">
+            <button class="bella-user-btn" (click)="toggleUserDropdown()">
+
               <div class="bella-user-avatar">
                 {{ getUserName().charAt(0).toUpperCase() }}
               </div>
@@ -110,7 +111,8 @@
               </svg>
             </button>
             
-            <div class="bella-user-dropdown">
+            <div class="bella-user-dropdown" [class.active]="showUserDropdown">
+
               <div class="bella-user-info">
                 <p class="bella-user-name-full">{{ getUserName() }}</p>
                 <p class="bella-user-role">{{ getUserRole() }}</p>

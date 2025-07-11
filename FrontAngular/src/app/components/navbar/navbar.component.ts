@@ -12,25 +12,38 @@ import { AuthService } from "../../core/services/auth.service"
 })
 export class NavbarComponent {
   isMenuOpen = false
-
+  showUserDropdown = false
   constructor(public authService: AuthService) {}
+
+  
+  toggleUserDropdown(): void {
+  this.showUserDropdown = !this.showUserDropdown;
+}
 
   logout(): void {
     this.authService.logout()
   }
 
-  toggleMenu(): void {
-    this.isMenuOpen = !this.isMenuOpen
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
+    if (!this.isMenuOpen) {
+      this.showUserDropdown = false; // cerrar dropdown si cierro menú
+    }
   }
 
   closeMenu(): void {
     this.isMenuOpen = false
+    
   }
 
-  getUserName(): string {
-    const userInfo = this.authService.getUserInfo()
-    return userInfo?.firstName || "Usuario"
+getUserName(): string {
+  const userInfo = this.authService.getUserInfo();
+  if (userInfo?.email) {
+    return userInfo.email;
   }
+  // Si no hay email, mostrar nombre o fallback
+  return userInfo?.firstName || "Usuario";
+}
 
   getUserRole(): string {
     return this.authService.getUserRole() || ""

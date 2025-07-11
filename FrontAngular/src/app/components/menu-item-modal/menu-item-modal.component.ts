@@ -53,10 +53,10 @@ export class MenuItemModalComponent implements OnInit {
 
     this.isProcessing = true
 
-    // Crear el objeto de pedido con quantity como número explícitamente
+    // Crear el objeto de order con quantity como número explícitamente
     const orderData = {
-      productName: this.itemTitle, // Make sure this is set correctly
-      quantity: Number(this.quantity), // Convertir explícitamente a número
+      productName: this.itemTitle, 
+      quantity: Number(this.quantity), 
       subtotal: this.getTotalPrice(),
       comment: this.comment || undefined,
       product: this.productId,

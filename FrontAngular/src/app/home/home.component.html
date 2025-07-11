@@ -52,44 +52,8 @@
     </div>
   </section>
 
-  <!-- Sección de Servicios Principales -->
-  <section class="services-section">
-    <div class="container">
-      <div class="section-header">
-        <h2 class="section-title">Nuestros Servicios</h2>
-        <p class="section-subtitle">Todo lo que necesitas para una experiencia gastronómica completa</p>
-      </div>
-      
-      <div class="services-grid">
-        <div *ngFor="let service of mainServices; let i = index" 
-             class="service-card animate-on-scroll"
-             [style.animation-delay]="i * 0.1 + 's'">
-          <div class="service-header" [ngClass]="'bg-gradient-to-r ' + service.color">
-            <div class="service-icon">
-              <i class="fas fa-{{service.icon}}"></i>
-            </div>
-            <h3 class="service-title">{{service.title}}</h3>
-          </div>
-          
-          <div class="service-content">
-            <p class="service-description">{{service.description}}</p>
-            
-            <ul class="service-features">
-              <li *ngFor="let feature of service.features" class="feature-item">
-                <i class="fas fa-check"></i>
-                <span>{{feature}}</span>
-              </li>
-            </ul>
-            
-            <a [routerLink]="service.route" class="service-button">
-              Explorar
-              <i class="fas fa-arrow-right"></i>
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+
+
 
   <!-- Sección de Características -->
   <section class="features-section">
@@ -111,37 +75,6 @@
     </div>
   </section>
 
-  <!-- Sección de Platos Destacados -->
-  <section class="featured-dishes-section">
-    <div class="container">
-      <h2 class="section-title">Nuestros Platos Destacados</h2>
-      <p class="section-subtitle">Especialidades preparadas por nuestros chefs</p>
-      
-      <div class="dishes-grid">
-        <div *ngFor="let dish of featuredDishes; let i = index" 
-             class="dish-card animate-on-scroll"
-             [style.animation-delay]="i * 0.1 + 's'">
-          <div class="dish-image">
-            <img [src]="dish.image" [alt]="dish.name">
-            <div class="dish-overlay">
-              <span class="dish-category">{{dish.category}}</span>
-            </div>
-          </div>
-          <div class="dish-content">
-            <h3 class="dish-name">{{dish.name}}</h3>
-            <p class="dish-description">{{dish.description}}</p>
-            <div class="dish-footer">
-              <span class="dish-price">{{dish.price}}</span>
-              <a routerLink="/carta" class="dish-button">
-                <i class="fas fa-plus"></i>
-                Ordenar
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <!-- Sección de Testimonios -->
   <section class="testimonials-section">

@@ -19,6 +19,7 @@ export class CartServiceService {
     private router: Router,
   ) {}
 
+  //Busca los carritos un usuario
   findAll(filter: any = {}): Observable<any> {
     // Check authentication first
     if (!this.authService.isAuthenticated()) {
@@ -48,7 +49,7 @@ export class CartServiceService {
       return of({ error: "Authentication required" })
     }
 
-    return this.http.post(this.baseUrl, cartData).pipe(catchError(this.handleError.bind(this)))
+    return this.http.post(this.baseUrl, cartData).pipe(catchError(this.handleError.bind(this))) // ACA
   }
 
   getCartWithOrders(cartId: string): Observable<any> {
@@ -128,11 +129,6 @@ addOrderToCart(orderData: {
   comment?: string
   product: string
 }): Observable<any> {
-  // Debug authentication
-  console.log('🔍 Auth check:', this.authService.isAuthenticated());
-  console.log('🔑 Token exists:', !!this.authService.getToken());
-  console.log('👤 User ID:', this.authService.getId());
-
   // Check authentication first
   if (!this.authService.isAuthenticated()) {
     console.error("User not authenticated")
@@ -152,10 +148,8 @@ addOrderToCart(orderData: {
   
   if (token) {
     headers.set('Authorization', `Bearer ${token}`);
-    console.log('🔧 MANUAL - Adding Authorization header:', `Bearer ${token.substring(0, 20)}...`);
-  }
 
-  console.log('📤 MANUAL - Request headers:', headers.keys());
+  }
 
   return this.http.post<any>(`${this.orderUrl}`, orderToSend, { headers }).pipe(
     catchError((err) => {
@@ -163,16 +157,6 @@ addOrderToCart(orderData: {
       return this.handleError(err)
     }),
   )
-  console.log('📤 Sending order data:', orderToSend);
-  console.log('🎯 Request URL:', this.orderUrl);
-
-  return this.http.post<any>(`${this.orderUrl}`, orderToSend).pipe(
-    catchError((err) => {
-      console.error("❌ Error adding order to cart:", err)
-      return this.handleError(err)
-    }),
-  )
-
   
 }
   // Method to get all orders (for admin dashboard)
