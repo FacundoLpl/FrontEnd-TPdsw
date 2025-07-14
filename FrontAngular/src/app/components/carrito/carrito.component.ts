@@ -74,15 +74,12 @@ export class CarritoComponent implements OnInit {
         if (res.data && res.data.length > 0) {
           this.cart = res.data
           this.cartId = res.data[0].id // Guardar el ID del carrito
-          console.log("Cart loaded:", this.cart)
         } else {
-          console.log("No pending cart found, creating one")
           this.createNewCart()
         }
         this.isLoading = false
       },
       error: (err) => {
-        console.error("Error fetching cart:", err)
         this.handleApiError(err)
         this.isLoading = false
       },
@@ -91,7 +88,6 @@ export class CarritoComponent implements OnInit {
 
   createNewCart() {
     if (!this.userId) return
-
     const newCart = {
       user: this.userId,
       state: "Pending",
@@ -103,45 +99,29 @@ export class CarritoComponent implements OnInit {
         if (res.data) {
           this.cart = [res.data]
           this.cartId = res.data.id
-          console.log("New cart created:", this.cart)
         }
       },
       error: (err) => {
-        console.error("Error creating cart:", err)
         this.handleApiError(err)
       },
     })
   }
 
   removeOrder(order: Order, cart: Cart) {
-    console.log("🔍 DEBUGGING - Full order object:", order)
-    console.log("🔍 DEBUGGING - Order keys:", Object.keys(order))
-    console.log("🔍 DEBUGGING - Order JSON:", JSON.stringify(order, null, 2))
-
-    // Verificar todas las posibles propiedades de ID
-    console.log("🔍 DEBUGGING - ID checks:")
-    console.log("  - order.id:", order.id)
-    console.log("  - order._id:", (order as any)._id)
-    console.log("  - order.id?.toString():", order.id?.toString())
-    console.log("  - order._id?.toString():", (order as any)._id?.toString())
 
     // Determinar el ID correcto
     const orderId = order.id || (order as any)._id
-    console.log("🔍 DEBUGGING - Final orderId:", orderId)
 
     if (!orderId) {
-      console.log("❌ No valid order ID found")
       this.handleError("ID de orden no encontrado")
       return
     }
 
     // Convertir a string si es necesario
     const orderIdString = orderId.toString()
-    console.log("🔍 DEBUGGING - Order ID as string:", orderIdString)
 
     this.cartService.deleteOrder(orderIdString, cart.id).subscribe({
       next: () => {
-        console.log("✅ Order deleted successfully")
         const orderIndex = cart.orders.findIndex((o) => {
           const oId = o.id || (o as any)._id
           return oId?.toString() === orderIdString
@@ -152,7 +132,6 @@ export class CarritoComponent implements OnInit {
         this.updateCartTotal(cart)
       },
       error: (err: any) => {
-        console.error("❌ Error deleting order", err)
         this.handleApiError(err)
       },
     })
@@ -183,7 +162,6 @@ export class CarritoComponent implements OnInit {
           cart.total = 0
         })
         .catch((error) => {
-          console.error("Error clearing cart", error)
           this.handleApiError(error)
         })
     }

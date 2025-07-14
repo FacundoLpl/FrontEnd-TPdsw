@@ -31,19 +31,6 @@ export class LoginComponent implements OnInit {
     private route: ActivatedRoute,
   ) {}
 
- /* ngOnInit(): void {
-    // Get return URL from route parameters or default to home
-    this.returnUrl = this.route.snapshot.queryParams["returnUrl"] || "/inicio"
-
-    // Si el usuario ya está autenticado, redirigir según su rol
-    if (this.authService.isAuthenticated()) {
-      this.authService.redirectByRole()
-    }
-
-    // Clear any existing tokens to ensure a fresh login
-    this.authService.clearToken()
-  }
-*/ 
 ngOnInit(): void {
   this.returnUrl = this.route.snapshot.queryParams["returnUrl"] || "/inicio"
   this.authService.logout();
@@ -58,14 +45,12 @@ ngOnInit(): void {
     this.isLoading = true
     this.feedback = true
 
-    console.log("Intentando iniciar sesión con:", { email: this.user, password: "***" })
 
     this.authService.login({ email: this.user, password: this.password }).subscribe({
       next: (response) => {
-        console.log("Login response received:", response)
+        // console.log("Login response received:", response)
         this.isLoading = false
 
-        // Check if response has error property (from our error handling)
         if (response.error) {
           this.feedback = false
           this.errorMessage = response.message || "Error en el inicio de sesión"
@@ -73,7 +58,7 @@ ngOnInit(): void {
           return
         }
 
-        // Check if we have a token
+        // Checkear si la respuesta contiene un token
         if (!response.token) {
           this.feedback = false
           this.errorMessage = "Respuesta de inicio de sesión inválida"
@@ -81,12 +66,10 @@ ngOnInit(): void {
           return
         }
 
-        console.log("Login exitoso:", response)
         this.notificationService.success("¡Bienvenido de vuelta!")
 
-        // Navigate to the return URL or use the role-based redirection
+        // Navega a la URL de retorno si está definida
         if (this.returnUrl && this.returnUrl !== "/inicio") {
-          console.log("Redirigiendo a:", this.returnUrl)
           this.router.navigateByUrl(this.returnUrl)
         } else {
           // El AuthService maneja automáticamente la redirección según el rol
@@ -115,7 +98,7 @@ ngOnInit(): void {
       },
     })
   }
-
+ // Para ver el ojito en el login
   togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword
   }

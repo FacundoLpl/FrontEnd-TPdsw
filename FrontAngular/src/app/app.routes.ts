@@ -36,7 +36,7 @@ export const routes: Routes = [
     canActivate: [AuthGuard], // Proteger carrito para usuarios autenticados
   },
   
-  // 👈 MIS PEDIDOS - MOVIDO AQUÍ
+  //  MIS PEDIDOS - MOVIDO AQUÍ
   {
     path: 'mis-pedidos',
     component: MisPedidosComponent,
@@ -62,7 +62,7 @@ export const routes: Routes = [
     canActivate: [AdminGuard],
   },
 
-   //Rutas para diferentes roles (opcional)
+   //Rutas para diferentes roles 
   {
     path: "mozo/panel",
    loadComponent: () => import("./mozo/mozo-panel.component").then((m) => m.MozoPanelComponent),

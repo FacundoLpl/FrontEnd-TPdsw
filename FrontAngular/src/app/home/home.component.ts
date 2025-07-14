@@ -83,13 +83,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
     {
       title: "Cocina de Autor",
       description: "Platos únicos creados por nuestro chef ejecutivo con ingredientes de primera calidad",
-      icon: "chef-hat",
+      icon: "heart",
       color: "from-amber-500 to-amber-600",
     },
     {
       title: "Ambiente Único",
       description: "Diseño interior cuidadosamente pensado para crear la atmósfera perfecta",
-      icon: "sparkles",
+      icon: "heart",
       color: "from-red-500 to-red-600",
     },
     {
@@ -101,7 +101,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     {
       title: "Tecnología Avanzada",
       description: "Sistema integrado para una experiencia fluida desde la reserva hasta el pago",
-      icon: "cpu-chip",
+      icon: "heart",
       color: "from-indigo-500 to-indigo-600",
     },
   ]
@@ -112,21 +112,21 @@ export class HomeComponent implements OnInit, AfterViewInit {
       role: "Food Blogger",
       comment: "Una experiencia gastronómica excepcional. Cada plato es una obra de arte y el servicio es impecable.",
       rating: 5,
-      image: "https://rockandfellers.com.ar/front/images/bg/ryf4.png",
+      image: "https://randomuser.me/api/portraits/women/44.jpg",
     },
     {
       name: "Carlos Mendoza",
       role: "Chef Consultor",
       comment: "La calidad de los ingredientes y la técnica culinaria están al nivel de los mejores restaurantes.",
       rating: 5,
-      image: "https://rockandfellers.com.ar/front/images/bg/ryf4.png",
+      image: "https://randomuser.me/api/portraits/men/44.jpg",
     },
     {
       name: "Ana Rodríguez",
       role: "Crítica Gastronómica",
       comment: "Un lugar que redefine la experiencia culinaria con innovación y tradición en perfecta armonía.",
       rating: 4,
-      image: "https://rockandfellers.com.ar/front/images/bg/ryf4.png",
+      image:"https://randomuser.me/api/portraits/women/34.jpg",
     },
   ]
   // Estadísticas

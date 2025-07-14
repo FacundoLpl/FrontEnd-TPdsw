@@ -43,47 +43,37 @@ export class AuthService {
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.hasValidToken())
   public isAuthenticated$ = this.isAuthenticatedSubject.asObservable()
 
-  // Update the base URL to match your actual API endpoint
+  // Base URL para API requests
   private baseUrl = "http://localhost:3000/api"
 
   constructor(
     private http: HttpClient,
     private router: Router,
-  ) {
-  
-}
+  ) {}
 
-  // Method to check if user is authenticated (for template usage)
   isAuthenticated(): boolean {
   const token = this.getToken();
   const isAuth = !!token;
-
   return isAuth;
 }
-
-  // Method to check if user is admin
   isAdmin(): boolean {
     const userType = this.getUserType()
     return userType === "Admin"
   }
 
-  // Method to check if user is mozo
   isMozo(): boolean {
     const userType = this.getUserType()
     return userType === "Mozo"
   }
 
-  // Method to redirect if not admin
   redirectIfNotAdmin(): void {
     if (!this.isAdmin()) {
       this.router.navigate(["/unauthorized"])
     }
   }
 
-  // Method to redirect based on user role
   redirectByRole(): void {
     const userType = this.getUserType()
-
     if (userType === "Admin") {
       this.router.navigate(["/admin"])
     } else if (userType === "Mozo") {
@@ -93,24 +83,19 @@ export class AuthService {
     }
   }
 
-  // Method to get user role
   getUserRole(): string | null {
     return this.getUserType()
   }
 
-  // Method to decode JWT token without external library
   getDecodedToken(): DecodedToken | null {
     const token = this.getToken()
     if (!token) return null
 
     try {
-      // JWT token consists of three parts: header.payload.signature
       const parts = token.split(".")
       if (parts.length !== 3) {
         throw new Error("Invalid token format")
       }
-
-      // Decode the payload (second part)
       const payload = parts[1]
       const base64 = payload.replace(/-/g, "+").replace(/_/g, "/")
       const jsonPayload = decodeURIComponent(
@@ -122,12 +107,10 @@ export class AuthService {
 
       return JSON.parse(jsonPayload) as DecodedToken
     } catch (error) {
-      console.error("Error decoding token:", error)
       return null
     }
   }
 
-  // Method to get user info
   getUserInfo(): UserInfo | null {
   const storedInfo = localStorage.getItem(this.USER_INFO_KEY);
   if (storedInfo) {
@@ -147,13 +130,9 @@ export class AuthService {
       userType: decodedToken.userType,
       firstName: decodedToken.firstName,
       lastName: decodedToken.lastName,
-      // No ponemos email porque no está en token
     };
-    // NO hacer localStorage.setItem aquí
     return userInfo;
   }
-
-  console.log('No user info found');
   return null;
 }
 
@@ -169,46 +148,27 @@ getUserName(): string {
   }
   return 'User';
 }
-
-
-
-
-  // Updated login method to use the correct endpoint and handle different input formats
   login(credentialsOrEmail: { email: string; password: string } | string, password?: string): Observable<any> {
     let credentials: { email: string; password: string }
-
     if (typeof credentialsOrEmail === "string" && password) {
-      // If called with separate email and password
       credentials = { email: credentialsOrEmail, password }
     } else if (typeof credentialsOrEmail === "object") {
-      // If called with credentials object
       credentials = credentialsOrEmail
     } else {
-      // Invalid arguments
       return of({ error: "Invalid login arguments" } as any)
     }
 
-    console.log("Login request with:", { email: credentials.email, password: "***" })
-
-    // Set headers for the request
     const headers = new HttpHeaders({
       "Content-Type": "application/json",
     })
 
-    // Use the correct login endpoint
     return this.http.post<any>(`${this.baseUrl}/users/login`, credentials, { headers }).pipe(
       map((response) => {
-        console.log("Raw login response:", response)
         return response
       }),
       tap((response) => {
-        console.log("Processing login response:", response)
-
-        // Check if response has the expected structure
         if (response && response.token) {
           this.setSession(response)
-
-          // Store additional user info if available
           const userInfo: UserInfo = {
             id: response.id,
             userType: response.userType,
@@ -223,12 +183,9 @@ getUserName(): string {
       }),
       catchError((error) => {
         console.error("Login error:", error)
-
-        // Clear any existing token if we get an auth error
         if (error.status === 401) {
           this.clearToken()
         }
-
         return of({
           error: true,
           status: error.status,
@@ -238,19 +195,11 @@ getUserName(): string {
     )
   }
 
-  // En tu AuthService, añade este método:
 register(userData: any): Observable<any> {
-  console.log('🔄 AuthService register called with:', userData);
-  
   return this.http.post<any>(`${this.baseUrl}/users/register`, userData).pipe(
     tap((response) => {
-      console.log('📥 Register response received:', response);
-      
       if (response && response.token) {
-        console.log('💾 Storing token from registration');
         this.setSession(response);
-        
-        // Store additional user info
         const userInfo: UserInfo = {
           id: response.id,
           userType: response.userType,
@@ -284,11 +233,8 @@ register(userData: any): Observable<any> {
   }
 
   getToken(): string | null {
-
   const token = localStorage.getItem(this.TOKEN_KEY);
-  
   if (token) {
-    // Verificar expiración
     const expiresAt = localStorage.getItem(this.EXPIRES_AT_KEY);
     if (expiresAt) {
       const isExpired = new Date() > new Date(expiresAt);
@@ -298,38 +244,29 @@ register(userData: any): Observable<any> {
       }
     }
   }
-  
   return token;
 }
   getId(): string | null {
   const token = this.getToken();
   if (!token) return null;
-  
   try {
     const payload = JSON.parse(atob(token.split('.')[1]));
-    console.log('👤 User ID from token:', payload.id);
     return payload.id;
   } catch (e) {
-    console.log('❌ Error getting ID from token');
     return null;
   }
 }
-
   getUserType(): string | null {
     return localStorage.getItem(this.USER_TYPE_KEY)
   }
-
   isLoggedIn(): boolean {
     return this.hasValidToken()
   }
-
   clearToken(): void {
     localStorage.removeItem(this.TOKEN_KEY)
     localStorage.removeItem(this.EXPIRES_AT_KEY)
     this.isAuthenticatedSubject.next(false)
-    console.log('✅ Tokens cleared');
   }
-
   refreshToken(): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.baseUrl}/auth/refresh-token`, {}).pipe(
       tap((response) => this.setSession(response)),
@@ -341,47 +278,25 @@ register(userData: any): Observable<any> {
   }
 
   private setSession(authResult: AuthResponse): void {
-
-  
   const expiresAt = new Date()
-  // Parse expiresIn (e.g., "1h" to milliseconds)
   const expiresInMs = this.parseExpiresIn(authResult.expiresIn || "1h")
-  console.log('⏰ Parsed expiresIn:', expiresInMs, 'ms');
-  
   expiresAt.setTime(expiresAt.getTime() + expiresInMs)
-  console.log('📅 Token expires at:', expiresAt.toISOString());
-
-  console.log('💾 Storing token with key:', this.TOKEN_KEY);
   localStorage.setItem(this.TOKEN_KEY, authResult.token)
   localStorage.setItem(this.USER_ID_KEY, authResult.id)
   localStorage.setItem(this.USER_TYPE_KEY, authResult.userType)
   localStorage.setItem(this.EXPIRES_AT_KEY, expiresAt.toISOString())
-
-  // Verificar inmediatamente que se guardó
   const storedToken = localStorage.getItem(this.TOKEN_KEY);
-
-
   this.isAuthenticatedSubject.next(true)
-
 }
-
   private parseExpiresIn(expiresIn: string): number {
-
-  
-  // Remove any whitespace
   const cleanExpiresIn = expiresIn.trim().toLowerCase();
-  
-  // Extract number and unit
   const match = cleanExpiresIn.match(/^(\d+)([smhd]?)$/);
-  
   if (!match) {
-    console.warn('⚠️ Invalid expiresIn format, defaulting to 1 hour');
+    console.warn(' Invalid expiresIn format, defaulting to 1 hour');
     return 60 * 60 * 1000; // 1 hour default
   }
-  
   const value = parseInt(match[1]);
   const unit = match[2] || 'h'; // default to hours
-  
   let milliseconds: number;
   switch (unit) {
     case 's': milliseconds = value * 1000; break;
@@ -390,22 +305,17 @@ register(userData: any): Observable<any> {
     case 'd': milliseconds = value * 24 * 60 * 60 * 1000; break;
     default: milliseconds = value * 60 * 60 * 1000; // default to hours
   }
-  
-  console.log('✅ Parsed result:', { value, unit, milliseconds });
   return milliseconds;
 }
 
   private hasValidToken(): boolean {
     const token = this.getToken()
     const expiresAt = localStorage.getItem(this.EXPIRES_AT_KEY)
-
     if (!token || !expiresAt) {
       return false
     }
-
     return new Date() < new Date(expiresAt)
   }
-
   private checkTokenValidity(): void {
     if (this.hasValidToken()) {
       this.isAuthenticatedSubject.next(true)

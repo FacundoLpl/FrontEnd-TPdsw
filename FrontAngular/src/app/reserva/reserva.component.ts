@@ -7,6 +7,7 @@ import { ListaReservasComponent } from "../components/lista-reservas/lista-reser
 import { ReservationService } from "../services/reservation.service"
 import { AuthService } from "../core/services/auth.service"
 import { Router } from "@angular/router"
+import { NotificationService } from "../services/notification.service.js"
 
 @Component({
   selector: "app-reserva",
@@ -37,6 +38,7 @@ export class ReservaComponent implements OnInit {
     private reservationService: ReservationService,
     private authService: AuthService,
     private router: Router,
+    private notificationService: NotificationService,
   ) {
     this.initializeDates()
     this.initializeForm()
@@ -47,7 +49,7 @@ export class ReservaComponent implements OnInit {
     if (userInfo && userInfo.firstName) {
       return userInfo.firstName.charAt(0).toUpperCase()
     }
-    return "U" // Default initial if firstName is not available
+    return "U" // Inicial por defecto si no hay información del usuario
   }
 
   getFullName(): string {
@@ -55,22 +57,14 @@ export class ReservaComponent implements OnInit {
     if (userInfo) {
       return `${userInfo.firstName || ""} ${userInfo.lastName || ""}`.trim()
     }
-    return "Usuario" // Default name if user info is not available
+    return "Usuario" // Nombre por defecto si no hay información del usuario
   }
-
-  // Other methods and code here
-
-  // Example of replacing getDecodedToken() with getUserInfo()
   someMethod() {
     const userInfo = this.authService.getUserInfo()
-    // Use userInfo instead of token
   }
 
   ngOnInit(): void {
-    // Verificar autenticación de manera menos agresiva
     this.checkAuthenticationStatus()
-
-    // Solo buscar reservas si está autenticado
     if (this.isAuthenticated) {
       this.buscarPendiente()
     }
@@ -78,8 +72,6 @@ export class ReservaComponent implements OnInit {
 
   private checkAuthenticationStatus(): void {
     this.isAuthenticated = this.authService.isAuthenticated()
-
-    // No redirigir inmediatamente, solo mostrar mensaje
     if (!this.isAuthenticated) {
       this.error = "Para hacer una reserva necesitas iniciar sesión. Puedes navegar por el menú sin autenticarte."
     }
@@ -174,23 +166,18 @@ export class ReservaComponent implements OnInit {
   }
 
   // Crear reserva
-
 addReservation(): void {
   if (!this.isAuthenticated) {
     this.error = "Debes iniciar sesión para hacer una reserva."
     this.redirectToLogin()
     return
   }
-
   const userId = this.authService.getId()
-  console.log('🔍 User ID:', userId);
-
   if (!userId) {
     this.error = "Error de autenticación. Por favor inicia sesión nuevamente."
     this.redirectToLogin()
     return
   }
-
   this.isLoading = true
   this.clearMessages()
 
@@ -198,46 +185,23 @@ addReservation(): void {
   const fecha = this.reservaForm.value.fecha
   const hora = this.reservaForm.value.hora
 
-  console.log('📤 Form values:', { people, fecha, hora });
-  console.log('📤 typeof fecha:', typeof fecha);
-  console.log('📤 typeof hora:', typeof hora);
-  console.log('📤 typeof people:', typeof people);
-
-  // ✅ SOLUCIÓN: Crear string ISO directamente sin Date objects
   const datetimeString = `${fecha}T${hora}:00`;
-  
-  console.log('📅 DateTime string being sent:', datetimeString);
-  console.log('📅 typeof datetimeString:', typeof datetimeString);
+ this.reservationService.addReservation(userId, people, datetimeString).subscribe({
+  next: (response) => {
+    this.isLoading = false
 
-  // Verificar que el servicio reciba string
-  console.log('🚀 About to call service with:', { 
-    userId, 
-    people, 
-    datetimeString,
-    types: {
-      userId: typeof userId,
-      people: typeof people,
-      datetimeString: typeof datetimeString
-    }
-  });
+    this.notificationService.success(
+      ` Reserva creada exitosamente para ${people} personas el ${this.formatDisplayDate(fecha)} a las ${hora}`
+    )
 
-  // Enviar directamente el string
-  this.reservationService.addReservation(userId, people, datetimeString).subscribe({
-    next: (response) => {
-      console.log('✅ Reservation created:', response);
-      this.isLoading = false
-      this.successMessage = `✅ Reserva creada exitosamente para ${people} personas el ${this.formatDisplayDate(fecha)} a las ${hora}`
-
-      this.resetForm()
-      this.setActiveSection("mis-reservas")
+    this.resetForm()
+    this.setActiveSection("mis-reservas")
 
       setTimeout(() => {
         this.successMessage = null
       }, 5000)
     },
     error: (error) => {
-
-      
       this.isLoading = false
       
       if (error.status === 400) {
@@ -262,12 +226,10 @@ addReservation(): void {
   
   this.reservationService.getPendingReservation().subscribe({
     next: (response) => {
-      console.log('✅ Pending reservation response:', response);
       this.pendingReservation = response.data;
       this.isLoading = false;
     },
     error: (error) => {
-      console.log('❌ Error getting pending reservation:', error);
       this.pendingReservation = null;
       this.isLoading = false;
     }
@@ -275,48 +237,25 @@ addReservation(): void {
 }
 
   // Cancelar reserva
-  cancelarReserva(id: string): void {
-  console.log('🔍 Canceling reservation with ID:', id);
-  console.log('🔍 Pending reservation object:', this.pendingReservation);
-  console.log('🔍 Type of ID:', typeof id);
-  
-  // Validar que el ID sea válido
+cancelarReserva(id: string): void {
   if (!id || id === 'undefined' || id === 'null') {
-    console.log('❌ Invalid reservation ID');
-    this.error = 'ID de reserva inválido';
+    this.notificationService.error(' ID de reserva inválido');
     return;
   }
-
-  if (!confirm("¿Estás seguro de que quieres cancelar esta reserva?")) {
-    return;
-  }
-
   this.isLoading = true;
 
   this.reservationService.cancelReservation(id).subscribe({
     next: (res) => {
-      console.log('✅ Reservation canceled successfully:', res);
       this.isLoading = false;
-      this.successMessage = "✅ Reserva cancelada con éxito";
       this.pendingReservation = null;
-
-      setTimeout(() => {
-        this.successMessage = null;
-      }, 3000);
+      this.notificationService.success(' Reserva cancelada con éxito');
     },
     error: (err) => {
-      console.log('❌ Error canceling reservation:', err);
       this.isLoading = false;
-      console.error(err);
-      this.error = "⚠️ Error al cancelar la reserva";
-      
-      setTimeout(() => {
-        this.error = null;
-      }, 5000);
+      this.notificationService.error(' Error al cancelar la reserva');
     },
   });
 }
-
   // Redirigir al login
   redirectToLogin(): void {
     setTimeout(() => {

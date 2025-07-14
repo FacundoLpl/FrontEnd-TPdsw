@@ -61,13 +61,9 @@ export class RegisterComponent implements OnInit {
     this.isLoading = true
     this.feedback = true
 
-    // Asegurar que el userType sea correcto
-    this.userData.userType = "Client"
-
     // En register.component.ts, mejora el manejo de errores:
 this.authService.register(this.userData).subscribe({
   next: (response) => {
-    console.log('✅ Registration response:', response);
     this.isLoading = false
     
     // Verificar si realmente fue exitoso
@@ -83,7 +79,6 @@ this.authService.register(this.userData).subscribe({
       return
     }
 
-    console.log("Registro exitoso:", response)
     this.notificationService.success("¡Cuenta creada exitosamente! Bienvenido a Restaurant DSW")
     
     // Redirigir después del registro exitoso
