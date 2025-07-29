@@ -6,7 +6,8 @@ import { AuthService } from "../core/services/auth.service"
 import { ProductServiceService } from "../services/product-service.service"
 import { CartServiceService } from "../services/cart-service.service"
 import { UserFormService } from "../services/user-form.service"
-
+import { NotificationService  } from "../services/notification.service"
+import { forkJoin } from 'rxjs';
 interface DashboardStats {
   totalOrders: number
   totalRevenue: number
@@ -66,13 +67,29 @@ export class AdminDashboardComponent implements OnInit {
   orderStatusFilter = "all"
 
   // Nuevo producto/usuario
-  newProduct: any = {
-    name: "",
-    price: 0,
-    category: { id: "", name: "" },
-    imageUrl: "",
-    description: "",
-  }
+  newProduct = {
+  name: '',
+  price: 0,
+  stock: 0,
+  description: '',
+  imageUrl: '',
+  state: 'Active',
+  category: { id: "", name: "" },
+};
+// Para manejar el producto que se está editando
+editingProduct: any = {
+  id: '',
+  name: '',
+  price: 0,
+  stock: 0,
+  description: '',
+  imageUrl: '',
+  state: 'Active',
+  category: { id: '', name: '' }
+}
+
+showEditModal = false
+
 
   newUser: any = {
     firstName: "",
@@ -93,7 +110,8 @@ export class AdminDashboardComponent implements OnInit {
     private authService: AuthService,
     private productService: ProductServiceService,
     private cartService: CartServiceService,
-    private userFormService: UserFormService, // Cambiado a userFormService
+    private userFormService: UserFormService,
+    private notificationService: NotificationService,
   ) {}
 
   ngOnInit(): void {
@@ -109,8 +127,130 @@ export class AdminDashboardComponent implements OnInit {
     }
   }
 
-  // Cargar datos iniciales del dashboard
-  loadDashboardData(): void {
+    // Crear nuevo producto
+  createProduct(): void {
+  this.isLoading = true
+
+  const productToSend = {
+    name: this.newProduct.name,
+    price: this.newProduct.price,
+    stock: this.newProduct.stock,
+    description: this.newProduct.description,
+    imageUrl: this.newProduct.imageUrl,
+    state: this.newProduct.state as "Active" | "Archived",
+    category: this.newProduct.category.id,
+  }
+
+  this.productService.createProduct(productToSend).subscribe({
+    next: (res: any) => {
+      this.products.push(res.data)
+      this.filteredProducts = [...this.products]
+      this.resetNewProduct()
+      this.isLoading = false
+      this.notificationService.success("Producto creado exitosamente.")
+      const closeButton = document.querySelector('#addProductModal .btn-close') as HTMLElement;
+        if (closeButton) {
+          closeButton.click();
+        }
+     },
+    error: (err: any) => {
+      this.notificationService.error("Error al crear producto: " + (err.error?.message || "Error desconocido"))
+      console.error(err)
+      this.isLoading = false
+    },
+  })
+}
+
+  // Resetear formulario de nuevo producto
+ resetNewProduct(): void {
+  this.newProduct = {
+    name: "",
+    price: 0,
+    stock: 0,
+    state: "Active",
+    category: { id: "", name: "" },
+    imageUrl: "",
+    description: "",
+  };
+}
+
+ // Eliminar producto
+  deleteProduct(id: string): void {
+    if (confirm("¿Estás seguro de que deseas eliminar este producto?")) {
+      this.isLoading = true
+
+      this.productService.deleteProduct(id).subscribe({
+        next: () => {
+          this.products = this.products.filter((p) => p.id !== id)
+          this.filteredProducts = this.filteredProducts.filter((p) => p.id !== id)
+          this.isLoading = false
+          this.notificationService.success("Producto eliminado exitosamente")
+        },
+        error: (err: any) => {
+          this.notificationService.error("Error al eliminar producto")
+          console.error(err)
+          this.isLoading = false
+        },
+      })
+    }
+  }
+
+// Abrir modal y cargar datos del producto a editar
+openEditModal(product: any): void {
+  this.editingProduct = JSON.parse(JSON.stringify(product)) // clonar objeto para evitar mutar original
+  this.showEditModal = true
+}
+
+// Cerrar modal de edición
+closeEditModal(): void {
+  this.showEditModal = false
+}
+
+// Actualizar producto
+updateProduct(): void {
+  if (!this.editingProduct.name || !this.editingProduct.price || !this.editingProduct.stock || !this.editingProduct.category?.id) {
+    alert('Completa todos los campos obligatorios')
+    return
+  }
+
+  this.isLoading = true
+
+  const productToUpdate = {
+    id: this.editingProduct.id,
+    name: this.editingProduct.name,
+    price: this.editingProduct.price,
+    stock: this.editingProduct.stock,
+    description: this.editingProduct.description,
+    imageUrl: this.editingProduct.imageUrl,
+    state: this.editingProduct.state,
+    category: this.editingProduct.category.id,
+  }
+
+  this.productService.updateProduct(this.editingProduct.id, productToUpdate).subscribe({
+    next: (res: any) => {
+      if (!res.error) {
+        const index = this.products.findIndex(p => p.id === this.editingProduct.id)
+        if (index !== -1) {
+          this.products[index] = res.data
+          this.filteredProducts = [...this.products]
+        }
+        this.closeEditModal()
+        this.notificationService.success("Producto actualizado exitosamente.")
+      } else {
+        this.notificationService.error('Error al actualizar producto: ' + res.error)
+      }
+      this.isLoading = false
+    },
+    error: (err) => {
+      this.notificationService.error('Error al actualizar producto')
+      console.error(err)
+      this.isLoading = false
+    }
+  })
+}
+
+// Cargar datos iniciales del dashboard
+loadDashboardData(): void {
     this.isLoading = true
 
     // Cargar estadísticas
@@ -135,7 +275,7 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   // Cambiar sección activa
-  setActiveSection(section: string): void {
+setActiveSection(section: string): void {
     this.activeSection = section
 
     // Recargar datos según la sección
@@ -158,17 +298,35 @@ export class AdminDashboardComponent implements OnInit {
     }
   }
 
-  // Cargar estadísticas generales
-  loadStats(): void {
-    // Datos de ejemplo por ahora
-    this.stats = {
-      totalOrders: 156,
-      totalRevenue: 8750,
-      totalProducts: 48,
-      totalUsers: 120,
-      pendingOrders: 12,
+// Cargar estadísticas generales
+loadStats(): void {
+  this.isLoading = true;
+
+  forkJoin({
+    totalOrders: this.cartService.getTotalOrders(),
+    totalRevenue: this.cartService.getTotalRevenue(),
+    totalProducts: this.productService.findAll(),
+    totalUsers: this.userFormService.getAllUsers(), // descomentar si tenés este endpoint activo
+    pendingOrders: this.cartService.getAllOrders({ state: 'pending' })
+  }).subscribe({
+    next: (res: any) => {
+      console.log('loadStats results:', res);
+      this.stats = {
+        totalOrders: res.totalOrders?.totalOrders || 0,
+        totalRevenue: res.totalRevenue?.totalRevenue || 0,
+        totalProducts: res.totalProducts?.data?.length || 0,
+        totalUsers: res.totalUsers?.data?.length || 0, 
+        pendingOrders: res.pendingOrders?.data?.length || 0
+      };
+      this.isLoading = false;
+    },
+    error: (err) => {
+      console.error('Error cargando estadísticas', err);
+      this.isLoading = false;
     }
-  }
+  });
+}
+
 
   // Cargar datos de ventas para el gráfico
   loadSalesData(): void {
@@ -317,38 +475,6 @@ export class AdminDashboardComponent implements OnInit {
       },
     })
   }
-
-  // Crear nuevo producto
-  createProduct(): void {
-    this.isLoading = true
-
-    this.productService.createProduct(this.newProduct).subscribe({
-      next: (res: any) => {
-        this.products.push(res.data)
-        this.filteredProducts = [...this.products]
-        this.resetNewProduct()
-        this.isLoading = false
-        alert("Producto creado exitosamente")
-      },
-      error: (err: any) => {
-        this.error = "Error al crear producto"
-        console.error(err)
-        this.isLoading = false
-      },
-    })
-  }
-
-  // Resetear formulario de nuevo producto
-  resetNewProduct(): void {
-    this.newProduct = {
-      name: "",
-      price: 0,
-      category: { id: "", name: "" },
-      imageUrl: "",
-      description: "",
-    }
-  }
-
   // Crear nuevo usuario (implementar cuando tengamos el servicio correcto)
   createUser(): void {
     this.isLoading = true
@@ -405,26 +531,47 @@ export class AdminDashboardComponent implements OnInit {
     }
   }
 
-  // Eliminar producto
-  deleteProduct(id: string): void {
-    if (confirm("¿Estás seguro de que deseas eliminar este producto?")) {
-      this.isLoading = true
+ // Estado para editar categoría
+editingCategory: any = {
+  id: '',
+  name: ''
+};
 
-      this.productService.deleteProduct(id).subscribe({
-        next: () => {
-          this.products = this.products.filter((p) => p.id !== id)
-          this.filteredProducts = this.filteredProducts.filter((p) => p.id !== id)
-          this.isLoading = false
-          alert("Producto eliminado exitosamente")
-        },
-        error: (err: any) => {
-          this.error = "Error al eliminar producto"
-          console.error(err)
-          this.isLoading = false
-        },
-      })
-    }
+showEditCategoryModal = false;
+
+// Método para abrir modal y cargar categoría
+openEditCategoryModal(category: any): void {
+  this.editingCategory = { ...category }; // clonamos para no mutar la original
+  this.showEditCategoryModal = true;
+}
+
+// Método para cerrar modal edición categoría
+closeEditCategoryModal(): void {
+  this.showEditCategoryModal = false;
+}
+
+// Método para actualizar categoría (ejemplo simple)
+updateCategory(): void {
+  if (!this.editingCategory.name) {
+    alert('El nombre es obligatorio');
+    return;
   }
+  this.productService.updateCategory(this.editingCategory.id, this.editingCategory).subscribe({
+    next: (res: any) => {
+      const index = this.categories.findIndex(c => c.id === this.editingCategory.id);
+      if (index !== -1) {
+        this.categories[index] = res.data;
+      }
+      this.closeEditCategoryModal();
+      alert('Categoría actualizada exitosamente');
+    },
+    error: (err) => {
+      console.error('Error al actualizar categoría', err);
+      alert('Error al actualizar categoría');
+    }
+  });
+}
+
 
   // Eliminar usuario (implementar cuando tengamos el servicio correcto)
   deleteUser(id: string): void {

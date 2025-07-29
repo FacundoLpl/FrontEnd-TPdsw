@@ -12,6 +12,17 @@ import { Router } from "@angular/router"
 export class CartServiceService {
   private baseUrl = "http://localhost:3000/api/carts/"
   private orderUrl = "http://localhost:3000/api/orders/"
+  isLoading: boolean = false;
+
+  stats: { totalOrders: number; totalRevenue: number } = {
+    totalOrders: 0,
+    totalRevenue: 0,
+  };
+
+  salesChart: { labels: string[]; data: number[] } = {
+    labels: [],
+    data: [],
+  };
 
   constructor(
     private http: HttpClient,
@@ -92,7 +103,7 @@ export class CartServiceService {
     return this.http.put(`${this.baseUrl}${cartId}`, cartData).pipe(catchError(this.handleError.bind(this)))
   }
 
-addOrderToCart(orderData: {
+  addOrderToCart(orderData: {
   productName: string
   quantity: string | number
   subtotal: number
@@ -123,7 +134,7 @@ addOrderToCart(orderData: {
   )
   
 }
-  // Metodo ver todas las ordenes (para admin dashboard)
+  // Metodo ver pedidos recientes
   getAllOrders(filter: any = {}): Observable<any> {
     if (!this.authService.isAuthenticated()) {
       console.error("User not authenticated")
@@ -151,6 +162,108 @@ addOrderToCart(orderData: {
       }),
     )
   }
+  // Metodo ver todas las ordenes (para admin dashboard)
+  getTotalOrders(): Observable<any> {
+    if (!this.authService.isAuthenticated()) {
+      console.error("User not authenticated");
+      this.router.navigate(["/login"], { queryParams: { returnUrl: this.router.url } });
+      return of({ error: "Authentication required" });
+    }
+    return this.http.get(`${this.orderUrl}total`).pipe(
+      catchError((error) => {
+        console.error("Error fetching total orders:", error);
+        return this.handleError(error);
+      })
+    );
+  }
+  // Metodo para saber el total de ingresos (para admin dashboard)
+  getTotalRevenue(): Observable<any> {
+    if (!this.authService.isAuthenticated()) {
+      console.error("User not authenticated");
+      this.router.navigate(["/login"], { queryParams: { returnUrl: this.router.url } });
+      return of({ error: "Authentication required" });
+    }
+    return this.http.get(`${this.orderUrl}total-revenue`).pipe(
+      catchError((error) => {
+        console.error("Error fetching total revenue:", error);
+        return this.handleError(error);
+      })
+    );
+  }
+
+  getWeeklyOrders(): Observable<any> {
+    if (!this.authService.isAuthenticated()) {
+      console.error("User not authenticated");
+      this.router.navigate(["/login"], { queryParams: { returnUrl: this.router.url } });
+      return of({ error: "Authentication required" });
+    }
+    return this.http.get(`${this.orderUrl}weekly`).pipe(
+      catchError((error) => {
+        console.error("Error fetching weekly orders:", error);
+        return this.handleError(error);
+      })
+    );
+  }
+
+  loadStats(): void {
+    this.isLoading = true;
+    
+    // Obtener total de pedidos
+    this.getTotalOrders().subscribe({
+      next: (res) => {
+        this.stats.totalOrders = res.totalOrders || 0;
+      },
+      error: (err) => {
+        console.error('Error cargando total de pedidos', err);
+    },
+  });
+
+  // Obtener ingresos totales
+  this.getTotalRevenue().subscribe({
+    next: (res) => {
+      this.stats.totalRevenue = res.totalRevenue || 0;
+    },
+    error: (err) => {
+      console.error('Error cargando ingresos totales', err);
+    },
+  });
+
+  this.isLoading = false;
+}
+
+  loadSalesData(): void {
+    this.getWeeklyOrders().subscribe({
+      next: (res) => {
+        this.salesChart.labels = res.map((day: { day: string }) => day.day);
+        this.salesChart.data = res.map((day: { amount: number }) => day.amount);
+      },
+      error: (err) => {
+        console.error('Error cargando ventas semanales', err);
+        // Datos de ejemplo en caso de error:
+        this.salesChart = {
+          labels: ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"],
+          data: [0, 0, 0, 0, 0, 0, 0],
+        };
+      },
+    });
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   getUserOrders(): Observable<any> {
   if (!this.authService.isAuthenticated()) {
     console.error("User not authenticated");

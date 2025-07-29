@@ -29,9 +29,11 @@ export interface Category {
 export interface CreateProductDto {
   name: string
   price: number
+  stock: number
+  state: "Active" | "Archived"
   imageUrl: string
   description?: string
-  categoryId: string
+  category: string
   featured?: boolean
 }
 
@@ -104,7 +106,8 @@ export class ProductServiceService {
     return this.http.post(`${this.baseUrl}`, productData).pipe(
       catchError((err) => {
         console.error("Error creating product:", err)
-        return of({ error: err.error?.message || "Error al crear producto" })
+        const backendMessage = err.error?.message || "Error al crear producto"
+        return of({ error: backendMessage })
       }),
     )
   }
