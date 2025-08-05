@@ -37,11 +37,6 @@ export class UserFormService {
 
   constructor(private http: HttpClient) {}
 
-  // ========== CRUD BÁSICO ==========
-
-  /**
-   * Obtener todos los usuarios con filtros opcionales
-   */
   getAllUsers(filter: any = {}): Observable<any> {
     let params = new HttpParams()
 

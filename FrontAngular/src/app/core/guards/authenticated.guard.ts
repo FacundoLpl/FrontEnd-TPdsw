@@ -13,7 +13,6 @@ export class AuthenticatedGuard implements CanActivate {
 
   canActivate(): boolean {
     if (this.authService.isAuthenticated()) {
-      // If already authenticated, redirect to home
       this.router.navigate(["/inicio"])
       return false
     }

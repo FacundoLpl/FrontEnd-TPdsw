@@ -4,6 +4,7 @@ import { RouterModule } from "@angular/router"
 import { NavbarComponent } from "../components/navbar/navbar.component"
 import { FooterComponent } from "../components/footer/footer/footer.component"
 
+
 interface ServiceCard {
   title: string
   description: string
@@ -18,15 +19,6 @@ interface FeatureCard {
   description: string
   icon: string
   color: string
-}
-
-interface MenuItem {
-  name: string
-  description: string
-  price: string
-  image: string
-  category: string
-  featured: boolean
 }
 
 interface Testimonial {
@@ -86,19 +78,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
       features: ["Salones privados", "Menús personalizados", "Decoración incluida", "Servicio especializado"],
     },
   ]
-
   // Características del restaurante
   features: FeatureCard[] = [
     {
       title: "Cocina de Autor",
       description: "Platos únicos creados por nuestro chef ejecutivo con ingredientes de primera calidad",
-      icon: "chef-hat",
+      icon: "heart",
       color: "from-amber-500 to-amber-600",
     },
     {
       title: "Ambiente Único",
       description: "Diseño interior cuidadosamente pensado para crear la atmósfera perfecta",
-      icon: "sparkles",
+      icon: "heart",
       color: "from-red-500 to-red-600",
     },
     {
@@ -110,39 +101,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     {
       title: "Tecnología Avanzada",
       description: "Sistema integrado para una experiencia fluida desde la reserva hasta el pago",
-      icon: "cpu-chip",
+      icon: "heart",
       color: "from-indigo-500 to-indigo-600",
     },
   ]
-
-  // Platos destacados
-  featuredDishes: MenuItem[] = [
-    {
-      name: "Parrillada Signature",
-      description: "Selección premium de cortes argentinos con guarnición gourmet",
-      price: "$3500",
-      image: "https://rockandfellers.com.ar/front/images/bg/ryf1.jpg",
-      category: "Especialidades",
-      featured: true,
-    },
-    {
-      name: "Risotto Trufa Negra",
-      description: "Arroz carnaroli con trufa negra, parmesano 24 meses y manteca de hierbas",
-      price: "$2800",
-      image: "https://rockandfellers.com.ar/front/images/bg/ryf2.jpg",
-      category: "Pastas",
-      featured: true,
-    },
-    {
-      name: "Salmón Patagónico",
-      description: "Filete grillado con reducción de vino blanco y vegetales de estación",
-      price: "$3200",
-      image: "https://rockandfellers.com.ar/front/images/bg/ryf3.jpg",
-      category: "Pescados",
-      featured: true,
-    },
-  ]
-
   // Testimonios
   testimonials: Testimonial[] = [
     {
@@ -150,24 +112,23 @@ export class HomeComponent implements OnInit, AfterViewInit {
       role: "Food Blogger",
       comment: "Una experiencia gastronómica excepcional. Cada plato es una obra de arte y el servicio es impecable.",
       rating: 5,
-      image: "https://rockandfellers.com.ar/front/images/bg/ryf4.png",
+      image: "https://randomuser.me/api/portraits/women/44.jpg",
     },
     {
       name: "Carlos Mendoza",
       role: "Chef Consultor",
       comment: "La calidad de los ingredientes y la técnica culinaria están al nivel de los mejores restaurantes.",
       rating: 5,
-      image: "https://rockandfellers.com.ar/front/images/bg/ryf4.png",
+      image: "https://randomuser.me/api/portraits/men/44.jpg",
     },
     {
       name: "Ana Rodríguez",
       role: "Crítica Gastronómica",
       comment: "Un lugar que redefine la experiencia culinaria con innovación y tradición en perfecta armonía.",
       rating: 4,
-      image: "https://rockandfellers.com.ar/front/images/bg/ryf4.png",
+      image:"https://randomuser.me/api/portraits/women/34.jpg",
     },
   ]
-
   // Estadísticas
   stats: Stat[] = [
     { number: "500+", label: "Clientes Satisfechos", icon: "users" },
@@ -175,7 +136,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
     { number: "5★", label: "Calificación Promedio", icon: "star" },
     { number: "3", label: "Años de Experiencia", icon: "calendar" },
   ]
-
   // Horarios
   businessHours = [
     { day: "Lunes - Jueves", hours: "12:00 - 23:00" },
@@ -185,9 +145,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   constructor() {}
 
-  ngOnInit(): void {
-    // Inicialización
-  }
+   ngOnInit(): void {
+
+}
+
 
   ngAfterViewInit(): void {
     this.initializeAnimations()

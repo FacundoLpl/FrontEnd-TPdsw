@@ -14,8 +14,8 @@ export class ReservationService {
   constructor(private http: HttpClient, private authService: AuthService) {}
   
  addReservation(user: string, people: number, datetime: string): Observable<any> {
-  console.log('🚀 ReservationService received:', { user, people, datetime });
-  console.log('🚀 Types in service:', {
+  console.log(' ReservationService received:', { user, people, datetime });
+  console.log(' Types in service:', {
     user: typeof user,
     people: typeof people,
     datetime: typeof datetime
@@ -28,14 +28,14 @@ export class ReservationService {
     datetime: datetime,
   };
 
-  console.log('🚀 ReservationService sending body:', body);
-  console.log('🚀 Body types:', {
+  console.log(' ReservationService sending body:', body);
+  console.log(' Body types:', {
     state: typeof body.state,
     user: typeof body.user,
     people: typeof body.people,
     datetime: typeof body.datetime
   });
-  console.log('🚀 Datetime value:', body.datetime);
+  console.log(' Datetime value:', body.datetime);
 
   return this.http.post(this.apiUrl, body);
 }
@@ -55,20 +55,17 @@ export class ReservationService {
     const userId = this.authService.getId();
     if (userId != null) {
       let params = new HttpParams()
-        .set('state', 'Pending') // ← Cambié 'Pending' por 'Pending' (mayúscula)
+        .set('state', 'Pending')
         .set('user', userId);
-    
         return this.http.get<{ message: string, data: any[] }>(`${this.apiUrl}`, { params }).pipe(
-          map(response => response.data[0] || null) // devolvemos la primera reserva o null
+          map(response => response.data[0] || null)
         );
     } else {
       return throwError(() => new Error("Log In antes de continuar"));
     }
   }
 
-  // ✅ CORREGIDO: URL correcta
   cancelReservation(reservationId: string): Observable<any> {
-  console.log('🔍 Service: Canceling reservation with ID:', reservationId);
   return this.http.delete(`${this.apiUrl}/${reservationId}`);
 }
   // Obtener reserva pendiente del usuario

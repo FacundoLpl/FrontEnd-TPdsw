@@ -52,15 +52,8 @@
           <h3 class="item-name">{{ order.product?.name || order.productName || 'Producto' }}</h3>
           <p class="item-description" *ngIf="order.comment">{{ order.comment }}</p>
           <div class="item-price">${{ getUnitPrice(order) | number:'1.2-2' }} c/u</div>
-          <div class="item-id">ID: {{ order.id }}</div>
-        </div>
-        <div class="item-quantity">
-          <button class="quantity-btn" (click)="updateOrderQuantity(order, cart[0], getQuantityAsNumber(order) - 1)" [disabled]="getQuantityAsNumber(order) <= 1 || isUpdating">-</button>
-          <input type="number" [(ngModel)]="order.quantity" min="1" (change)="updateOrderQuantity(order, cart[0], getQuantityAsNumber(order))" [disabled]="isUpdating">
-          <button class="quantity-btn" (click)="updateOrderQuantity(order, cart[0], getQuantityAsNumber(order) + 1)" [disabled]="isUpdating">+</button>
-          <div class="updating-indicator" *ngIf="isUpdating">
-            <i class="fas fa-spinner fa-spin"></i>
-          </div>
+          <div class="item-id">ID del order: {{ order.id }}</div>
+          <div class="item-quantity">Cantidad: {{ order.quantity }}</div>
         </div>
         <div class="item-subtotal">${{ order.subtotal | number:'1.2-2' }}</div>
         <button class="remove-btn" (click)="removeOrder(order, cart[0])" [disabled]="isUpdating">
@@ -84,7 +77,6 @@
         <span>${{ cart[0].total * 1.1 | number:'1.2-2' }}</span>
       </div>
       <div class="cart-actions">
-        <button class="clear-cart-btn" (click)="clearCart(cart[0])" [disabled]="isUpdating">Vaciar Carrito</button>
         <button class="checkout-btn" (click)="toggleCheckoutForm()" [disabled]="isUpdating">
           {{ showCheckoutForm ? 'Cancelar' : 'Proceder al Pago' }}
         </button>

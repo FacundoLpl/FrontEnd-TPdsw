@@ -48,20 +48,16 @@
       <div class="order-details">
         <div class="delivery-info">
           <div class="info-row">
-            <span class="label">Tipo de entrega:</span>
-            <span class="value">{{ getDeliveryTypeText(order) }}</span>
+            <span class="label">Tipo de entrega: {{ getDeliveryTypeText(order) }}</span>
           </div>
           <div class="info-row" *ngIf="order.deliveryAddress">
-            <span class="label">Dirección:</span>
-            <span class="value">{{ order.deliveryAddress }}</span>
+            <span class="label">Dirección: {{ order.deliveryAddress }}</span>
           </div>
           <div class="info-row" *ngIf="order.contactNumber">
-            <span class="label">Contacto:</span>
-            <span class="value">{{ order.contactNumber }}</span>
+            <span class="label">Contacto: {{ order.contactNumber }}</span>
           </div>
           <div class="info-row">
-            <span class="label">Pago:</span>
-            <span class="value">{{ getPaymentMethodText(order) }}</span>
+            <span class="label">Pago: {{ getPaymentMethodText(order) }}</span>
           </div>
         </div>
 

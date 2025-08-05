@@ -30,34 +30,34 @@ export class NosotrosComponent implements OnInit {
   // Datos del equipo de desarrollo
   teamMembers: TeamMember[] = [
     {
-      name: "Juan Pérez",
+      name: "Facundo Cantaberta",
       role: "Full Stack Developer",
       description:
         "Especialista en Angular y Node.js. Responsable del desarrollo del frontend y la integración con APIs.",
       skills: ["Angular", "TypeScript", "CSS"],
-      photo: "/placeholder.svg?height=200&width=200",
-      github: "https://github.com/juanperez",
-      linkedin: "https://linkedin.com/in/juanperez",
+      photo: "https://randomuser.me/api/portraits/men/44.jpg",
+      github: "https://github.com/",
+      linkedin: "https://linkedin.com/in/",
     },
     {
-      name: "María García",
+      name: "María Paz Battistoni",
       role: "Backend Developer",
       description:
         "Experta en bases de datos y APIs REST. Encargada de la arquitectura del servidor y la seguridad del sistema.",
       skills: ["Node.js", "MongoDB", "Express"],
-      photo: "/placeholder.svg?height=200&width=200",
-      github: "https://github.com/mariagarcia",
-      linkedin: "https://linkedin.com/in/mariagarcia",
+      photo: "https://randomuser.me/api/portraits/women/44.jpg",
+      github: "https://github.com/",
+      linkedin: "https://linkedin.com/in/",
     },
     {
-      name: "Carlos López",
+      name: "Bautista Alfaro",
       role: "UI/UX Designer",
       description:
         "Diseñador especializado en experiencia de usuario. Responsable del diseño visual y la usabilidad del sistema.",
       skills: ["Figma", "CSS", "Design Systems"],
-      photo: "/placeholder.svg?height=200&width=200",
-      github: "https://github.com/carloslopez",
-      linkedin: "https://linkedin.com/in/carloslopez",
+      photo: "https://randomuser.me/api/portraits/men/2.jpg",
+      github: "https://github.com/",
+      linkedin: "https://linkedin.com/in/",
     },
   ]
 

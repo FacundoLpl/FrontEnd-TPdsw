@@ -168,7 +168,7 @@
   position: relative;
   display: flex;
   align-items: center;
-  background: white;
+  background: rgb(59, 59, 59);
   border-radius: 3rem;
   padding: 0.5rem 1.5rem;
   box-shadow: var(--shadow);

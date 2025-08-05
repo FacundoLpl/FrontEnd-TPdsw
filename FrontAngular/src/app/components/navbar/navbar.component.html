@@ -14,18 +14,6 @@
       </a>
     </div>
 
-    <!-- Botón hamburguesa para móvil -->
-    <button 
-      class="bella-mobile-menu-btn" 
-      [class.active]="isMenuOpen"
-      (click)="toggleMenu()"
-      aria-label="Toggle menu"
-    >
-      <span class="bella-hamburger-line"></span>
-      <span class="bella-hamburger-line"></span>
-      <span class="bella-hamburger-line"></span>
-    </button>
-
     <!-- Menú de navegación -->
     <div class="bella-navbar-menu" [class.active]="isMenuOpen">
       <ul class="bella-navbar-nav">
@@ -86,7 +74,7 @@
             <span class="bella-cart-text">Carrito</span>
           </a>
 
-          <!-- 👈 MIS PEDIDOS - CORREGIDO -->
+          <!--  MIS PEDIDOS -->
           <a routerLink="/mis-pedidos" routerLinkActive="active" class="bella-nav-link bella-orders-link" (click)="closeMenu()">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
@@ -100,7 +88,8 @@
 
           <!-- Menú de usuario -->
           <div class="bella-user-menu">
-            <button class="bella-user-btn">
+            <button class="bella-user-btn" (click)="toggleUserDropdown()">
+
               <div class="bella-user-avatar">
                 {{ getUserName().charAt(0).toUpperCase() }}
               </div>
@@ -110,7 +99,8 @@
               </svg>
             </button>
             
-            <div class="bella-user-dropdown">
+            <div class="bella-user-dropdown" [class.active]="showUserDropdown">
+
               <div class="bella-user-info">
                 <p class="bella-user-name-full">{{ getUserName() }}</p>
                 <p class="bella-user-role">{{ getUserRole() }}</p>

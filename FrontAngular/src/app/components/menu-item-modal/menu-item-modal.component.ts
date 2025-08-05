@@ -3,6 +3,7 @@ import { CommonModule } from "@angular/common"
 import { FormsModule } from "@angular/forms"
 import  { CartServiceService } from "../../services/cart-service.service"
 import { AuthService } from "../../core/services/auth.service"
+import { NotificationService } from "../../services/notification.service.js"
 
 @Component({
   selector: "app-menu-item-modal",
@@ -29,6 +30,7 @@ export class MenuItemModalComponent implements OnInit {
   constructor(
     private cartService: CartServiceService,
     private authService: AuthService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit() {
@@ -53,16 +55,15 @@ export class MenuItemModalComponent implements OnInit {
 
     this.isProcessing = true
 
-    // Crear el objeto de pedido con quantity como número explícitamente
+    // Crear el objeto de order con quantity como número explícitamente
     const orderData = {
-      productName: this.itemTitle, // Make sure this is set correctly
-      quantity: Number(this.quantity), // Convertir explícitamente a número
+      productName: this.itemTitle, 
+      quantity: Number(this.quantity), 
       subtotal: this.getTotalPrice(),
       comment: this.comment || undefined,
       product: this.productId,
     }
 
-    console.log("Adding to cart:", orderData)
 
     // Usar el método correcto del servicio
     this.cartService.addOrderToCart(orderData).subscribe({
@@ -70,16 +71,15 @@ export class MenuItemModalComponent implements OnInit {
         this.isProcessing = false
 
         if (response.error) {
-          alert("Error: " + response.error)
+          this.notificationService.success("Error: " + response.error)
         } else {
-          alert("¡Producto agregado al carrito!")
+          this.notificationService.success("¡Producto agregado al carrito!")
           this.onClose()
         }
       },
       error: (err: any) => {
-        console.error("Error adding order", err)
         this.isProcessing = false
-        alert("Error al agregar el producto al carrito")
+        this.notificationService.success("Error al agregar el producto al carrito")
       },
     })
   }

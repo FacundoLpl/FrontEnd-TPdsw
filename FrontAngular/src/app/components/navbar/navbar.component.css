@@ -192,6 +192,8 @@
 /* Menú de usuario */
 .bella-user-menu {
   position: relative !important;
+  display: inline-block !important;
+  padding-bottom: 0.5rem;
 }
 
 .bella-user-btn {
@@ -235,26 +237,29 @@
 }
 
 .bella-user-dropdown {
-  position: absolute !important;
-  top: calc(100% + 0.5rem) !important;
-  right: 0 !important;
-  background: white !important;
-  border: 1px solid var(--bella-border-color) !important;
-  border-radius: 0.5rem !important;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
-  min-width: 200px !important;
-  opacity: 0 !important;
-  visibility: hidden !important;
-  transform: translateY(-10px) !important;
-  transition: var(--bella-transition) !important;
-  z-index: 1002 !important;
+  display: none; /* esconder por defecto */
+  position: absolute; /* para que se muestre flotando */
+  top: 100%;
+  right: 0;
+  background: white;
+  border: 1px solid var(--bella-border-color);
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+  min-width: 180px;
+  z-index: 1500;
 }
 
-.bella-user-menu:hover .bella-user-dropdown {
-  opacity: 1 !important;
-  visibility: visible !important;
-  transform: translateY(0) !important;
+.bella-user-dropdown.active {
+  display: block; /* importante */
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
 }
+
 
 .bella-user-info {
   padding: 1rem !important;
