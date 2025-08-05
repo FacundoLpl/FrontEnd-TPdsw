@@ -1,10 +1,10 @@
-/* Estilo global para el cuerpo de la página */
+
 body {
-    background-color: #333; /* Cambia este valor por el color exacto de tu footer */
-    color: #fff; /* Ajusta el color del texto para asegurar la legibilidad en el fondo oscuro */
+    background-color: #333; 
+    color: #fff;
     margin: 0;
     padding: 0;
-    font-family: Arial, Helvetica, sans-serif; /* Mantén una fuente consistente */
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 /* Estilos para los encabezados */
@@ -16,23 +16,21 @@ h1 {
 
 /* Estilos para la barra de navegación */
 .barra-navegacion {
-    position: relative; /* Cambia a 'fixed' si quieres que permanezca visible mientras se hace scroll */
-    top: 20px; /* Ajusta esta distancia según tus necesidades */
-    margin: 20px auto; /* Centrar la barra horizontalmente */
-    padding: 10px 20px; /* Espacio interno para mejorar el aspecto */
-    background-color: rgb(255, 0, 0); /* Fondo rojo para contraste */
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para efecto de flotación */
-    border-radius: 8px; /* Bordes redondeados */
-    width: 80%; /* Ajusta el ancho según tu diseño */
-    z-index: 1000; /* Asegura que esté por encima de otros elementos si es necesario */
+    position: relative; 
+    top: 20px; 
+    margin: 20px auto; 
+    padding: 10px 20px; 
+    background-color: rgb(255, 0, 0);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); 
+    border-radius: 8px;
+    width: 80%; 
+    z-index: 1000;
 }
 
-/* Estilos para los enlaces de la navegación */
 .nav-link {
     color: white;
 }
 
-/* Estilos para la lista de navegación */
 .navbar-nav {
     justify-content: center;
     font-family: 'Nunito';

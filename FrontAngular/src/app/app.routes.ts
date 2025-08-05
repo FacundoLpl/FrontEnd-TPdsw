@@ -7,7 +7,6 @@ import { NosotrosComponent } from "./nosotros/nosotros.component"
 import { CarritoComponent } from "./components/carrito/carrito.component"
 import { LoginComponent } from "./authentication/login/login.component"
 import { RegisterComponent } from "./authentication/register/register.component"
-import { AdminComponent } from "./components/admin/admin.component"
 import { AdminDashboardComponent } from "./admin/admin-dashboard.component"
 import { MisPedidosComponent } from "./components/mis-pedidos/mis-pedidos.component"
 
@@ -37,7 +36,7 @@ export const routes: Routes = [
     canActivate: [AuthGuard], // Proteger carrito para usuarios autenticados
   },
   
-  // 👈 MIS PEDIDOS - MOVIDO AQUÍ
+  //  MIS PEDIDOS - MOVIDO AQUÍ
   {
     path: 'mis-pedidos',
     component: MisPedidosComponent,
@@ -58,23 +57,17 @@ export const routes: Routes = [
 
   // Rutas de administración
   {
-    path: "admin",
-    component: AdminComponent,
-    canActivate: [AdminGuard],
-  },
-  {
     path: "admin/dashboard",
     component: AdminDashboardComponent,
     canActivate: [AdminGuard],
   },
 
-   //Rutas para diferentes roles (opcional)
+   //Rutas para diferentes roles 
   {
     path: "mozo/panel",
    loadComponent: () => import("./mozo/mozo-panel.component").then((m) => m.MozoPanelComponent),
     canActivate: [AuthGuard], // Puedes crear un guard específico para mozos
   },
 
-  // 👈 WILDCARD - SIEMPRE AL FINAL
   { path: "**", redirectTo: "/carta" }
 ]
