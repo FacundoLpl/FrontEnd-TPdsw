@@ -1,6 +1,11 @@
-<div class="menu-item-card" (click)="onItemClick()">
-  <div class="item-image-container">
-    <img [src]="imageUrl || '/assets/images/placeholder-food.jpg'" [alt]="title" class="item-image">
+<div class="menu-item-card">
+  <!-- Imagen y overlay para ver detalles -->
+  <div class="item-image-container" (click)="onItemClick()">
+    <img 
+      [src]="imageUrl || '/assets/images/placeholder-food.jpg'" 
+      [alt]="title" 
+      class="item-image"
+    />
     <div class="item-overlay">
       <div class="overlay-content">
         <i class="fas fa-eye"></i>
@@ -8,20 +13,40 @@
       </div>
     </div>
   </div>
-  
+
+  <!-- Badge de producto destacado -->
   <div *ngIf="featured" class="item-badge">
-    <i class="fas fa-star"></i>
-    Destacado
+    <i class="fas fa-star"></i> Destacado
   </div>
-  
+
+  <!-- Contenido del producto -->
   <div class="item-content">
     <h3 class="item-title">{{ title }}</h3>
     <p class="item-description" *ngIf="description">{{ description }}</p>
+
+    <!-- Rating con estrellas -->
+    <div class="rating" (click)="abrirModal(productId); $event.stopPropagation()">
+      <ng-container *ngFor="let star of [1,2,3,4,5]">
+        <i 
+          class="fa" 
+          [class.fa-star]="averageRating >= star" 
+          [class.fa-star-o]="averageRating < star"
+        ></i>
+      </ng-container>
+    </div>
+
+      <!-- Botón para ver reseñas -->
+    <div class="button-container">
+      <button (click)="verResenas.emit()">Ver Reseñas</button>
+    </div>
+
+
+    <!-- Pie: Precio y botón agregar al carrito -->
     <div class="item-footer">
       <div class="item-price" *ngIf="price !== undefined">${{ price }}</div>
       <button 
         class="quick-add-btn" 
-        (click)="onAddToCartClick($event)"
+        (click)="onAddToCartClick($event)" 
         [class.loading]="isAddingToCart"
       >
         <i *ngIf="!isAddingToCart" class="fas fa-plus"></i>

@@ -1,0 +1,12 @@
+<h2>Reseñas del producto</h2>
+
+<p *ngIf="reviews.length === 0">No hay reseñas para este producto.</p>
+
+<div *ngFor="let review of reviews" class="review-card">
+  <div class="stars">
+    <ng-container *ngFor="let star of [1,2,3,4,5]">
+      <i class="fa" [class.fa-star]="review.rating >= star" [class.fa-star-o]="review.rating < star"></i>
+    </ng-container>
+  </div>
+  <p class="comment">{{ review.comment }}</p>
+</div>
