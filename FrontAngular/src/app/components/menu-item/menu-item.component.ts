@@ -1,14 +1,18 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core"
+import { Component, Input, Output, EventEmitter, OnInit } from "@angular/core"
 import { CommonModule } from "@angular/common"
+import { ReviewServiceService } from "../../services/review-service.service"
+import { Router } from '@angular/router'
 
 @Component({
   selector: "app-menu-item",
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule], // Ya no importes ReviewModalComponent acá
   templateUrl: "./menu-item.component.html",
   styleUrls: ["./menu-item.component.css"],
 })
-export class MenuItemComponent {
+export class MenuItemComponent implements OnInit {
+  constructor(private reviewService: ReviewServiceService, private router: Router) { }
+
   @Input() title = ""
   @Input() imageUrl = ""
   @Input() altText = ""
@@ -17,31 +21,54 @@ export class MenuItemComponent {
   @Input() featured?: boolean = false
   @Input() productId?: string = ""
 
-  // Eventos para interactuar con el componente padre
   @Output() itemClick = new EventEmitter<void>()
   @Output() addToCart = new EventEmitter<string>()
 
-  // Estado de carga para el botón de agregar
+  // NUEVO: Evento para avisar al padre que quiere abrir modal con este producto
+  @Output() verResenas = new EventEmitter<string>()
+
   isAddingToCart = false
+  averageRating: number = 0
+
+  ngOnInit() {
+    if (this.productId) {
+      this.reviewService.getReviewsByProductId(this.productId).subscribe((reviews: { rating: number }[]) => {
+        if (reviews.length) {
+          const total = reviews.reduce((sum, r) => sum + r.rating, 0)
+          this.averageRating = total / reviews.length
+        }
+      })
+    }
+  }
+
+  goToReviews(event: Event) {
+    event.stopPropagation()
+    this.router.navigate(['/reviews', this.productId])
+  }
 
   onItemClick() {
     this.itemClick.emit()
   }
 
   onAddToCartClick(event: Event) {
-    // Evitar que se propague el evento y abra el modal
     event.stopPropagation()
-
     if (!this.isAddingToCart && this.productId) {
       this.isAddingToCart = true
-
-      // Emitir el ID del producto
       this.addToCart.emit(this.productId)
-
-      // Simular finalización después de un tiempo (esto se manejará realmente en el componente padre)
       setTimeout(() => {
         this.isAddingToCart = false
       }, 1000)
     }
   }
+
+  // CAMBIO: emitir el evento para abrir modal
+  abrirModal(productId?: string): void {
+    if (!productId) return;
+    this.verResenas.emit(productId)
+  }
+
+
+  // cerrarModal(): void {
+  //   this.mostrarModal = false
+  // }
 }

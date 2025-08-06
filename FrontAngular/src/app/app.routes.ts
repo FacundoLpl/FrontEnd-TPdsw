@@ -9,8 +9,9 @@ import { LoginComponent } from "./authentication/login/login.component"
 import { RegisterComponent } from "./authentication/register/register.component"
 import { AdminDashboardComponent } from "./admin/admin-dashboard.component"
 import { MisPedidosComponent } from "./components/mis-pedidos/mis-pedidos.component"
+import { ReviewListComponent } from './components/review/review-list/review-list.component'
 
-// Guards
+
 import { AuthGuard } from "./core/guards/auth.guard"
 import { AuthenticatedGuard } from "./core/guards/authenticated.guard"
 import { AdminGuard } from "./core/guards/admin.guard"
@@ -24,7 +25,9 @@ export const routes: Routes = [
   },
 
   // Páginas públicas
+  
   { path: "carta", component: CartaComponent },
+  { path: 'reviews/:productId', component: ReviewListComponent },
   { path: "reserva", component: ReservaComponent },
   { path: "faq", component: FaqComponent },
   { path: "nosotros", component: NosotrosComponent },
