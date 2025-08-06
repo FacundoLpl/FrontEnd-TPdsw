@@ -213,7 +213,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let order of filteredOrders.slice(0, 5)">
+              <tr *ngFor="let order of filteredCarts.slice(0, 5)">
                 <td>{{ order.id }}</td>
                 <td>{{ getUserFullName(order.user) }}</td>
                 <td>{{ order.createdAt | date:'dd/MM/yyyy HH:mm' }}</td>
@@ -224,7 +224,7 @@
                   </span>
                 </td>
               </tr>
-              <tr *ngIf="filteredOrders.length === 0">
+              <tr *ngIf="filteredCarts.length === 0">
                 <td colspan="5" class="no-data">No hay pedidos recientes</td>
               </tr>
             </tbody>
@@ -626,14 +626,14 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let order of filteredOrders">
-              <td>{{ order.id }}</td>
-              <td>{{ getUserFullName(order.user) }}</td>
-              <td>{{ order.createdAt | date:'dd/MM/yyyy HH:mm' }}</td>
-              <td>${{ order.total }}</td>
+            <tr *ngFor="let cart of filteredCarts">
+              <td>{{ cart.id }}</td>
+              <td>{{ getUserFullName(cart.user) }}</td>
+              <td>{{ cart.createdAt | date:'dd/MM/yyyy HH:mm' }}</td>
+              <td>${{ cart.total }}</td>
               <td>
-                <span class="status-badge" [class]="order.state">
-                  {{ order.state }}
+                <span class="status-badge" [class]="cart.state">
+                  {{ cart.state }}
                 </span>
               </td>
               <td class="actions-cell">
@@ -651,15 +651,14 @@
                     </svg>
                   </button>
                   <div class="dropdown-menu">
-                    <button class="dropdown-item" (click)="updateOrderStatus(order.id, 'Pending')">Pendiente</button>
-                    <button class="dropdown-item" (click)="updateOrderStatus(order.id, 'Processing')">En proceso</button>
-                    <button class="dropdown-item" (click)="updateOrderStatus(order.id, 'Completed')">Completado</button>
-                    <button class="dropdown-item" (click)="updateOrderStatus(order.id, 'Cancelled')">Cancelado</button>
+                    <button class="dropdown-item" (click)="updateCartState(cart.id, 'Pending')">Pendiente</button>
+                    <button class="dropdown-item" (click)="updateCartState(cart.id, 'Completed')">Completado</button>
+                    <button class="dropdown-item" (click)="updateCartState(cart.id, 'Cancelled')">Cancelado</button>
                   </div>
                 </div>
               </td>
             </tr>
-            <tr *ngIf="filteredOrders.length === 0">
+            <tr *ngIf="filteredCarts.length === 0">
               <td colspan="6" class="no-data">No se encontraron pedidos</td>
             </tr>
           </tbody>

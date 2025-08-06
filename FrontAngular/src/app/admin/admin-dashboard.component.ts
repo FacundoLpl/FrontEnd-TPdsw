@@ -62,7 +62,9 @@ export class AdminDashboardComponent implements OnInit {
 
   // Datos de pedidos
   orders: any[] = []
+  carts: any[] = []
   filteredOrders: any[] = []
+  filteredCarts: any[] = []
   orderSearchTerm = ""
   orderStatusFilter = "all"
 
@@ -303,11 +305,11 @@ loadStats(): void {
   this.isLoading = true;
 
   forkJoin({
-    totalOrders: this.cartService.getTotalOrders(),
+    totalCarts: this.cartService.getTotalCarts(),
     totalRevenue: this.cartService.getTotalRevenue(),
     totalProducts: this.productService.findAll(),
     totalUsers: this.userFormService.getAllUsers(), // descomentar si tenés este endpoint activo
-    pendingOrders: this.cartService.getAllOrders({ state: 'pending' })
+    pendingCarts: this.cartService.getAllCarts({ state: 'pending' })
   }).subscribe({
     next: (res: any) => {
       console.log('loadStats results:', res);
@@ -425,7 +427,7 @@ loadStats(): void {
   loadOrders(): void {
     this.isLoading = true
 
-    this.cartService.getAllOrders().subscribe({
+    this.cartService.getAllCarts().subscribe({
       next: (res: any) => {
         this.orders = res.data || []
         this.filterOrders()
@@ -457,6 +459,7 @@ loadStats(): void {
     }
 
     this.filteredOrders = filtered
+    this.filteredCarts = filtered
   }
 
   // Cargar categorías
@@ -603,14 +606,14 @@ updateCategory(): void {
   }
 
   // Actualizar estado de pedido
-  updateOrderStatus(orderId: string, newStatus: string): void {
+  updateCartState(cartId: string, newState: string): void {
     this.isLoading = true
 
-    this.cartService.updateOrderStatus(orderId, newStatus).subscribe({
+    this.cartService.updateCartState(cartId, newState).subscribe({
       next: () => {
-        const order = this.orders.find((o) => o.id === orderId)
-        if (order) {
-          order.state = newStatus
+        const cart = this.carts.find((o) => o.id === cartId)
+        if (cart) {
+          cart.state = newState
         }
         this.isLoading = false
         alert("Estado del pedido actualizado exitosamente")

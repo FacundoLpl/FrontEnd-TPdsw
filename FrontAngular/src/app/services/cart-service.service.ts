@@ -14,8 +14,8 @@ export class CartServiceService {
   private orderUrl = "http://localhost:3000/api/orders/"
   isLoading: boolean = false;
 
-  stats: { totalOrders: number; totalRevenue: number } = {
-    totalOrders: 0,
+  stats: { totalCarts: number; totalRevenue: number } = {
+    totalCarts: 0,
     totalRevenue: 0,
   };
 
@@ -135,7 +135,7 @@ export class CartServiceService {
   
 }
   // Metodo ver pedidos recientes
-  getAllOrders(filter: any = {}): Observable<any> {
+  getAllCarts(filter: any = {}): Observable<any> {
     if (!this.authService.isAuthenticated()) {
       console.error("User not authenticated")
       this.router.navigate(["/login"], { queryParams: { returnUrl: this.router.url } })
@@ -155,23 +155,23 @@ export class CartServiceService {
       params = params.set("endDate", filter.endDate)
     }
 
-    return this.http.get(`${this.orderUrl}`, { params }).pipe(
+    return this.http.get(`${this.baseUrl}`, { params }).pipe(
       catchError((error) => {
-        console.error("Error fetching orders:", error)
+        console.error("Error fetching carts:", error)
         return this.handleError(error)
       }),
     )
   }
   // Metodo ver todas las ordenes (para admin dashboard)
-  getTotalOrders(): Observable<any> {
+  getTotalCarts(): Observable<any> {
     if (!this.authService.isAuthenticated()) {
       console.error("User not authenticated");
       this.router.navigate(["/login"], { queryParams: { returnUrl: this.router.url } });
       return of({ error: "Authentication required" });
     }
-    return this.http.get(`${this.orderUrl}total`).pipe(
+    return this.http.get(`${this.baseUrl}total`).pipe(
       catchError((error) => {
-        console.error("Error fetching total orders:", error);
+        console.error("Error fetching total carts:", error);
         return this.handleError(error);
       })
     );
@@ -183,7 +183,7 @@ export class CartServiceService {
       this.router.navigate(["/login"], { queryParams: { returnUrl: this.router.url } });
       return of({ error: "Authentication required" });
     }
-    return this.http.get(`${this.orderUrl}total-revenue`).pipe(
+    return this.http.get(`${this.baseUrl}total-revenue`).pipe(
       catchError((error) => {
         console.error("Error fetching total revenue:", error);
         return this.handleError(error);
@@ -209,9 +209,9 @@ export class CartServiceService {
     this.isLoading = true;
     
     // Obtener total de pedidos
-    this.getTotalOrders().subscribe({
+    this.getTotalCarts().subscribe({
       next: (res) => {
-        this.stats.totalOrders = res.totalOrders || 0;
+        this.stats.totalCarts = res.totalCarts || 0;
       },
       error: (err) => {
         console.error('Error cargando total de pedidos', err);
@@ -274,16 +274,16 @@ export class CartServiceService {
     catchError(this.handleError.bind(this))
   );
 }
-  updateOrderStatus(orderId: string, newStatus: string): Observable<any> {
+  updateCartState(cartId: string, newState: string): Observable<any> {
     // Check authentication first
     if (!this.authService.isAuthenticated()) {
       console.error("User not authenticated")
       this.router.navigate(["/login"], { queryParams: { returnUrl: this.router.url } })
       return of({ error: "Authentication required" })
     }
-    return this.http.patch(`${this.orderUrl}${orderId}/status`, { state: newStatus }).pipe(
+    return this.http.put(`${this.baseUrl}${cartId}`, { state: newState }).pipe(
       catchError((error) => {
-        console.error("Error updating order status:", error)
+        console.error("Error updating cart state:", error)
         return this.handleError(error)
       }),
     )
