@@ -178,3 +178,25 @@
   margin-top: 10px;
   cursor: pointer;
 }
+
+
+.button-container {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 0.5rem; /* Ajusta el margen inferior si es necesario */
+}
+
+.reviews-link {
+  font-size: 0.875rem; /* Tamaño de fuente más discreto */
+  color: #298d26; /* Un color que lo haga parecer un enlace */
+  cursor: pointer;
+  text-decoration: underline; /* Subrayado para indicar que es clicable */
+  padding: 0; /* Elimina cualquier padding de botón */
+  border: none; /* Elimina el borde */
+  background: none; /* Elimina el fondo */
+  transition: color 0.2s ease;
+}
+
+.reviews-link:hover {
+  color: #5a67d8; /* Color al pasar el ratón */
+}

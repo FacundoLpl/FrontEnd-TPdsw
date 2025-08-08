@@ -1,4 +1,4 @@
-import { Component, Input,  OnInit } from "@angular/core"
+import { Component, Input, OnInit } from "@angular/core"
 import { NavbarComponent } from "../navbar/navbar.component.js"
 import { FooterComponent } from "../footer/footer/footer.component.js"
 import { CartServiceService } from "../../services/cart-service.service.js"
@@ -14,7 +14,7 @@ import { NotificationService } from "../../services/notification.service.js"
 @Component({
   selector: "app-carrito",
   standalone: true,
-  imports: [NavbarComponent, FooterComponent, NgFor, FormsModule, NgIf, NgClass, DecimalPipe, RouterLink , NotificationComponent],
+  imports: [NavbarComponent, FooterComponent, NgFor, FormsModule, NgIf, NgClass, DecimalPipe, RouterLink, NotificationComponent],
   templateUrl: "./carrito.component.html",
   styleUrls: ["./carrito.component.css"],
 })
@@ -23,7 +23,6 @@ export class CarritoComponent implements OnInit {
   @Input() price = 0
   @Input() quantity = 1
   @Input() comment = ""
-
   orders: Order[] = []
   isLoggedIn = false
   isLoading = false
@@ -31,25 +30,21 @@ export class CarritoComponent implements OnInit {
   errorMessage = ""
   userId: string | null = null
   cartId: string | null = null
-
   deliveryType = "delivery"
   deliveryAddress = ""
   paymentMethod = "cash"
   contactNumber = ""
   additionalInstructions = ""
-
   total = 0
-
   // Nuevas propiedades para la UI mejorada
   showCheckoutForm = false
   isProcessing = false
-
   items: { itemTitle: string; price: number; quantity: number; comment: string }[] = []
 
   constructor(
     private cartService: CartServiceService,
     private authService: AuthService,
-    private notificationService: NotificationService, 
+    private notificationService: NotificationService,
   ) {}
 
   cart: any[] = []
@@ -65,9 +60,7 @@ export class CarritoComponent implements OnInit {
       this.handleError("Debes iniciar sesión para ver tu carrito")
       return
     }
-
     this.isLoading = true
-
     // Buscar carrito pendiente para el usuario
     this.cartService.findAll({ user: this.userId, state: "Pending" }).subscribe({
       next: (res: any) => {
@@ -93,7 +86,6 @@ export class CarritoComponent implements OnInit {
       state: "Pending",
       total: 0,
     }
-
     this.cartService.create(newCart).subscribe({
       next: (res: any) => {
         if (res.data) {
@@ -108,18 +100,14 @@ export class CarritoComponent implements OnInit {
   }
 
   removeOrder(order: Order, cart: Cart) {
-
     // Determinar el ID correcto
     const orderId = order.id || (order as any)._id
-
     if (!orderId) {
       this.handleError("ID de orden no encontrado")
       return
     }
-
     // Convertir a string si es necesario
     const orderIdString = orderId.toString()
-
     this.cartService.deleteOrder(orderIdString, cart.id).subscribe({
       next: () => {
         const orderIndex = cart.orders.findIndex((o) => {
@@ -155,7 +143,6 @@ export class CarritoComponent implements OnInit {
             })
           }),
       )
-
       Promise.all(deletePromises)
         .then(() => {
           cart.orders = []
@@ -171,44 +158,57 @@ export class CarritoComponent implements OnInit {
     this.showCheckoutForm = !this.showCheckoutForm
   }
 
-finalizarCompra(cart: Cart) {
-  if (!this.contactNumber.trim()) {
-    this.notificationService.error("Por favor ingresa un número de contacto")
-    return
+  finalizarCompra(cart: Cart) {
+    if (!this.contactNumber.trim()) {
+      this.notificationService.error("Por favor ingresa un número de contacto")
+      return
+    }
+    if (this.deliveryType === "delivery" && !this.deliveryAddress.trim()) {
+      this.notificationService.error("Por favor ingresa una dirección de entrega")
+      return
+    }
+    this.isProcessing = true
+    
+    // Crear el objeto con la fecha actual cuando se confirma el pedido
+    const newCart = {
+      state: "Completed",
+      deliveryType: this.deliveryType,
+      deliveryAddress: this.deliveryType === "delivery" ? this.deliveryAddress : null,
+      paymentMethod: this.paymentMethod,
+      contactNumber: this.contactNumber,
+      additionalInstructions: this.additionalInstructions,
+      date: new Date(), // Agregar la fecha actual cuando se confirma el pedido
+    }
+    
+    this.cartService.completePurchase(cart.id, newCart).subscribe({
+      next: (response: any) => {
+        // Actualizar el carrito local con los datos del servidor
+        if (response.data) {
+          cart.state = response.data.state
+          cart.date = response.data.date // Asignar la fecha del servidor
+          cart.deliveryType = response.data.deliveryType
+          cart.deliveryAddress = response.data.deliveryAddress
+          cart.paymentMethod = response.data.paymentMethod
+          cart.contactNumber = response.data.contactNumber
+          cart.additionalInstructions = response.data.additionalInstructions
+        } else {
+          cart.state = "Completed"
+          cart.date = new Date() // Fallback si no viene del servidor
+        }
+        
+        this.updateCartTotal(cart)
+        this.isProcessing = false
+        this.showCheckoutForm = false
+        this.resetCheckoutForm()
+        this.notificationService.success("¡Pedido realizado con éxito! Te contactaremos pronto.")
+        this.loadUserCart()
+      },
+      error: (err: any) => {
+        this.handleApiError(err)
+        this.isProcessing = false
+      },
+    })
   }
-
-  if (this.deliveryType === "delivery" && !this.deliveryAddress.trim()) {
-    this.notificationService.error("Por favor ingresa una dirección de entrega")
-    return
-  }
-
-  this.isProcessing = true
-
-  const newCart = {
-    state: "Completed",
-    deliveryType: this.deliveryType,
-    deliveryAddress: this.deliveryType === "delivery" ? this.deliveryAddress : null,
-    paymentMethod: this.paymentMethod,
-    contactNumber: this.contactNumber,
-    additionalInstructions: this.additionalInstructions,
-  }
-
-  this.cartService.completePurchase(cart.id, newCart).subscribe({
-    next: () => {
-      cart.state = "Completed"
-      this.updateCartTotal(cart)
-      this.isProcessing = false
-      this.showCheckoutForm = false
-      this.resetCheckoutForm()
-      this.notificationService.success("¡Pedido realizado con éxito! Te contactaremos pronto.")
-      this.loadUserCart()
-    },
-    error: (err: any) => {
-      this.handleApiError(err)
-      this.isProcessing = false
-    },
-  })
-}
 
   resetCheckoutForm() {
     this.deliveryType = "delivery"

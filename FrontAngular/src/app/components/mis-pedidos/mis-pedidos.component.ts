@@ -1,6 +1,6 @@
-import { Component,  OnInit } from "@angular/core"
-import  { CartServiceService } from "../../services/cart-service.service"
-import  { AuthService } from "../../core/services/auth.service"
+import { Component, OnInit } from "@angular/core"
+import { CartServiceService } from "../../services/cart-service.service"
+import { AuthService } from "../../core/services/auth.service"
 import { NgFor, NgIf, DatePipe, DecimalPipe, NgClass } from "@angular/common"
 import { NavbarComponent } from "../navbar/navbar.component"
 import { FooterComponent } from "../footer/footer/footer.component"
@@ -8,7 +8,7 @@ import { FooterComponent } from "../footer/footer/footer.component"
 @Component({
   selector: "app-mis-pedidos",
   standalone: true,
-  imports: [NgFor,NgClass, NgIf, DatePipe, DecimalPipe, NavbarComponent, FooterComponent],
+  imports: [NgFor, NgClass, NgIf, DatePipe, DecimalPipe, NavbarComponent, FooterComponent],
   templateUrl: "./mis-pedidos.component.html",
   styleUrls: ["./mis-pedidos.component.css"],
 })
@@ -46,6 +46,19 @@ export class MisPedidosComponent implements OnInit {
         this.isLoading = false
       },
     })
+  }
+
+  // Nuevo método para obtener la fecha correcta del pedido
+  getOrderDate(order: any): Date {
+    // Priorizar la fecha del pedido (date) sobre la fecha de creación (createdAt)
+    if (order.date) {
+      return new Date(order.date)
+    } else if (order.createdAt) {
+      return new Date(order.createdAt)
+    } else {
+      // Fallback en caso de que no haya ninguna fecha
+      return new Date()
+    }
   }
 
   getOrderStatus(order: any): string {
@@ -89,6 +102,21 @@ export class MisPedidosComponent implements OnInit {
       default:
         return order.paymentMethod || "No especificado"
     }
+  }
+
+  // Métodos para las reseñas
+  openProductReview(orderItem: any) {
+    console.log("Opening product review for:", orderItem)
+    // Aquí puedes implementar la lógica para abrir un modal de reseña
+    // o navegar a una página de reseña específica del producto
+    alert(`Abriendo reseña para: ${orderItem.product?.name || orderItem.productName}`)
+  }
+
+  openOrderReview(order: any) {
+    console.log("Opening order review for:", order)
+    // Aquí puedes implementar la lógica para abrir un modal de reseña
+    // o navegar a una página de reseña del pedido completo
+    alert(`Abriendo reseña para el pedido #${order.id.substring(order.id.length - 8)}`)
   }
 
   private handleApiError(error: any) {

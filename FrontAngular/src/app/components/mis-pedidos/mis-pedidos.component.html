@@ -1,10 +1,7 @@
-
 <app-navbar></app-navbar>
-
 <div class="orders-container">
   <div class="orders-header">
     <h1>Mis Pedidos</h1>
-    <p>Aquí puedes ver el historial de todos tus pedidos</p>
   </div>
 
   <!-- Error message display -->
@@ -37,14 +34,17 @@
     <div class="order-card" *ngFor="let order of orders">
       <div class="order-header">
         <div class="order-info">
-          <h3>Pedido #{{ order.id.substring(order.id.length - 8) }}</h3>
-          <span class="order-date">{{ order.createdAt | date:'dd/MM/yyyy HH:mm' }}</span>
+          <h3>Pedido #{{ order.id.substring(order.id.length - 8) }}</h3> 
+          <span class="order-date">
+            <i class="fas fa-calendar-alt"></i>
+            {{ getOrderDate(order) | date:'dd/MM/yyyy HH:mm' }}
+          </span>
         </div>
         <div class="order-status" [ngClass]="getOrderStatusClass(order)">
           {{ getOrderStatus(order) }}
         </div>
       </div>
-
+      
       <div class="order-details">
         <div class="delivery-info">
           <div class="info-row">
@@ -58,17 +58,26 @@
           </div>
           <div class="info-row">
             <span class="label">Pago: {{ getPaymentMethodText(order) }}</span>
-          </div>
+          
         </div>
 
         <div class="order-items">
           <h4>Productos:</h4>
           <div class="item" *ngFor="let orderItem of order.orders">
-            <div class="item-info">
-              <span class="item-name">{{ orderItem.product?.name || orderItem.productName }}</span>
-              <span class="item-quantity">x{{ orderItem.quantity }}</span>
+            <div class="item-content">
+              <div class="item-info">
+                <span class="item-name">{{ orderItem.product?.name || orderItem.productName }}</span>
+                <span class="item-quantity">x{{ orderItem.quantity }}</span>
+              </div>
+              <span class="item-price">${{ orderItem.subtotal | number:'1.2-2' }}</span>
             </div>
-            <span class="item-price">${{ orderItem.subtotal | number:'1.2-2' }}</span>
+             Botón de reseña por producto 
+            <button class="review-btn product-review" 
+                    *ngIf="order.state === 'Completed'"
+                    (click)="openProductReview(orderItem)">
+              <i class="fas fa-star"></i>
+              Reseñar Producto
+            </button>
           </div>
         </div>
 
@@ -91,21 +100,9 @@
           <h4>Instrucciones adicionales:</h4>
           <p>{{ order.additionalInstructions }}</p>
         </div>
-      </div>
-    </div>
-  </div>
 
-  <!-- Login prompt -->
-  <div class="login-prompt" *ngIf="!isLoggedIn">
-    <div class="login-prompt-content">
-      <div class="login-icon">
-        <i class="fas fa-user-lock"></i>
       </div>
-      <h2>Inicia sesión para ver tus pedidos</h2>
-      <p>Necesitas iniciar sesión para ver tu historial de pedidos.</p>
-      <button class="login-btn" (click)="goToLogin()">Iniciar Sesión</button>
     </div>
   </div>
 </div>
-
 <app-footer></app-footer>

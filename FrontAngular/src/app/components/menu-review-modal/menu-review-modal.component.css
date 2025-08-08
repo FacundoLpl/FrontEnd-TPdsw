@@ -1,3 +1,4 @@
+/* Modal Overlay */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -80,6 +81,9 @@
   border-radius: 20px;
   font-weight: 600;
   font-size: 1rem;
+  display: flex; /* Added for better alignment */
+  align-items: center; /* Added for better alignment */
+  gap: 0.25rem; /* Added for better alignment */
 }
 
 .close-btn {
@@ -141,14 +145,15 @@
   font-weight: 600;
 }
 
-.item-details {
+.rating-section {
   padding: 1.5rem;
+  border-bottom: 1px solid #eee;
 }
 
 .section-title {
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: 600;
-  margin: 0 0 0.75rem 0;
+  margin: 0 0 1rem 0;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -159,147 +164,57 @@
   color: #4caf50;
 }
 
-.description-section {
-  margin-bottom: 1.5rem;
-}
-
-.item-description {
-  margin: 0;
-  color: #666;
-  line-height: 1.5;
-}
-
-.customization-section {
-  margin-bottom: 1.5rem;
-}
-
-.textarea-container {
-  position: relative;
-}
-
-.comment-textarea {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  resize: none;
-  font-family: inherit;
-  font-size: 0.9rem;
-  transition: border-color 0.3s;
-}
-
-.comment-textarea:focus {
-  outline: none;
-  border-color: #4caf50;
-}
-
-.textarea-footer {
+.rating-stars {
   display: flex;
-  justify-content: flex-end;
-  margin-top: 0.25rem;
-}
-
-.char-count {
-  font-size: 0.75rem;
-  color: #999;
-}
-
-.quantity-section {
+  gap: 0.25rem;
   margin-bottom: 1rem;
 }
 
-.quantity-controls {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  background-color: #f8f8f8;
-  border-radius: 8px;
-  padding: 0.5rem 1rem;
-}
-
-.quantity-btn {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: none;
-  background-color: white;
-  color: #333;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.rating-stars i {
+  font-size: 1.5rem;
+  color: #ccc; /* Default empty star color */
   cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s;
+  transition: color 0.2s;
 }
 
-.quantity-btn:hover:not(:disabled) {
-  background-color: #eee;
+.rating-stars i.fa-star {
+  color: #ffc107; /* Filled star color */
 }
 
-.quantity-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+.rating-stars i.fa-star-half-alt {
+  color: #ffc107; /* Half-filled star color */
 }
 
-.quantity-display {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex: 1;
+.rating-stars i.fa-star-o {
+  color: #ccc; /* Empty star color */
 }
 
-.quantity-number {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #333;
+.rating-stars i:hover {
+  color: #ffc107;
 }
 
-.quantity-label {
-  font-size: 0.75rem;
-  color: #666;
+.review-list-section {
+  padding: 1.5rem;
+  border-bottom: none; /* Last section, no bottom border */
 }
 
 .modal-footer {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   padding: 1.25rem;
   border-top: 1px solid #eee;
   background-color: #f9f9f9;
   border-radius: 0 0 12px 12px;
-  flex-wrap: wrap; /* opcional por si en pantallas chicas se apilan */
-}
-
-.price-summary {
-  margin-bottom: 0; /* quitamos el margen inferior si va en línea */
-}
-
-.price-breakdown {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.price-line {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.9rem;
-  color: #666;
-}
-
-.price-line.total {
-  font-weight: 700;
-  font-size: 1.1rem;
-  color: #333;
-  margin-top: 0.5rem;
-  padding-top: 0.5rem;
-  border-top: 1px dashed #ddd;
+  flex-wrap: wrap;
 }
 
 .action-buttons {
   display: flex;
   gap: 1rem;
+  width: 100%;
 }
+
 .cancel-btn {
   flex: 1;
   padding: 0.75rem;
@@ -320,35 +235,6 @@
   background-color: #f1f1f1;
 }
 
-.add-to-cart-btn {
-  flex: 2;
-  padding: 0.75rem;
-  border: none;
-  background-color: #4caf50;
-  color: white;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  transition: background-color 0.3s;
-}
-
-.add-to-cart-btn:hover:not(:disabled) {
-  background-color: #45a049;
-}
-
-.add-to-cart-btn:disabled {
-  background-color: #cccccc;
-  cursor: not-allowed;
-}
-
-.add-to-cart-btn.processing {
-  background-color: #45a049;
-}
-
 @media (max-width: 768px) {
   .modal-content {
     max-width: 100%;
@@ -356,11 +242,9 @@
     max-height: 100%;
     border-radius: 0;
   }
-
   .modal-header {
     border-radius: 0;
   }
-
   .modal-footer {
     border-radius: 0;
   }

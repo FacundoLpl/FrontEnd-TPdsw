@@ -1,25 +1,21 @@
-<!-- Modal Overlay -->
+
 <div class="modal-overlay" (click)="onClose()">
   <div class="modal-content" (click)="$event.stopPropagation()">
-<div class="modal-header">
-  <div class="header-content">
-    <h2 class="modal-title">Reseñar: {{ productName }}</h2>
-    <div class="price-badge">
-      <i class="fas fa-star"></i>
-      {{ averageRating > 0 ? averageRating : 'Sin Reseñas' }}/5
+    <div class="modal-header">
+      <div class="header-content">
+        <h2 class="modal-title">{{ productName }}</h2>
+        <div class="price-badge">
+          <i class="fas fa-star"></i>
+          {{ averageRating > 0 ? averageRating : 'Sin Reseñas' }}/5
+        </div>
+      </div>
+      <button class="close-btn" (click)="onClose()">
+        <i class="fas fa-times"></i>
+      </button>
     </div>
-  </div>
-  <button class="close-btn" (click)="onClose()">
-    <i class="fas fa-times"></i>
-  </button>
-</div>
-
-
-    <!-- Body -->
     <div class="modal-body">
-      <!-- Imagen -->
       <div class="item-image-container">
-        <img [src]="imageUrl || '/assets/images/placeholder-food.jpg'" [alt]="productName" class="item-image" />
+        <img [src]="imageUrl || '/placeholder.svg?height=200&width=600'" [alt]="productName" class="item-image" />
         <div class="image-overlay">
           <div class="image-badge">
             <i class="fas fa-comments"></i>
@@ -27,13 +23,7 @@
           </div>
         </div>
       </div>
-
-      <!-- Rating -->
       <div class="rating-section">
-        <h4 class="section-title">
-          <i class="fas fa-star"></i>
-          Tu calificación
-        </h4>
         <div class="rating-stars">
           <ng-container *ngFor="let star of [1,2,3,4,5]">
             <i
@@ -45,14 +35,12 @@
             ></i>
           </ng-container>
         </div>
-        <!-- Lista de Reseñas -->
-          <div class="review-list-section">
+        <div class="review-list-section">
           <app-review-list [productId]="productId"></app-review-list>
-          </div>
+        </div>
       </div>
     </div>
 
-    <!-- Footer -->
     <div class="modal-footer">
       <div class="action-buttons">
         <button class="cancel-btn" (click)="onClose()">
@@ -62,4 +50,4 @@
       </div>
     </div>
   </div>
-</div> 
+</div>

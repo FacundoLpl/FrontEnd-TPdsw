@@ -1,8 +1,8 @@
 import { Injectable } from "@angular/core"
-import {  HttpClient, HttpHeaders } from "@angular/common/http"
-import { BehaviorSubject,  Observable, of } from "rxjs"
+import { HttpClient, HttpHeaders, HttpErrorResponse } from "@angular/common/http" // Importar HttpErrorResponse
+import { BehaviorSubject, Observable, of } from "rxjs"
 import { tap, catchError, map } from "rxjs/operators"
-import  { Router } from "@angular/router"
+import { Router } from "@angular/router"
 
 interface AuthResponse {
   token: string
@@ -35,15 +35,12 @@ interface UserInfo {
 })
 export class AuthService {
   private readonly TOKEN_KEY = 'authToken';
- private readonly USER_ID_KEY = 'userId';
- private readonly USER_TYPE_KEY = 'userType';
- private readonly EXPIRES_AT_KEY = 'expires_at';
- private readonly USER_INFO_KEY = 'userInfo';
-
+  private readonly USER_ID_KEY = 'userId';
+  private readonly USER_TYPE_KEY = 'userType';
+  private readonly EXPIRES_AT_KEY = 'expires_at';
+  private readonly USER_INFO_KEY = 'userInfo';
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.hasValidToken())
   public isAuthenticated$ = this.isAuthenticatedSubject.asObservable()
-
-  // Base URL para API requests
   private baseUrl = "http://localhost:3000/api"
 
   constructor(
@@ -52,10 +49,11 @@ export class AuthService {
   ) {}
 
   isAuthenticated(): boolean {
-  const token = this.getToken();
-  const isAuth = !!token;
-  return isAuth;
-}
+    const token = this.getToken();
+    const isAuth = !!token;
+    return isAuth;
+  }
+
   isAdmin(): boolean {
     const userType = this.getUserType()
     return userType === "Admin"
@@ -90,7 +88,6 @@ export class AuthService {
   getDecodedToken(): DecodedToken | null {
     const token = this.getToken()
     if (!token) return null
-
     try {
       const parts = token.split(".")
       if (parts.length !== 3) {
@@ -104,7 +101,6 @@ export class AuthService {
           .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
           .join(""),
       )
-
       return JSON.parse(jsonPayload) as DecodedToken
     } catch (error) {
       return null
@@ -112,42 +108,41 @@ export class AuthService {
   }
 
   getUserInfo(): UserInfo | null {
-  const storedInfo = localStorage.getItem(this.USER_INFO_KEY);
-  if (storedInfo) {
-    try {
-      const parsed = JSON.parse(storedInfo);
-      return parsed;  // Devuelve lo que haya en localStorage (incluyendo email)
-    } catch (e) {
-      console.error("Error parsing user info:", e);
+    const storedInfo = localStorage.getItem(this.USER_INFO_KEY);
+    if (storedInfo) {
+      try {
+        const parsed = JSON.parse(storedInfo);
+        return parsed;
+      } catch (e) {
+        console.error("Error parsing user info:", e);
+      }
     }
+    const decodedToken = this.getDecodedToken();
+    if (decodedToken) {
+      const userInfo: UserInfo = {
+        id: decodedToken.id,
+        userType: decodedToken.userType,
+        firstName: decodedToken.firstName,
+        lastName: decodedToken.lastName,
+      };
+      return userInfo;
+    }
+    return null;
   }
 
-  // Si no hay localStorage, buscar en token (pero NO guardar en localStorage para no perder email)
-  const decodedToken = this.getDecodedToken();
-  if (decodedToken) {
-    const userInfo: UserInfo = {
-      id: decodedToken.id,
-      userType: decodedToken.userType,
-      firstName: decodedToken.firstName,
-      lastName: decodedToken.lastName,
-    };
-    return userInfo;
+  getUserName(): string {
+    const userInfo = this.getUserInfo();
+    if (userInfo) {
+      if (userInfo.firstName && userInfo.lastName) {
+        return `${userInfo.firstName} ${userInfo.lastName}`;
+      }
+      if (userInfo.email) {
+        return userInfo.email;
+      }
+    }
+    return 'User';
   }
-  return null;
-}
 
-getUserName(): string {
-  const userInfo = this.getUserInfo();
-  if (userInfo) {
-    if (userInfo.firstName && userInfo.lastName) {
-      return `${userInfo.firstName} ${userInfo.lastName}`;
-    }
-    if (userInfo.email) {
-      return userInfo.email;
-    }
-  }
-  return 'User';
-}
   login(credentialsOrEmail: { email: string; password: string } | string, password?: string): Observable<any> {
     let credentials: { email: string; password: string }
     if (typeof credentialsOrEmail === "string" && password) {
@@ -157,11 +152,9 @@ getUserName(): string {
     } else {
       return of({ error: "Invalid login arguments" } as any)
     }
-
     const headers = new HttpHeaders({
       "Content-Type": "application/json",
     })
-
     return this.http.post<any>(`${this.baseUrl}/users/login`, credentials, { headers }).pipe(
       map((response) => {
         return response
@@ -183,9 +176,8 @@ getUserName(): string {
       }),
       catchError((error) => {
         console.error("Login error:", error)
-        if (error.status === 401) {
-          this.clearToken()
-        }
+        // Aquí no se llama a clearToken/logout porque el interceptor ya lo maneja
+        // o porque es un error de credenciales, no de token expirado.
         return of({
           error: true,
           status: error.status,
@@ -195,32 +187,32 @@ getUserName(): string {
     )
   }
 
-register(userData: any): Observable<any> {
-  return this.http.post<any>(`${this.baseUrl}/users/register`, userData).pipe(
-    tap((response) => {
-      if (response && response.token) {
-        this.setSession(response);
-        const userInfo: UserInfo = {
-          id: response.id,
-          userType: response.userType,
-          firstName: response.firstName || userData.firstName,
-          lastName: response.lastName || userData.lastName,
-          email: userData.email,
-        };
-        localStorage.setItem(this.USER_INFO_KEY, JSON.stringify(userInfo));
-      }
-    }),
-    catchError((error) => {
-      console.error('❌ Register error:', error);
-      return of({
-        error: true,
-        status: error.status,
-        message: error.error?.message || "Error en el registro",
-        errors: error.error?.errors || []
-      });
-    })
-  );
-}
+  register(userData: any): Observable<any> {
+    return this.http.post<any>(`${this.baseUrl}/users/register`, userData).pipe(
+      tap((response) => {
+        if (response && response.token) {
+          this.setSession(response);
+          const userInfo: UserInfo = {
+            id: response.id,
+            userType: response.userType,
+            firstName: response.firstName || userData.firstName,
+            lastName: response.lastName || userData.lastName,
+            email: userData.email,
+          };
+          localStorage.setItem(this.USER_INFO_KEY, JSON.stringify(userInfo));
+        }
+      }),
+      catchError((error) => {
+        console.error('❌ Register error:', error);
+        return of({
+          error: true,
+          status: error.status,
+          message: error.error?.message || "Error en el registro",
+          errors: error.error?.errors || []
+        });
+      })
+    );
+  }
 
   logout(): void {
     localStorage.removeItem(this.TOKEN_KEY)
@@ -233,40 +225,45 @@ register(userData: any): Observable<any> {
   }
 
   getToken(): string | null {
-  const token = localStorage.getItem(this.TOKEN_KEY);
-  if (token) {
-    const expiresAt = localStorage.getItem(this.EXPIRES_AT_KEY);
-    if (expiresAt) {
-      const isExpired = new Date() > new Date(expiresAt);
-      if (isExpired) {
-        this.clearToken();
-        return null;
+    const token = localStorage.getItem(this.TOKEN_KEY);
+    if (token) {
+      const expiresAt = localStorage.getItem(this.EXPIRES_AT_KEY);
+      if (expiresAt) {
+        const isExpired = new Date() > new Date(expiresAt);
+        if (isExpired) {
+          this.clearToken();
+          return null;
+        }
       }
     }
+    return token;
   }
-  return token;
-}
+
   getId(): string | null {
-  const token = this.getToken();
-  if (!token) return null;
-  try {
-    const payload = JSON.parse(atob(token.split('.')[1]));
-    return payload.id;
-  } catch (e) {
-    return null;
+    const token = this.getToken();
+    if (!token) return null;
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.id;
+    } catch (e) {
+      return null;
+    }
   }
-}
+
   getUserType(): string | null {
     return localStorage.getItem(this.USER_TYPE_KEY)
   }
+
   isLoggedIn(): boolean {
     return this.hasValidToken()
   }
+
   clearToken(): void {
     localStorage.removeItem(this.TOKEN_KEY)
     localStorage.removeItem(this.EXPIRES_AT_KEY)
     this.isAuthenticatedSubject.next(false)
   }
+
   refreshToken(): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.baseUrl}/auth/refresh-token`, {}).pipe(
       tap((response) => this.setSession(response)),
@@ -278,35 +275,35 @@ register(userData: any): Observable<any> {
   }
 
   private setSession(authResult: AuthResponse): void {
-  const expiresAt = new Date()
-  const expiresInMs = this.parseExpiresIn(authResult.expiresIn || "1h")
-  expiresAt.setTime(expiresAt.getTime() + expiresInMs)
-  localStorage.setItem(this.TOKEN_KEY, authResult.token)
-  localStorage.setItem(this.USER_ID_KEY, authResult.id)
-  localStorage.setItem(this.USER_TYPE_KEY, authResult.userType)
-  localStorage.setItem(this.EXPIRES_AT_KEY, expiresAt.toISOString())
-  const storedToken = localStorage.getItem(this.TOKEN_KEY);
-  this.isAuthenticatedSubject.next(true)
-}
+    const expiresAt = new Date()
+    const expiresInMs = this.parseExpiresIn(authResult.expiresIn || "1h")
+    expiresAt.setTime(expiresAt.getTime() + expiresInMs)
+    localStorage.setItem(this.TOKEN_KEY, authResult.token)
+    localStorage.setItem(this.USER_ID_KEY, authResult.id)
+    localStorage.setItem(this.USER_TYPE_KEY, authResult.userType)
+    localStorage.setItem(this.EXPIRES_AT_KEY, expiresAt.toISOString())
+    this.isAuthenticatedSubject.next(true)
+  }
+
   private parseExpiresIn(expiresIn: string): number {
-  const cleanExpiresIn = expiresIn.trim().toLowerCase();
-  const match = cleanExpiresIn.match(/^(\d+)([smhd]?)$/);
-  if (!match) {
-    console.warn(' Invalid expiresIn format, defaulting to 1 hour');
-    return 60 * 60 * 1000; // 1 hour default
+    const cleanExpiresIn = expiresIn.trim().toLowerCase();
+    const match = cleanExpiresIn.match(/^(\d+)([smhd]?)$/);
+    if (!match) {
+      console.warn(' Invalid expiresIn format, defaulting to 1 hour');
+      return 60 * 60 * 1000; // 1 hour default
+    }
+    const value = parseInt(match[1]);
+    const unit = match[2] || 'h'; // default to hours
+    let milliseconds: number;
+    switch (unit) {
+      case 's': milliseconds = value * 1000; break;
+      case 'm': milliseconds = value * 60 * 1000; break;
+      case 'h': milliseconds = value * 60 * 60 * 1000; break;
+      case 'd': milliseconds = value * 24 * 60 * 60 * 1000; break;
+      default: milliseconds = value * 60 * 60 * 1000; // default to hours
+    }
+    return milliseconds;
   }
-  const value = parseInt(match[1]);
-  const unit = match[2] || 'h'; // default to hours
-  let milliseconds: number;
-  switch (unit) {
-    case 's': milliseconds = value * 1000; break;
-    case 'm': milliseconds = value * 60 * 1000; break;
-    case 'h': milliseconds = value * 60 * 60 * 1000; break;
-    case 'd': milliseconds = value * 24 * 60 * 60 * 1000; break;
-    default: milliseconds = value * 60 * 60 * 1000; // default to hours
-  }
-  return milliseconds;
-}
 
   private hasValidToken(): boolean {
     const token = this.getToken()
@@ -316,11 +313,6 @@ register(userData: any): Observable<any> {
     }
     return new Date() < new Date(expiresAt)
   }
-  private checkTokenValidity(): void {
-    if (this.hasValidToken()) {
-      this.isAuthenticatedSubject.next(true)
-    } else {
-      this.clearToken()
-    }
-  }
+
+
 }
