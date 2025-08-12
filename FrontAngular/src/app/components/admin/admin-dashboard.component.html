@@ -10,7 +10,7 @@
           <p class="admin-role">Administrador</p>
         </div>
       </div>
-    </div>
+    </div> 
     
     <nav class="sidebar-nav">
       <button 
@@ -69,8 +69,8 @@
       
       <button 
         class="nav-item" 
-        [class.active]="activeSection === 'orders'"
-        (click)="setActiveSection('orders')"
+        [class.active]="activeSection === 'carts'"
+        (click)="setActiveSection('carts')"
       >
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
@@ -198,104 +198,40 @@
         </div>
       </div>
       
-      <!-- Recent Orders -->
-      <div class="recent-orders">
-        <h2>Pedidos Recientes</h2>
-        <div class="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Cliente</th>
-                <th>Fecha</th>
-                <th>Total</th>
-                <th>Estado</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let order of filteredOrders.slice(0, 5)">
-                <td>{{ order.id }}</td>
-                <td>{{ getUserFullName(order.user) }}</td>
-                <td>{{ order.createdAt | date:'dd/MM/yyyy HH:mm' }}</td>
-                <td>${{ order.total }}</td>
-                <td>
-                  <span class="status-badge" [class]="order.state">
-                    {{ order.state }}
-                  </span>
-                </td>
-              </tr>
-              <tr *ngIf="filteredOrders.length === 0">
-                <td colspan="5" class="no-data">No hay pedidos recientes</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Products Section -->
-    <div *ngIf="activeSection === 'products'" class="products-section">
-      <h1>Gestión de Productos</h1>
-      
-      <div class="section-actions">
-        <div class="search-box">
-          <input 
-            type="text" 
-            placeholder="Buscar productos..." 
-            [(ngModel)]="productSearchTerm"
-            (input)="filterProducts()"
-          >
-        </div>
-        
-        <button class="add-btn" data-bs-toggle="modal" data-bs-target="#addProductModal">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 5v14M5 12h14"></path>
-          </svg>
-          Nuevo Producto
-        </button>
-      </div>
-      
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Imagen</th>
-              <th>Nombre</th>
-              <th>Categoría</th>
-              <th>Precio</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let product of filteredProducts">
-              <td>
-                <img [src]="product.imageUrl" [alt]="product.name" class="product-thumbnail">
-              </td>
-              <td>{{ product.name }}</td>
-              <td>{{ product.category?.name }}</td>
-              <td>${{ product.price }}</td>
-              <td class="actions-cell">
-                <button class="edit-btn" title="Editar" (click)="openEditModal(product)" >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-                  </svg>
-                </button>
-                <button class="delete-btn" title="Eliminar" (click)="deleteProduct(product.id)">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                    <line x1="10" y1="11" x2="10" y2="17"></line>
-                    <line x1="14" y1="11" x2="14" y2="17"></line>
-                  </svg>
-                </button>
-              </td>
-            </tr>
-            <tr *ngIf="filteredProducts.length === 0">
-              <td colspan="5" class="no-data">No se encontraron productos</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+     <!-- Recent Orders -->
+<div class="recent-orders">
+  <h2>Pedidos Recientes</h2>
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Cliente</th>
+          <th>Fecha</th>
+          <th>Total</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of filteredOrders.slice(0, 5)">
+          <td>{{ order.id }}</td>
+          <td>{{ getUserFullName(order.cart.user) }}</td>
+          <td>{{ order.createdAt | date:'dd/MM/yyyy HH:mm' }}</td>
+          <td>${{ order.cart.total }}</td>
+          <td>
+            <span class="status-badge" [class]="order.cart.state">
+              {{ order.cart.state }}
+            </span>
+          </td>
+        </tr>
+        <tr *ngIf="filteredOrders.length === 0">
+          <td colspan="5" class="no-data">No hay pedidos recientes</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
       
     <!-- Add Product Modal -->
       <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
@@ -589,7 +525,7 @@
     </div>
     
     <!-- Orders Section -->
-    <div *ngIf="activeSection === 'orders'" class="orders-section">
+    <div *ngIf="activeSection === 'carts'" class="orders-section">
       <h1>Gestión de Pedidos</h1>
       
       <div class="section-actions">
@@ -597,13 +533,13 @@
           <input 
             type="text" 
             placeholder="Buscar pedidos..." 
-            [(ngModel)]="orderSearchTerm"
-            (input)="filterOrders()"
+            [(ngModel)]="cartSearchTerm"
+            (input)="filterCarts()"
           >
         </div>
         
         <div class="filter-dropdown">
-          <select [(ngModel)]="orderStatusFilter" (change)="filterOrders()">
+          <select [(ngModel)]="cartStatusFilter" (change)="filterCarts()">
             <option value="all">Todos los estados</option>
             <option value="Pending">Pendientes</option>
             <option value="Processing">En proceso</option>
@@ -626,14 +562,14 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let order of filteredOrders">
-              <td>{{ order.id }}</td>
-              <td>{{ getUserFullName(order.user) }}</td>
-              <td>{{ order.createdAt | date:'dd/MM/yyyy HH:mm' }}</td>
-              <td>${{ order.total }}</td>
+            <tr *ngFor="let cart of filteredCarts">
+              <td>{{ cart.id }}</td>
+              <td>{{ getUserFullName(cart.user) }}</td>
+              <td>{{ cart.createdAt | date:'dd/MM/yyyy HH:mm' }}</td>
+              <td>${{ cart.total }}</td>
               <td>
-                <span class="status-badge" [class]="order.state">
-                  {{ order.state }}
+                <span class="status-badge" [class]="cart.state">
+                  {{ cart.state }}
                 </span>
               </td>
               <td class="actions-cell">
@@ -651,15 +587,15 @@
                     </svg>
                   </button>
                   <div class="dropdown-menu">
-                    <button class="dropdown-item" (click)="updateOrderStatus(order.id, 'Pending')">Pendiente</button>
-                    <button class="dropdown-item" (click)="updateOrderStatus(order.id, 'Processing')">En proceso</button>
-                    <button class="dropdown-item" (click)="updateOrderStatus(order.id, 'Completed')">Completado</button>
-                    <button class="dropdown-item" (click)="updateOrderStatus(order.id, 'Cancelled')">Cancelado</button>
+                    <button class="dropdown-item" (click)="updateCartStatus(cart.id, 'Pending')">Pendiente</button>
+                    <button class="dropdown-item" (click)="updateCartStatus(cart.id, 'Processing')">En proceso</button>
+                    <button class="dropdown-item" (click)="updateCartStatus(cart.id, 'Completed')">Completado</button>
+                    <button class="dropdown-item" (click)="updateCartStatus(cart.id, 'Cancelled')">Cancelado</button>
                   </div>
                 </div>
               </td>
             </tr>
-            <tr *ngIf="filteredOrders.length === 0">
+            <tr *ngIf="filteredCarts.length === 0">
               <td colspan="6" class="no-data">No se encontraron pedidos</td>
             </tr>
           </tbody>

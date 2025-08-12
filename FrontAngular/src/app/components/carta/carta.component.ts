@@ -1,14 +1,14 @@
 import { Component, OnInit } from "@angular/core"
-import { NavbarComponent } from "../components/navbar/navbar.component"
-import { FooterComponent } from "../components/footer/footer/footer.component"
-import { MenuItemComponent } from "../components/menu-item/menu-item.component"
-import { MenuItemModalComponent } from "../components/menu-item-modal/menu-item-modal.component"
+import { NavbarComponent } from "../navbar/navbar.component"
+import { FooterComponent } from "../footer/footer/footer.component"
+import { MenuItemComponent } from "../menu-item/menu-item.component"
+import { MenuItemModalComponent } from "../menu-item-modal/menu-item-modal.component"
 import { CommonModule } from "@angular/common"
 import { FormsModule } from "@angular/forms"
-import { ProductServiceService } from "../services/product-service.service"
-import { CartServiceService } from "../services/cart-service.service"
-import { AuthService } from "../core/services/auth.service"
-import { NotificationService } from "../services/notification.service"
+import { ProductServiceService } from "../../services/product-service.service"
+import { CartServiceService } from "../../services/cart-service.service"
+import { AuthService } from "../../core/services/auth.service"
+import { NotificationService } from "../../services/notification.service"
 interface Product {
   id: string
   name: string

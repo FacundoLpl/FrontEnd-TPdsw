@@ -2,8 +2,8 @@ import { Injectable } from "@angular/core"
 import { HttpClient, HttpParams, HttpHeaders } from "@angular/common/http"
 import { Observable, throwError, of } from "rxjs"
 import { catchError } from "rxjs/operators"
-import  { Order } from "../entities/order.entity"
-import  { AuthService } from "../core/services/auth.service"
+import { Order } from "../entities/order.entity"
+import { AuthService } from "../core/services/auth.service"
 import { Router } from "@angular/router"
 
 @Injectable({
@@ -52,7 +52,7 @@ export class CartServiceService {
       this.router.navigate(["/login"], { queryParams: { returnUrl: this.router.url } })
       return of({ error: "Authentication required" })
     }
-    return this.http.post(this.baseUrl, cartData).pipe(catchError(this.handleError.bind(this))) // ACA
+    return this.http.post(this.baseUrl, cartData).pipe(catchError(this.handleError.bind(this)))
   }
 
   getCartWithOrders(cartId: string): Observable<any> {
@@ -80,20 +80,21 @@ export class CartServiceService {
   }
 
   deleteOrder(orderId: string, cartId: string): Observable<any> {
-  if (!orderId || orderId === 'undefined') {
-    return throwError(() => ({ message: 'ID de orden inválido' }));
+    if (!orderId || orderId === 'undefined') {
+      return throwError(() => ({ message: 'ID de orden inválido' }));
+    }
+    if (!this.authService.isAuthenticated()) {
+      console.error("User not authenticated");
+      this.router.navigate(["/login"], { queryParams: { returnUrl: this.router.url } });
+      return of({ error: "Authentication required" });
+    }
+    return this.http.delete(`${this.orderUrl}${orderId}`).pipe(
+      catchError((error) => {
+        return this.handleError(error);
+      })
+    );
   }
-  if (!this.authService.isAuthenticated()) {
-    console.error("User not authenticated");
-    this.router.navigate(["/login"], { queryParams: { returnUrl: this.router.url } });
-    return of({ error: "Authentication required" });
-  }
-  return this.http.delete(`${this.orderUrl}${orderId}`).pipe(
-    catchError((error) => {
-      return this.handleError(error);
-    })
-  );
-}
+
   completePurchase(cartId: string, cartData: any): Observable<any> {
     if (!this.authService.isAuthenticated()) {
       console.error("User not authenticated")
@@ -104,38 +105,37 @@ export class CartServiceService {
   }
 
   addOrderToCart(orderData: {
-  productName: string
-  quantity: string | number
-  subtotal: number
-  comment?: string
-  product: string
-}): Observable<any> {
-  if (!this.authService.isAuthenticated()) {
-    console.error("User not authenticated")
-    this.router.navigate(["/login"], { queryParams: { returnUrl: this.router.url } })
-    return of({ error: "Authentication required" })
-  }
-  const orderToSend = {
-    ...orderData,
-    quantity: Number(orderData.quantity),
+    productName: string
+    quantity: string | number
+    subtotal: number
+    comment?: string
+    product: string
+  }): Observable<any> {
+    if (!this.authService.isAuthenticated()) {
+      console.error("User not authenticated")
+      this.router.navigate(["/login"], { queryParams: { returnUrl: this.router.url } })
+      return of({ error: "Authentication required" })
+    }
+    const orderToSend = {
+      ...orderData,
+      quantity: Number(orderData.quantity),
+    }
+
+    const token = this.authService.getToken();
+    const headers = new HttpHeaders();
+    if (token) {
+      headers.set('Authorization', `Bearer ${token}`);
+    }
+    return this.http.post<any>(`${this.orderUrl}`, orderToSend, { headers }).pipe(
+      catchError((err) => {
+        console.error("❌ Error adding order to cart:", err)
+        return this.handleError(err)
+      }),
+    )
   }
 
-  // TEMPORAL: Forzar el header manualmente ?????????????????????? ver
-  const token = this.authService.getToken();
-  const headers = new HttpHeaders();
-  if (token) {
-    headers.set('Authorization', `Bearer ${token}`);
-  }
-  return this.http.post<any>(`${this.orderUrl}`, orderToSend, { headers }).pipe(
-    catchError((err) => {
-      console.error("❌ Error adding order to cart:", err)
-      return this.handleError(err)
-    }),
-  )
-  
-}
-  // Metodo ver pedidos recientes
-  getAllOrders(filter: any = {}): Observable<any> {
+  // Reemplazo de getAllOrders por getAllCarts
+  getAllCarts(filter: any = {}): Observable<any> {
     if (!this.authService.isAuthenticated()) {
       console.error("User not authenticated")
       this.router.navigate(["/login"], { queryParams: { returnUrl: this.router.url } })
@@ -155,14 +155,28 @@ export class CartServiceService {
       params = params.set("endDate", filter.endDate)
     }
 
-    return this.http.get(`${this.orderUrl}`, { params }).pipe(
+    return this.http.get(`${this.baseUrl}`, { params }).pipe(
       catchError((error) => {
-        console.error("Error fetching orders:", error)
+        console.error("Error fetching carts:", error)
         return this.handleError(error)
       }),
     )
   }
-  // Metodo ver todas las ordenes (para admin dashboard)
+
+  updateCartStatus(cartId: string, newStatus: string): Observable<any> {
+    if (!this.authService.isAuthenticated()) {
+      console.error("User not authenticated")
+      this.router.navigate(["/login"], { queryParams: { returnUrl: this.router.url } })
+      return of({ error: "Authentication required" })
+    }
+    return this.http.patch(`${this.baseUrl}${cartId}/status`, { state: newStatus }).pipe(
+      catchError((error) => {
+        console.error("Error updating cart status:", error)
+        return this.handleError(error)
+      }),
+    )
+  }
+
   getTotalOrders(): Observable<any> {
     if (!this.authService.isAuthenticated()) {
       console.error("User not authenticated");
@@ -176,7 +190,7 @@ export class CartServiceService {
       })
     );
   }
-  // Metodo para saber el total de ingresos (para admin dashboard)
+
   getTotalRevenue(): Observable<any> {
     if (!this.authService.isAuthenticated()) {
       console.error("User not authenticated");
@@ -207,29 +221,27 @@ export class CartServiceService {
 
   loadStats(): void {
     this.isLoading = true;
-    
-    // Obtener total de pedidos
+
     this.getTotalOrders().subscribe({
       next: (res) => {
         this.stats.totalOrders = res.totalOrders || 0;
       },
       error: (err) => {
         console.error('Error cargando total de pedidos', err);
-    },
-  });
+      },
+    });
 
-  // Obtener ingresos totales
-  this.getTotalRevenue().subscribe({
-    next: (res) => {
-      this.stats.totalRevenue = res.totalRevenue || 0;
-    },
-    error: (err) => {
-      console.error('Error cargando ingresos totales', err);
-    },
-  });
+    this.getTotalRevenue().subscribe({
+      next: (res) => {
+        this.stats.totalRevenue = res.totalRevenue || 0;
+      },
+      error: (err) => {
+        console.error('Error cargando ingresos totales', err);
+      },
+    });
 
-  this.isLoading = false;
-}
+    this.isLoading = false;
+  }
 
   loadSalesData(): void {
     this.getWeeklyOrders().subscribe({
@@ -239,7 +251,6 @@ export class CartServiceService {
       },
       error: (err) => {
         console.error('Error cargando ventas semanales', err);
-        // Datos de ejemplo en caso de error:
         this.salesChart = {
           labels: ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"],
           data: [0, 0, 0, 0, 0, 0, 0],
@@ -248,46 +259,17 @@ export class CartServiceService {
     });
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   getUserOrders(): Observable<any> {
-  if (!this.authService.isAuthenticated()) {
-    console.error("User not authenticated");
-    this.router.navigate(["/login"], { queryParams: { returnUrl: this.router.url } });
-    return of({ error: "Authentication required" });
-  }
-  return this.http.get(`${this.baseUrl}my-orders`).pipe(
-    catchError(this.handleError.bind(this))
-  );
-}
-  updateOrderStatus(orderId: string, newStatus: string): Observable<any> {
-    // Check authentication first
     if (!this.authService.isAuthenticated()) {
-      console.error("User not authenticated")
-      this.router.navigate(["/login"], { queryParams: { returnUrl: this.router.url } })
-      return of({ error: "Authentication required" })
+      console.error("User not authenticated");
+      this.router.navigate(["/login"], { queryParams: { returnUrl: this.router.url } });
+      return of({ error: "Authentication required" });
     }
-    return this.http.patch(`${this.orderUrl}${orderId}/status`, { state: newStatus }).pipe(
-      catchError((error) => {
-        console.error("Error updating order status:", error)
-        return this.handleError(error)
-      }),
-    )
+    return this.http.get(`${this.baseUrl}my-orders`).pipe(
+      catchError(this.handleError.bind(this))
+    );
   }
+
   private handleError(error: any) {
     console.error("API error:", error)
     let errorMessage = "Ha ocurrido un error"
@@ -295,7 +277,7 @@ export class CartServiceService {
       errorMessage = error.error.message
     } else if (error.status === 401) {
       errorMessage = "Tu sesión ha expirado. Por favor, inicia sesión nuevamente."
-      this.authService.logout() 
+      this.authService.logout()
     } else if (error.status === 404) {
       errorMessage = "Recurso no encontrado"
     } else if (error.status === 500) {

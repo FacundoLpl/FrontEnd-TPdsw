@@ -2,10 +2,10 @@ import { Component,  OnInit } from "@angular/core"
 import { CommonModule } from "@angular/common"
 import { FormsModule } from "@angular/forms"
 import { RouterModule,  ActivatedRoute,  Router } from "@angular/router"
-import { NavbarComponent } from "../../components/navbar/navbar.component"
-import { FooterComponent } from "../../components/footer/footer/footer.component"
-import { AuthService } from "../../core/services/auth.service"
-import { NotificationService } from "../../services/notification.service"
+import { NavbarComponent } from "../../navbar/navbar.component"
+import { FooterComponent } from "../../footer/footer/footer.component"
+import { AuthService } from "../../../core/services/auth.service"
+import { NotificationService } from "../../../services/notification.service"
 
 
 @Component({

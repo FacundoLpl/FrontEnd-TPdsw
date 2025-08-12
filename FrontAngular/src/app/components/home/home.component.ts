@@ -1,8 +1,8 @@
 import { Component, type OnInit, type AfterViewInit, HostListener } from "@angular/core"
 import { CommonModule } from "@angular/common"
 import { RouterModule } from "@angular/router"
-import { NavbarComponent } from "../components/navbar/navbar.component"
-import { FooterComponent } from "../components/footer/footer/footer.component"
+import { NavbarComponent } from "../navbar/navbar.component"
+import { FooterComponent } from "../footer/footer/footer.component"
 
 
 interface ServiceCard {
