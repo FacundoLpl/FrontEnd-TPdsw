@@ -10,7 +10,7 @@
           <p class="admin-role">Administrador</p>
         </div>
       </div>
-    </div> 
+    </div>
     
     <nav class="sidebar-nav">
       <button 
@@ -69,8 +69,8 @@
       
       <button 
         class="nav-item" 
-        [class.active]="activeSection === 'carts'"
-        (click)="setActiveSection('carts')"
+        [class.active]="activeSection === 'orders'"
+        (click)="setActiveSection('orders')"
       >
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
@@ -589,7 +589,7 @@
     </div>
     
     <!-- Orders Section -->
-    <div *ngIf="activeSection === 'carts'" class="orders-section">
+    <div *ngIf="activeSection === 'orders'" class="orders-section">
       <h1>Gestión de Pedidos</h1>
       
       <div class="section-actions">
@@ -597,13 +597,13 @@
           <input 
             type="text" 
             placeholder="Buscar pedidos..." 
-            [(ngModel)]="cartSearchTerm"
-            (input)="filterCarts()"
+            [(ngModel)]="orderSearchTerm"
+            (input)="filterOrders()"
           >
         </div>
         
         <div class="filter-dropdown">
-          <select [(ngModel)]="cartStatusFilter" (change)="filterCarts()">
+          <select [(ngModel)]="orderStatusFilter" (change)="filterOrders()">
             <option value="all">Todos los estados</option>
             <option value="Pending">Pendientes</option>
             <option value="Processing">En proceso</option>
