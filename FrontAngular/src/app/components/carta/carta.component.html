@@ -138,6 +138,7 @@
             [price]="product.price"
             [featured]="product.featured"
             [productId]="product.id"
+            (verResenas)="VerResenas(product.id)"
             [style.animation-delay]="getAnimationDelay(i)"
             (itemClick)="openModal(product.name, product.imageUrl, product.id, product.price)"
             (addToCart)="quickAddToCart(product.id, product.name, product.price)"
@@ -156,6 +157,16 @@
     [price]="selectedPrice"
     (close)="closeModal()"
   ></app-menu-item-modal>
+
+  <!-- Modal de reseñas -->
+<app-menu-review-modal 
+  *ngIf="isReviewModalOpen"
+  [productId]="selectedProductIdForReview"
+  [productName]="selectedProductNameForReview"
+  [imageUrl]="selectedImageUrlForReview"
+  (close)="closeReviewModal()"
+></app-menu-review-modal>
+
 
   <app-footer></app-footer>
 </div>

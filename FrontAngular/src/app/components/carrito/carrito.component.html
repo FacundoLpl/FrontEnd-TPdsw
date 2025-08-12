@@ -3,19 +3,7 @@
 <div class="cart-container">
   <div class="cart-header">
     <h1>Mi Carrito</h1>
-    
-    <!-- Display User and Cart IDs -->
-    <div class="cart-info">
-      <div class="info-item">
-        <span class="info-label">ID Cliente:</span>
-        <span class="info-value">{{ userId }}</span>
-      </div>
-      <div class="info-item" *ngIf="cartId">
-        <span class="info-label">ID Carrito:</span>
-        <span class="info-value">{{ cartId }}</span>
-      </div>
-    </div>
-  </div>
+
 
   <!-- Error message display -->
   <div class="error-message" *ngIf="errorMessage">
@@ -52,7 +40,6 @@
           <h3 class="item-name">{{ order.product?.name || order.productName || 'Producto' }}</h3>
           <p class="item-description" *ngIf="order.comment">{{ order.comment }}</p>
           <div class="item-price">${{ getUnitPrice(order) | number:'1.2-2' }} c/u</div>
-          <div class="item-id">ID del order: {{ order.id }}</div>
           <div class="item-quantity">Cantidad: {{ order.quantity }}</div>
         </div>
         <div class="item-subtotal">${{ order.subtotal | number:'1.2-2' }}</div>

@@ -61,13 +61,12 @@ export class AdminDashboardComponent implements OnInit {
   userTypeFilter = "all"
 
   // Datos de pedidos
+  orders: any[] = []
   carts: any[] = []
-filteredCarts: any[] = []
-cartSearchTerm = ""
-cartStatusFilter = "all"
-orderSearchTerm = "";
-filteredOrders: any[] = [];
-
+  filteredOrders: any[] = []
+  filteredCarts: any[] = []
+  orderSearchTerm = ""
+  orderStatusFilter = "all"
 
   // Nuevo producto/usuario
   newProduct = {
@@ -269,7 +268,7 @@ loadDashboardData(): void {
     // this.loadUsers()
 
     // Cargar pedidos
-    //this.loadOrders()
+    this.loadOrders()
 
     // Cargar categorías
     this.loadCategories()
@@ -289,8 +288,8 @@ setActiveSection(section: string): void {
       case "users":
         // this.loadUsers() // Comentado hasta implementar
         break
-     case "carts":
-       this.loadCarts()
+      case "orders":
+        this.loadOrders()
         break
       case "categories":
         this.loadCategories()
@@ -306,11 +305,11 @@ loadStats(): void {
   this.isLoading = true;
 
   forkJoin({
-    totalOrders: this.cartService.getTotalOrders(),
+    totalCarts: this.cartService.getTotalCarts(),
     totalRevenue: this.cartService.getTotalRevenue(),
     totalProducts: this.productService.findAll(),
     totalUsers: this.userFormService.getAllUsers(), // descomentar si tenés este endpoint activo
-    pendingOrders: this.cartService.getAllCarts({ state: 'pending' })
+    pendingCarts: this.cartService.getAllCarts({ state: 'pending' })
   }).subscribe({
     next: (res: any) => {
       console.log('loadStats results:', res);
@@ -425,16 +424,15 @@ loadStats(): void {
   }
 
   // Cargar pedidos
-  loadCarts(): void {
-  this.isLoading = true
-  this.cartService.getAllCarts().subscribe({ // renombrar en el service también si hace falta
-    next: (res: any) => {
-      console.log('Carts loaded:', res); // ← Añade esto
-      console.log('carts up')
-      this.carts = res.data || []
-      this.filterCarts();
-      this.isLoading = false
-    },
+  loadOrders(): void {
+    this.isLoading = true
+
+    this.cartService.getAllCarts().subscribe({
+      next: (res: any) => {
+        this.orders = res.data || []
+        this.filterOrders()
+        this.isLoading = false
+      },
       error: (err: any) => {
         this.error = "Error al cargar pedidos"
         console.error(err)
@@ -444,25 +442,26 @@ loadStats(): void {
   }
 
   // Filtrar pedidos
-  filterCarts(): void {
-  let filtered = [...this.carts]
-  
-  // Filtrar por estado
-  if (this.cartStatusFilter !== "all") {
-    filtered = filtered.filter((c) => c.state === this.cartStatusFilter)
+  filterOrders(): void {
+    let filtered = [...this.orders]
+
+    // Filtrar por estado
+    if (this.orderStatusFilter !== "all") {
+      filtered = filtered.filter((o) => o.state === this.orderStatusFilter)
+    }
+
+    // Filtrar por término de búsqueda
+    if (this.orderSearchTerm.trim()) {
+      const term = this.orderSearchTerm.toLowerCase()
+      filtered = filtered.filter(
+        (o) => o.id?.toLowerCase().includes(term) || o.user?.firstName?.toLowerCase().includes(term),
+      )
+    }
+
+    this.filteredOrders = filtered
+    this.filteredCarts = filtered
   }
-  
-  // Filtrar por término de búsqueda
-  if (this.cartSearchTerm.trim()) {
-    const term = this.cartSearchTerm.toLowerCase()
-    filtered = filtered.filter(
-      (c) => c.id?.toLowerCase().includes(term) || 
-             this.getUserFullName(c.user).toLowerCase().includes(term)
-    )
-  }
-  
-  this.filteredCarts = filtered
-}
+
   // Cargar categorías
   loadCategories(): void {
     this.isLoading = true
@@ -607,24 +606,25 @@ updateCategory(): void {
   }
 
   // Actualizar estado de pedido
- updateCartStatus(cartId: string, newStatus: string): void {
-  this.isLoading = true
-  this.cartService.updateCartStatus(cartId, newStatus).subscribe({
-    next: () => {
-      const cart = this.carts.find((c) => c.id === cartId)
-      if (cart) {
-        cart.state = newStatus
-      }
-      this.isLoading = false
-      alert("Estado del pedido actualizado exitosamente")
-    },
-    error: (err: any) => {
-      this.error = "Error al actualizar estado del pedido"
-      console.error(err)
-      this.isLoading = false
-    },
-  })
-}
+  updateCartState(cartId: string, newState: string): void {
+    this.isLoading = true
+
+    this.cartService.updateCartState(cartId, newState).subscribe({
+      next: () => {
+        const cart = this.carts.find((o) => o.id === cartId)
+        if (cart) {
+          cart.state = newState
+        }
+        this.isLoading = false
+        alert("Estado del pedido actualizado exitosamente")
+      },
+      error: (err: any) => {
+        this.error = "Error al actualizar estado del pedido"
+        console.error(err)
+        this.isLoading = false
+      },
+    })
+  }
 
   // Cerrar sesión
   logout(): void {

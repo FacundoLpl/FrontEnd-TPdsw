@@ -1,0 +1,53 @@
+
+<div class="modal-overlay" (click)="onClose()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div class="header-content">
+        <h2 class="modal-title">{{ productName }}</h2>
+        <div class="price-badge">
+          <i class="fas fa-star"></i>
+          {{ averageRating > 0 ? averageRating : 'Sin Reseñas' }}/5
+        </div>
+      </div>
+      <button class="close-btn" (click)="onClose()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="item-image-container">
+        <img [src]="imageUrl || '/placeholder.svg?height=200&width=600'" [alt]="productName" class="item-image" />
+        <div class="image-overlay">
+          <div class="image-badge">
+            <i class="fas fa-comments"></i>
+            Opiniones
+          </div>
+        </div>
+      </div>
+      <div class="rating-section">
+        <div class="rating-stars">
+          <ng-container *ngFor="let star of [1,2,3,4,5]">
+            <i
+              class="fas"
+              [class.fa-star]="star <= rating"
+              [class.fa-star-half-alt]="star - rating === 0.5"
+              [class.fa-star-o]="star > rating"
+              (click)="rating = star"
+            ></i>
+          </ng-container>
+        </div>
+        <div class="review-list-section">
+          <app-review-list [productId]="productId"></app-review-list>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <div class="action-buttons">
+        <button class="cancel-btn" (click)="onClose()">
+          <i class="fas fa-times"></i>
+          Volver
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

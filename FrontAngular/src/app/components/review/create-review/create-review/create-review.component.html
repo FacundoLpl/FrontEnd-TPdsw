@@ -1,0 +1,13 @@
+<div *ngIf="!submitted">
+  <h4>Dejá tu reseña</h4>
+  <label>Calificación:</label>
+  <input type="number" [(ngModel)]="rating" min="1" max="5" />
+  <br />
+  <label>Comentario:</label>
+  <textarea [(ngModel)]="comment"></textarea>
+  <br />
+  <button (click)="submitReview()">Enviar</button>
+</div>
+<div *ngIf="submitted">
+  <p>Gracias por tu reseña 🎉</p>
+</div>

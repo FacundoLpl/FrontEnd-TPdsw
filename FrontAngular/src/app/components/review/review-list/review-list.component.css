@@ -1,0 +1,12 @@
+.review-card {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.stars {
+  color: #f5c518;
+}
+
+.comment {
+  font-style: italic;
+}

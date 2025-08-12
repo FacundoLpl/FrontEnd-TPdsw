@@ -9,6 +9,7 @@ import { ProductServiceService } from "../../services/product-service.service"
 import { CartServiceService } from "../../services/cart-service.service"
 import { AuthService } from "../../core/services/auth.service"
 import { NotificationService } from "../../services/notification.service"
+import { MenuReviewModalComponent } from "../menu-review-modal/menu-review-modal.component"
 interface Product {
   id: string
   name: string
@@ -24,7 +25,7 @@ interface Product {
 @Component({
   selector: "app-carta",
   standalone: true,
-  imports: [CommonModule, FormsModule, NavbarComponent, FooterComponent, MenuItemComponent, MenuItemModalComponent],
+  imports: [CommonModule, FormsModule, NavbarComponent, FooterComponent, MenuItemComponent, MenuItemModalComponent, MenuReviewModalComponent],
   templateUrl: "./carta.component.html",
   styleUrl: "./carta.component.css",
 })
@@ -35,6 +36,10 @@ export class CartaComponent implements OnInit {
   selectedImageUrl = ""
   selectedProductId = ""
   selectedPrice = 0
+  isReviewModalOpen = false
+  selectedProductIdForReview = ""
+  selectedProductNameForReview = ""
+  selectedImageUrlForReview = ""
 
   // Propiedades de productos
   products: Product[] = []
@@ -244,4 +249,17 @@ export class CartaComponent implements OnInit {
   getAnimationDelay(index: number): string {
     return `${index * 0.05}s`
   }
+  VerResenas(productId: string) {
+  const product = this.products.find((p) => p.id === productId)
+  if (!product) return
+
+  this.selectedProductIdForReview = product.id
+  this.selectedProductNameForReview = product.name
+  this.selectedImageUrlForReview = product.imageUrl
+  this.isReviewModalOpen = true
+}
+  closeReviewModal() {
+  this.isReviewModalOpen = false
+}
+
 }

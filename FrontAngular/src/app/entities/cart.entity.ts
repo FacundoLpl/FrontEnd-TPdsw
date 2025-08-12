@@ -1,10 +1,18 @@
-import { User} from "./user.entity.js";
+import { User } from "./user.entity.js";
+import { Order } from "./order.entity.js";
 
 export interface Cart {
     id: string;
-    shipmentType: any;
+    shipmentType?: any; 
     total: number;
     state: 'Completed' | 'Pending' | 'Canceled';
     user: User;
-    orders: any[];
-  }
+    orders: Order[]; 
+    date?: Date; 
+    deliveryType: string; 
+    deliveryAddress: string;
+    paymentMethod: string; 
+    contactNumber: string;
+    additionalInstructions?: string;
+    
+}
