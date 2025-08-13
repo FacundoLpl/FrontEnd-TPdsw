@@ -270,6 +270,27 @@
   font-size: 1.1rem;
 }
 
+.conf-review-btn {
+  background: linear-gradient(135deg, #a1ce18, #cbe316);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: 600;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 4px 14px rgba(97, 182, 23, 0.3);
+}
+
+.conf-review-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(117, 199, 17, 0.4);
+}
+
 .review-btn {
   background: linear-gradient(135deg, #ff9800, #f57c00);
   color: white;
