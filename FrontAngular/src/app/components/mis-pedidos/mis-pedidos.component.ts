@@ -4,23 +4,35 @@ import { AuthService } from "../../core/services/auth.service"
 import { NgFor, NgIf, DatePipe, DecimalPipe, NgClass } from "@angular/common"
 import { NavbarComponent } from "../navbar/navbar.component"
 import { FooterComponent } from "../footer/footer/footer.component"
+import { ReviewServiceService } from "../../services/review-service.service"
+import { FormsModule } from "@angular/forms"
 
 @Component({
   selector: "app-mis-pedidos",
   standalone: true,
-  imports: [NgFor, NgClass, NgIf, DatePipe, DecimalPipe, NavbarComponent, FooterComponent],
+  imports: [NgFor, NgClass, NgIf, DatePipe, DecimalPipe, NavbarComponent, FooterComponent, FormsModule],
   templateUrl: "./mis-pedidos.component.html",
   styleUrls: ["./mis-pedidos.component.css"],
 })
+
 export class MisPedidosComponent implements OnInit {
   orders: any[] = []
   isLoading = false
   errorMessage = ""
   isLoggedIn = false
 
+  currentReviewId: string | null = null
+  rating: number = 0
+  comment: string = ""
+  isSubmittingReview: boolean = false
+  successMessage: string = ""
+  formErrorMessage: string = ""
+  userId: string = "user-123"
+
   constructor(
     private cartService: CartServiceService,
     private authService: AuthService,
+    private reviewService: ReviewServiceService
   ) {}
 
   ngOnInit() {
@@ -29,6 +41,57 @@ export class MisPedidosComponent implements OnInit {
       this.loadUserOrders()
     }
   }
+
+  startReview(productId: string): void {
+    this.currentReviewId = productId
+    this.rating = 0
+    this.comment = ""
+    this.isSubmittingReview = false
+    this.successMessage = ""
+    this.formErrorMessage = ""
+  }
+
+  cancelReview(): void {
+    this.currentReviewId = null
+    this.rating = 0
+    this.comment = ""
+    this.isSubmittingReview = false
+    this.successMessage = ""
+    this.formErrorMessage = ""
+  }
+
+  setRating(rating: number): void {
+    this.rating = rating
+  }
+
+submitReview(productId: string): void {
+  if (this.rating === 0 || this.comment.trim() === "") {
+    this.formErrorMessage = "Por favor, selecciona una calificación y escribe un comentario."
+    return
+  }
+
+  this.isSubmittingReview = true
+  this.formErrorMessage = ""
+
+  const reviewData: ReviewData = {
+    productId: productId,
+    rating: this.rating,
+    comment: this.comment,
+  }
+
+  this.reviewService.createReview(reviewData).subscribe({
+    next: () => {
+      this.successMessage = "¡Gracias por tu reseña!"
+      this.isSubmittingReview = false
+      setTimeout(() => this.cancelReview(), 2000)
+    },
+    error: (err: any) => {
+      console.error("Error al enviar reseña:", err)
+      this.formErrorMessage = "Ocurrió un error al enviar tu reseña. Por favor, inténtalo de nuevo."
+      this.isSubmittingReview = false
+    },
+  })
+}
 
   loadUserOrders() {
     this.isLoading = true
@@ -109,7 +172,8 @@ export class MisPedidosComponent implements OnInit {
     console.log("Opening product review for:", orderItem)
     // Aquí puedes implementar la lógica para abrir un modal de reseña
     // o navegar a una página de reseña específica del producto
-    alert(`Abriendo reseña para: ${orderItem.product?.name || orderItem.productName}`)
+    //alert(`Abriendo reseña para: ${orderItem.product?.name || orderItem.productName}`)
+    this.startReview(orderItem.product.id)
   }
 
   openOrderReview(order: any) {
@@ -135,4 +199,10 @@ export class MisPedidosComponent implements OnInit {
   goToLogin() {
     window.location.href = "/login?returnUrl=" + encodeURIComponent(window.location.pathname)
   }
+
+}
+interface ReviewData {
+  productId: string
+  rating: number
+  comment: string
 }

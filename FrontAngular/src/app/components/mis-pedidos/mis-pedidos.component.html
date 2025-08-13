@@ -58,29 +58,66 @@
           </div>
           <div class="info-row">
             <span class="label">Pago: {{ getPaymentMethodText(order) }}</span>
-          
+          </div>
         </div>
 
         <div class="order-items">
           <h4>Productos:</h4>
-          <div class="item" *ngFor="let orderItem of order.orders">
+          <div class="item" *ngFor="let itemItem of order.orders">
             <div class="item-content">
               <div class="item-info">
-                <span class="item-name">{{ orderItem.product?.name || orderItem.productName }}</span>
-                <span class="item-quantity">x{{ orderItem.quantity }}</span>
+                <span class="item-name">{{ itemItem.product?.name || itemItem.productName }}</span>
+                <span class="item-quantity">x{{ itemItem.quantity }}</span>
               </div>
-              <span class="item-price">${{ orderItem.subtotal | number:'1.2-2' }}</span>
+              <span class="item-price">${{ itemItem.subtotal | number:'1.2-2' }}</span>
             </div>
              Botón de reseña por producto 
             <button class="review-btn product-review" 
                     *ngIf="order.state === 'Completed'"
-                    (click)="openProductReview(orderItem)">
+                    (click)="openProductReview(itemItem)">
               <i class="fas fa-star"></i>
               Reseñar Producto
             </button>
+            <!-- Formulario de reseña, visible solo para el producto seleccionado -->
+            <div *ngIf="currentReviewId === itemItem.product.id" class="mt-4 p-4 bg-gray-100 rounded-lg shadow-inner">
+              <h4 class="text-lg font-medium mb-2">Reseña para {{ itemItem.product.name }}</h4>
+              <div class="flex items-center mb-4">
+              <span class="mr-2 text-blue-700">Tu calificación:</span>
+              <div class="star-rating">
+                  <span *ngFor="let star of [1, 2, 3, 4, 5]" (click)="setRating(star)"
+                    class="star text-3xl cursor-pointer transition-colors duration-200"
+                    [ngClass]="{'text-yellow-400': star <= rating, 'text-gray-400': star > rating}">
+                    ★
+                  </span>
+              </div>
+            </div>
+            <div class="mb-4">
+              <label for="comment-{{ itemItem.product.id }}" class="block text-gray-700 font-medium mb-2">Comentario:</label>
+              <textarea id="comment-{{ itemItem.product.id }}" [(ngModel)]="comment" rows="4"
+                class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
+                placeholder="Escribe tu comentario aquí...">
+              </textarea>
+            </div>
+            <div class="flex justify-end gap-2">
+              <button (click)="cancelReview()"
+                class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded transition duration-200">
+                Cancelar
+              </button>
+              <button (click)="submitReview(itemItem.product.id)" [disabled]="isSubmittingReview"
+                class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded transition duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed">
+                {{ isSubmittingReview ? 'Enviando...' : 'Enviar Reseña' }}
+              </button>
+              <div *ngIf="formErrorMessage" class="text-red-500 mt-2 text-sm">
+                {{ formErrorMessage }}
+              </div>
+              <div *ngIf="successMessage" class="bg-green-100 text-green-700 p-4 rounded-lg mt-4">
+                {{ successMessage }}
+              </div>
+            </div>
           </div>
         </div>
-
+      </div>
+      <div>
         <div class="order-total">
           <div class="total-row">
             <span>Subtotal:</span>
@@ -95,14 +132,11 @@
             <span>${{ order.total * 1.1 | number:'1.2-2' }}</span>
           </div>
         </div>
-
         <div class="additional-info" *ngIf="order.additionalInstructions">
           <h4>Instrucciones adicionales:</h4>
           <p>{{ order.additionalInstructions }}</p>
         </div>
-
       </div>
     </div>
-  </div>
+  <app-footer></app-footer>
 </div>
-<app-footer></app-footer>
