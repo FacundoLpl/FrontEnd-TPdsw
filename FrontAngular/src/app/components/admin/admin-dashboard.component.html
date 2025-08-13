@@ -134,8 +134,21 @@
             </svg>
           </div>
           <div class="stat-info">
-            <h3>Pedidos Totales</h3>
-            <p class="stat-value">{{ stats.totalOrders }}</p>
+            <h3>Pedidos Pendientes Totales</h3>
+            <p class="stat-value">{{ stats.totalPendingCarts }}</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon orders-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <path d="M16 10a4 4 0 0 1-8 0"></path>
+            </svg>
+          </div>
+          <div class="stat-info">
+            <h3>Pedidos Completados Totales</h3>
+            <p class="stat-value">{{ stats.totalCompletedCarts }}</p>
           </div>
         </div>
         
@@ -418,7 +431,8 @@
         <div *ngFor="let category of categories" class="category-card">
           <h3>{{ category.name }}</h3>
           <div class="category-actions">
-            <button class="edit-btn" title="Editar" (click)="openEditCategoryModal(category)">
+            <button class="edit-btn" title="Editar" (click)="openEditCategoryModal(category)" data-bs-toggle="modal"
+        data-bs-target="#editCategoryModal">
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                 <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
@@ -463,7 +477,43 @@
         </div>
       </div>
     </div>
-    
+    <!-- Modal Editar Categoría -->
+<div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      
+      <div class="modal-header">
+        <h5 class="modal-title" id="editCategoryModalLabel">Editar Categoría</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+
+      <div class="modal-body">
+        <form (ngSubmit)="updateCategory()" #editCategoryForm="ngForm">
+          <div class="mb-3">
+            <label for="categoryName" class="form-label">Nombre</label>
+            <input 
+              type="text" 
+              id="categoryName" 
+              class="form-control" 
+              [(ngModel)]="selectedCategory.name" 
+              name="name" 
+              required
+            >
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="submit" class="btn btn-primary" (click)="updateCategory()" [disabled]="!editCategoryForm.valid">
+          Guardar cambios
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
     <!-- Users Section -->
     <div *ngIf="activeSection === 'users'" class="users-section">
       <h1>Gestión de Usuarios</h1>
@@ -483,7 +533,7 @@
             <option value="all">Todos los tipos</option>
             <option value="Admin">Administradores</option>
             <option value="Mozo">Mozos</option>
-            <option value="Cliente">Clientes</option>
+            <option value="Client">Clientes</option>
           </select>
         </div>
         
@@ -517,7 +567,7 @@
               </td>
               <td>{{ user.createdAt | date:'dd/MM/yyyy' }}</td>
               <td class="actions-cell">
-                <button class="edit-btn" title="Editar">
+                <button class="edit-btn" title="Editar" (click)="updateUser(user)" data-bs-toggle="modal" data-bs-target="#editUserModal">
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                     <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
@@ -568,7 +618,7 @@
                 <div class="mb-3">
                   <label for="userType" class="form-label">Tipo de Usuario</label>
                   <select class="form-select" id="userType" [(ngModel)]="newUser.userType" name="userType" required>
-                    <option value="Cliente">Cliente</option>
+                    <option value="Client">Cliente</option>
                     <option value="Mozo">Mozo</option>
                     <option value="Admin">Administrador</option>
                   </select>
@@ -588,6 +638,51 @@
       </div>
     </div>
     
+<!-- Edit User Modal -->
+<div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editUserModalLabel">Editar Usuario</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="editUserFirstName" class="form-label">Nombre</label>
+            <input type="text" class="form-control" id="editUserFirstName" [(ngModel)]="selectedUser.firstName" name="editFirstName" required>
+          </div>
+          <div class="mb-3">
+            <label for="editUserLastName" class="form-label">Apellido</label>
+            <input type="text" class="form-control" id="editUserLastName" [(ngModel)]="selectedUser.lastName" name="editLastName" required>
+          </div>
+          <div class="mb-3">
+            <label for="editUserDni" class="form-label">DNI</label>
+            <input type="text" class="form-control" id="editUserDni" [(ngModel)]="selectedUser.dni" name="editDni" required>
+          </div>
+          <div class="mb-3">
+            <label for="editUserEmail" class="form-label">Email</label>
+            <input type="email" class="form-control" id="editUserEmail" [(ngModel)]="selectedUser.email" name="editEmail" required>
+          </div>
+          <div class="mb-3">
+            <label for="editUserType" class="form-label">Tipo de Usuario</label>
+            <select class="form-select" id="editUserType" [(ngModel)]="selectedUser.userType" name="editUserType" required>
+              <option value="Client">Cliente</option>
+              <option value="Mozo">Mozo</option>
+              <option value="Admin">Administrador</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="saveUpdatedUser()">Guardar cambios</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
     <!-- Orders Section -->
     <div *ngIf="activeSection === 'orders'" class="orders-section">
       <h1>Gestión de Pedidos</h1>
@@ -637,12 +732,18 @@
                 </span>
               </td>
               <td class="actions-cell">
-                <button class="view-btn" title="Ver detalles">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                    <circle cx="12" cy="12" r="3"></circle>
-                  </svg>
-                </button>
+<button class="view-btn" title="Ver detalles"
+        (click)="viewCartDetails(cart)"
+        data-bs-toggle="modal"
+        data-bs-target="#cartDetailsModal">
+  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" 
+       viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+    <circle cx="12" cy="12" r="3"></circle>
+  </svg>
+</button>
+
                 <div class="dropdown">
                   <button class="status-btn" title="Cambiar estado">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -665,7 +766,49 @@
         </table>
       </div>
     </div>
-    
+   <!-- Cart Details Modal -->
+<div class="modal fade" id="cartDetailsModal" tabindex="-1" aria-labelledby="cartDetailsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg"> 
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="cartDetailsModalLabel">Detalles del Carrito</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body" *ngIf="selectedCart && selectedCart.id">
+        <p><strong>Estado:</strong> {{ selectedCart.state }}</p>
+        <p><strong>Total:</strong> {{ selectedCart.total | currency:'ARS' }}</p>
+        <p><strong>Tipo de entrega:</strong> {{ selectedCart.deliveryType }}</p>
+        <p><strong>Nombre y Apellido:</strong> {{ selectedCart.user.firstName }} {{ selectedCart.user.lastName }}</p>
+        <p><strong>Teléfono de contacto:</strong> {{ selectedCart.contactNumber }}</p>
+        <p><strong>Dirección:</strong> {{ selectedCart.user.address }}</p>
+        <p><strong>Fecha:</strong> {{ selectedCart.date | date:'dd/MM/yyyy HH:mm' }}</p>
+
+        <h6 class="mt-3">Productos del pedido:</h6>
+        <table class="table table-sm">
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Cantidad</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let order of selectedCart.orders">
+              <td>{{ order.productName }}</td>
+              <td>{{ order.quantity }}</td>
+              <td>{{ order.subtotal | currency:'ARS' }}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p class="text-end fw-bold">Total: {{ selectedCart.total | currency:'ARS' }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
     <!-- Settings Section -->
     <div *ngIf="activeSection === 'settings'" class="settings-section">
       <h1>Configuración</h1>

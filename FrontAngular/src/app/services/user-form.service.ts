@@ -8,7 +8,7 @@ export interface CreateUserDto {
   dni: string
   email: string
   password: string
-  userType: "Admin" | "Mozo" | "Cliente"
+  userType: "Admin" | "Mozo" | "Client"
 }
 
 export interface UpdateUserDto {
@@ -16,7 +16,7 @@ export interface UpdateUserDto {
   lastName?: string
   dni?: string
   email?: string
-  userType?: "Admin" | "Mozo" | "Cliente"
+  userType?: "Admin" | "Mozo" | "Client"
   isActive?: boolean
 }
 
@@ -80,7 +80,7 @@ export class UserFormService {
    * Crear un nuevo usuario
    */
   createUser(userData: CreateUserDto): Observable<any> {
-    return this.http.post(`${this.baseUrl}`, userData).pipe(
+    return this.http.post(`${this.baseUrl}/register`, userData).pipe(
       catchError((err) => {
         console.error("Error creating user:", err)
         return of({ error: err.error?.message || "Error al crear usuario" })
@@ -132,7 +132,7 @@ export class UserFormService {
    * Obtener todos los clientes
    */
   getClientes(): Observable<any> {
-    return this.getAllUsers({ userType: "Cliente" })
+    return this.getAllUsers({ userType: "Client" })
   }
 
   /**
@@ -161,7 +161,7 @@ export class UserFormService {
   /**
    * Cambiar tipo de usuario
    */
-  changeUserType(id: string, newType: "Admin" | "Mozo" | "Cliente"): Observable<any> {
+  changeUserType(id: string, newType: "Admin" | "Mozo" | "Client"): Observable<any> {
     return this.updateUser(id, { userType: newType })
   }
 
@@ -213,7 +213,7 @@ export class UserFormService {
   /**
    * Obtener usuarios por tipo con paginación
    */
-  getUsersByType(userType: "Admin" | "Mozo" | "Cliente", page = 1, limit = 10): Observable<any> {
+  getUsersByType(userType: "Admin" | "Mozo" | "Client", page = 1, limit = 10): Observable<any> {
     return this.getAllUsers({ userType, page, limit })
   }
 

@@ -163,19 +163,28 @@ export class CartServiceService {
     )
   }
   // Metodo ver todas las ordenes (para admin dashboard)
-  getTotalCarts(): Observable<any> {
-    if (!this.authService.isAuthenticated()) {
-      console.error("User not authenticated");
-      this.router.navigate(["/login"], { queryParams: { returnUrl: this.router.url } });
-      return of({ error: "Authentication required" });
-    }
-    return this.http.get(`${this.baseUrl}total`).pipe(
-      catchError((error) => {
-        console.error("Error fetching total carts:", error);
-        return this.handleError(error);
-      })
-    );
+  getTotalCarts(filter: any = {}): Observable<any> {
+  if (!this.authService.isAuthenticated()) {
+    console.error("User not authenticated");
+    this.router.navigate(["/login"], { queryParams: { returnUrl: this.router.url } });
+    return of({ error: "Authentication required" });
   }
+  let params = new HttpParams();
+  if (filter) {
+    Object.keys(filter).forEach(key => {
+      params = params.set(key, filter[key]);
+    });
+  }
+  console.log('Filter params:', params.toString(), 'url:', `${this.baseUrl}total`);
+
+  return this.http.get(`${this.baseUrl}total`, { params }).pipe(
+    catchError(error => {
+      console.error("Error fetching total carts:", error);
+      return of({ error: error.message || "Error fetching total carts" });
+    })
+  );
+}
+
   // Metodo para saber el total de ingresos (para admin dashboard)
   getTotalRevenue(): Observable<any> {
     if (!this.authService.isAuthenticated()) {
