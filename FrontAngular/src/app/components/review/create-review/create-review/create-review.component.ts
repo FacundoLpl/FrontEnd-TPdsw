@@ -24,6 +24,7 @@ export class CreateReviewComponent {
         rating: this.rating,
         comment: this.comment
       };
+      alert('submit review');
       this.reviewService.createReview(review).subscribe({
         next: () => {
           this.submitted = true;

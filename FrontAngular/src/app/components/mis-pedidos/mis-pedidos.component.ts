@@ -78,7 +78,6 @@ submitReview(productId: string): void {
     rating: this.rating,
     comment: this.comment,
   }
-
   this.reviewService.createReview(reviewData).subscribe({
     next: () => {
       this.successMessage = "¡Gracias por tu reseña!"
