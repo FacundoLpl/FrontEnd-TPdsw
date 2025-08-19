@@ -71,7 +71,6 @@
               </div>
               <span class="item-price">${{ itemItem.subtotal | number:'1.2-2' }}</span>
             </div>
-             Botón de reseña por producto 
             <button class="review-btn product-review" 
                     *ngIf="order.state === 'Completed'"
                     (click)="openProductReview(itemItem)">
@@ -79,38 +78,38 @@
               Reseñar Producto
             </button>
             <!-- Formulario de reseña, visible solo para el producto seleccionado -->
-            <div *ngIf="currentReviewId === itemItem.product.id" class="mt-4 p-4 bg-gray-100 rounded-lg shadow-inner">
-              <h4 class="text-lg font-medium mb-2">Reseña para {{ itemItem.product.name }}</h4>
-              <div class="flex items-center mb-4">
-              <span class="mr-2 text-blue-700">Tu calificación:</span>
-              <div class="star-rating">
+            <div *ngIf="currentReviewId === itemItem.product.id" class="review-form">
+              <h4 class="review-form-title">Reseña para {{ itemItem.product.name }}</h4>
+              <div class="rating-section">
+                <span class="rating-label">Tu calificación:</span>
+                <div class="star-rating">
                   <span *ngFor="let star of [1, 2, 3, 4, 5]" (click)="setRating(star)"
-                    class="star text-3xl cursor-pointer transition-colors duration-200"
-                    [ngClass]="{'text-yellow-400': star <= rating, 'text-gray-400': star > rating}">
+                    class="star"
+                    [ngClass]="{'star-filled': star <= rating, 'star-empty': star > rating}">
                     {{ star <= rating ? '★' : '☆' }}
                   </span>
+                </div>
               </div>
-            </div>
-            <div class="mb-4">
-              <label for="comment-{{ itemItem.product.id }}" class="block text-gray-700 font-medium mb-2">Comentario:</label>
-              <textarea id="comment-{{ itemItem.product.id }}" [(ngModel)]="comment" rows="4"
-                class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
-                placeholder="Escribe tu comentario aquí...">
-              </textarea>
-            </div>
-            <div class="flex justify-end gap-2">
-              <button (click)="cancelReview()"
-                class="conf-review-btn">
-                Cancelar
-              </button>
-              <button (click)="submitReview(itemItem.product.id)" [disabled]="isSubmittingReview"
-                class="conf-review-btn" [ngClass]="{'disabled': isSubmittingReview}">
-                {{ isSubmittingReview ? 'Enviando...' : 'Enviar Reseña' }}
-              </button>
-              <div *ngIf="formErrorMessage" class="text-red-500 mt-2 text-sm">
+              <div class="comment-section">
+                <label for="comment-{{ itemItem.product.id }}" class="comment-label">Comentario:</label>
+                <textarea id="comment-{{ itemItem.product.id }}" [(ngModel)]="comment" rows="4"
+                  class="comment-textarea"
+                  placeholder="Escribe tu comentario aquí...">
+                </textarea>
+              </div>
+              <div class="review-actions">
+                <button (click)="cancelReview()" class="cancel-review-btn">
+                  Cancelar
+                </button>
+                <button (click)="submitReview(itemItem.product.id)" [disabled]="isSubmittingReview"
+                  class="submit-review-btn" [ngClass]="{'disabled': isSubmittingReview}">
+                  {{ isSubmittingReview ? 'Enviando...' : 'Enviar Reseña' }}
+                </button>
+              </div>
+              <div *ngIf="formErrorMessage" class="form-error-message">
                 {{ formErrorMessage }}
               </div>
-              <div *ngIf="successMessage" class="bg-green-100 text-green-700 p-4 rounded-lg mt-4">
+              <div *ngIf="successMessage" class="form-success-message">
                 {{ successMessage }}
               </div>
             </div>
@@ -138,5 +137,6 @@
         </div>
       </div>
     </div>
+  </div>
   <app-footer></app-footer>
 </div>

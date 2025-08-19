@@ -6,6 +6,7 @@ import { NavbarComponent } from "../navbar/navbar.component"
 import { FooterComponent } from "../footer/footer/footer.component"
 import { ReviewServiceService } from "../../services/review-service.service"
 import { FormsModule } from "@angular/forms"
+import { NotificationService } from "../../services/notification.service"
 
 @Component({
   selector: "app-mis-pedidos",
@@ -32,7 +33,8 @@ export class MisPedidosComponent implements OnInit {
   constructor(
     private cartService: CartServiceService,
     private authService: AuthService,
-    private reviewService: ReviewServiceService
+    private reviewService: ReviewServiceService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit() {
@@ -66,7 +68,7 @@ export class MisPedidosComponent implements OnInit {
 
 submitReview(productId: string): void {
   if (this.rating === 0 || this.comment.trim() === "") {
-    this.formErrorMessage = "Por favor, selecciona una calificación y escribe un comentario."
+    this.notificationService.error("Por favor, selecciona una calificación y escribe un comentario.")
     return
   }
 
@@ -74,19 +76,19 @@ submitReview(productId: string): void {
   this.formErrorMessage = ""
 
   const reviewData: ReviewData = {
-    productId: productId,
+    product: productId,
     rating: this.rating,
     comment: this.comment,
   }
   this.reviewService.createReview(reviewData).subscribe({
     next: () => {
-      this.successMessage = "¡Gracias por tu reseña!"
+      this.notificationService.success("¡Gracias por tu reseña!")
       this.isSubmittingReview = false
       setTimeout(() => this.cancelReview(), 2000)
     },
     error: (err: any) => {
       console.error("Error al enviar reseña:", err)
-      this.formErrorMessage = "Ocurrió un error al enviar tu reseña. Por favor, inténtalo de nuevo."
+      this.notificationService.error("Ocurrió un error al enviar tu reseña. Por favor, inténtalo de nuevo.")
       this.isSubmittingReview = false
     },
   })
@@ -201,7 +203,7 @@ submitReview(productId: string): void {
 
 }
 interface ReviewData {
-  productId: string
+  product: string
   rating: number
   comment: string
 }

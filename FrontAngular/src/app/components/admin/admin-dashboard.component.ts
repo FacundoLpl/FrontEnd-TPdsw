@@ -131,7 +131,7 @@ showEditModal = false
   // Verificar que el usuario sea administrador
   checkAdminAccess(): void {
     if (!this.authService.isAdmin()) {
-      console.error("Acceso denegado: Se requiere rol de administrador")
+      this.notificationService.error("Acceso denegado: Se requiere rol de administrador")
       this.authService.redirectIfNotAdmin()
     }
   }
@@ -332,7 +332,7 @@ loadStats(): void {
       this.isLoading = false;
     },
     error: (err) => {
-      console.error('Error cargando estadísticas', err);
+      this.notificationService.error('Error cargando estadísticas');
       this.isLoading = false;
     }
   });
@@ -359,7 +359,7 @@ loadStats(): void {
         this.isLoading = false
       },
       error: (err: any) => {
-        this.error = "Error al cargar productos"
+        this.notificationService.error("Error al cargar productos")
         console.error(err)
         this.isLoading = false
       },
@@ -389,7 +389,7 @@ loadStats(): void {
         this.isLoading = false
       },
       error: (err: any) => {
-        this.error = "Error al cargar usuarios"
+        this.notificationService.error("Error al cargar usuarios")
         console.error(err)
         this.isLoading = false
       },
@@ -430,7 +430,7 @@ loadStats(): void {
         this.isLoading = false
       },
       error: (err: any) => {
-        this.error = "Error al cargar pedidos"
+        this.notificationService.error("Error al cargar pedidos")
         console.error(err)
         this.isLoading = false
       },
@@ -471,9 +471,9 @@ viewCartDetails(cart: any): void {
         this.isLoading = false
       },
       error: (err: any) => {
-        this.error = "Error al cargar categorías"
-        console.error(err)
-        this.isLoading = false
+        this.notificationService.error("Error al cargar categorías");
+        console.error(err);
+        this.isLoading = false;
       },
     })
   }
@@ -487,11 +487,11 @@ viewCartDetails(cart: any): void {
       this.users.push(createdUser);
       this.filterUsers();
       this.resetNewUser();
-      alert("Usuario creado exitosamente");
+      this.notificationService.success("Usuario creado exitosamente");
     },
     error: (err) => {
       console.error("Error al crear usuario:", err);
-      alert(err.error?.message || "Ocurrió un error al crear el usuario");
+      this.notificationService.error(err.error?.message || "Ocurrió un error al crear el usuario");
     },
     complete: () => {
       this.isLoading = false;
@@ -512,11 +512,11 @@ saveUpdatedUser(): void {
       // Reemplazar en el array local
       this.users = this.users.map(u => u.id === updatedUser.id ? updatedUser : u);
       this.filterUsers();
-      alert("Usuario actualizado exitosamente");
+      this.notificationService.success("Usuario actualizado exitosamente");
     },
     error: (err) => {
       console.error("Error al actualizar usuario:", err);
-      alert(err.error?.message || "Ocurrió un error al actualizar");
+      this.notificationService.error(err.error?.message || "Ocurrió un error al actualizar");
     },
     complete: () => {
       this.isLoading = false;
@@ -546,12 +546,13 @@ saveUpdatedUser(): void {
         this.categories.push(res.data)
         this.resetNewCategory()
         this.isLoading = false
-        alert("Categoría creada exitosamente")
+
+        this.notificationService.success("Categoría creada exitosamente");
       },
       error: (err: any) => {
-        this.error = "Error al crear categoría"
-        console.error(err)
-        this.isLoading = false
+        this.notificationService.error("Error al crear categoría");
+        console.error(err);
+        this.isLoading = false;
       },
     })
   }
@@ -562,47 +563,6 @@ saveUpdatedUser(): void {
       name: "",
     }
   }
-/* EDITAR CATEGORIA VIEJO
- // Estado para editar categoría
-editingCategory: any = {
-  id: '',
-  name: ''
-};
-
-showEditCategoryModal = false;
-
-// Método para abrir modal y cargar categoría
-openEditCategoryModal(category: any): void {
-  this.editingCategory = { ...category }; // clonamos para no mutar la original
-  this.showEditCategoryModal = true;
-}
-
-// Método para cerrar modal edición categoría
-closeEditCategoryModal(): void {
-  this.showEditCategoryModal = false;
-}
-
-// Método para actualizar categoría 
-updateCategory(): void {
-  if (!this.editingCategory.name) {
-    alert('El nombre es obligatorio');
-    return;
-  }
-  this.productService.updateCategory(this.editingCategory.id, this.editingCategory).subscribe({
-    next: (res: any) => {
-      const index = this.categories.findIndex(c => c.id === this.editingCategory.id);
-      if (index !== -1) {
-        this.categories[index] = res.data;
-      }
-      this.closeEditCategoryModal();
-      alert('Categoría actualizada exitosamente');
-    },
-    error: (err) => {
-      console.error('Error al actualizar categoría', err);
-      alert('Error al actualizar categoría');
-    }
-  });
-} */
 openEditCategoryModal(category: any) {
   this.selectedCategory = { ...category }; // Clonamos para no tocar el original hasta guardar
 }
@@ -615,7 +575,6 @@ updateCategory() {
 }
 
 
-  // Eliminar usuario (implementar cuando tengamos el servicio correcto)
  deleteUser(id: string): void {
   if (confirm("¿Estás seguro de que deseas eliminar este usuario?")) {
     this.isLoading = true;
@@ -624,11 +583,11 @@ updateCategory() {
       next: () => {
         this.users = this.users.filter((u) => u.id !== id);
         this.filteredUsers = this.filteredUsers.filter((u) => u.id !== id);
-        alert("Usuario eliminado exitosamente");
+        this.notificationService.success("Usuario eliminado exitosamente");
       },
       error: (err) => {
         console.error("Error al eliminar usuario:", err);
-        alert(err.error?.message || "Ocurrió un error al eliminar el usuario");
+        this.notificationService.error(err.error?.message || "Ocurrió un error al eliminar el usuario");
       },
       complete: () => {
         this.isLoading = false;
@@ -647,12 +606,12 @@ updateCategory() {
         next: () => {
           this.categories = this.categories.filter((c) => c.id !== id)
           this.isLoading = false
-          alert("Categoría eliminada exitosamente")
+          this.notificationService.success("Categoría eliminada exitosamente");
         },
         error: (err: any) => {
-          this.error = "Error al eliminar categoría"
-          console.error(err)
-          this.isLoading = false
+          this.notificationService.error("Error al eliminar categoría");
+          console.error(err);
+          this.isLoading = false;
         },
       })
     }
@@ -669,12 +628,12 @@ updateCategory() {
           cart.state = newState
         }
         this.isLoading = false
-        alert("Estado del pedido actualizado exitosamente")
+        this.notificationService.success("Estado del pedido actualizado exitosamente");
       },
       error: (err: any) => {
-        this.error = "Error al actualizar estado del pedido"
-        console.error(err)
-        this.isLoading = false
+        this.notificationService.error("Error al actualizar estado del pedido");
+        console.error(err);
+        this.isLoading = false;
       },
     })
   }
