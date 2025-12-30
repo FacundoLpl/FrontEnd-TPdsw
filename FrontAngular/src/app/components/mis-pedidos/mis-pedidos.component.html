@@ -71,7 +71,7 @@
               </div>
               <span class="item-price">${{ orderItem.subtotal | number:'1.2-2' }}</span>
             </div>
-             Botón de reseña por producto 
+
             <button class="review-btn product-review" 
                     *ngIf="order.state === 'Completed'"
                     (click)="openProductReview(orderItem)">
