@@ -1,9 +1,9 @@
 import { Component, type OnInit } from "@angular/core"
 import { CommonModule } from "@angular/common"
 import { FormsModule } from "@angular/forms"
-import { AuthService } from "../core/services/auth.service"
-import { MozoService } from "../services/mozo.service"
-import { PedidoService } from "../services/pedido.service"
+import { AuthService } from "../../core/services/auth.service"
+import { MozoService } from "../../services/mozo.service"
+import { PedidoService } from "../../services/pedido.service"
 
 
 interface Mesa {

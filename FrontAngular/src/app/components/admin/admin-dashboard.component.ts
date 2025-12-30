@@ -2,14 +2,15 @@ import { Component, OnInit } from "@angular/core"
 import { CommonModule } from "@angular/common"
 import { RouterModule } from "@angular/router"
 import { FormsModule } from "@angular/forms"
-import { AuthService } from "../core/services/auth.service"
-import { ProductServiceService } from "../services/product-service.service"
-import { CartServiceService } from "../services/cart-service.service"
-import { UserFormService } from "../services/user-form.service"
-import { NotificationService  } from "../services/notification.service"
+import { AuthService } from "../../core/services/auth.service"
+import { ProductServiceService } from "../../services/product-service.service"
+import { CartServiceService } from "../../services/cart-service.service"
+import { UserFormService } from "../../services/user-form.service"
+import { NotificationService  } from "../../services/notification.service"
 import { forkJoin } from 'rxjs';
 interface DashboardStats {
-  totalOrders: number
+  totalPendingCarts: number
+  totalCompletedCarts: number
   totalRevenue: number
   totalProducts: number
   totalUsers: number
@@ -36,7 +37,8 @@ export class AdminDashboardComponent implements OnInit {
 
   // Estadísticas del dashboard
   stats: DashboardStats = {
-    totalOrders: 0,
+    totalPendingCarts: 0,
+    totalCompletedCarts: 0,
     totalRevenue: 0,
     totalProducts: 0,
     totalUsers: 0,
@@ -78,6 +80,9 @@ export class AdminDashboardComponent implements OnInit {
   state: 'Active',
   category: { id: "", name: "" },
 };
+
+// Pedido seleccionado
+selectedCart: any = {};
 // Para manejar el producto que se está editando
 editingProduct: any = {
   id: '',
@@ -107,6 +112,8 @@ showEditModal = false
   newCategory: any = {
     name: "",
   }
+  selectedCategory: any = { id: null, name: '' };
+  
 
   constructor(
     private authService: AuthService,
@@ -124,7 +131,7 @@ showEditModal = false
   // Verificar que el usuario sea administrador
   checkAdminAccess(): void {
     if (!this.authService.isAdmin()) {
-      console.error("Acceso denegado: Se requiere rol de administrador")
+      this.notificationService.error("Acceso denegado: Se requiere rol de administrador")
       this.authService.redirectIfNotAdmin()
     }
   }
@@ -264,8 +271,8 @@ loadDashboardData(): void {
     // Cargar productos
     this.loadProducts()
 
-    // Cargar usuarios (comentado hasta que tengamos el servicio correcto)
-    // this.loadUsers()
+    // Cargar usuarios
+    this.loadUsers()
 
     // Cargar pedidos
     this.loadOrders()
@@ -286,7 +293,7 @@ setActiveSection(section: string): void {
         this.loadProducts()
         break
       case "users":
-        // this.loadUsers() // Comentado hasta implementar
+        this.loadUsers() 
         break
       case "orders":
         this.loadOrders()
@@ -305,25 +312,27 @@ loadStats(): void {
   this.isLoading = true;
 
   forkJoin({
-    totalCarts: this.cartService.getTotalCarts(),
+    totalPendingCarts: this.cartService.getTotalCarts({ state: 'Pending' }),
+    totalCompletedCarts: this.cartService.getTotalCarts({ state: 'Completed' }),
     totalRevenue: this.cartService.getTotalRevenue(),
     totalProducts: this.productService.findAll(),
-    totalUsers: this.userFormService.getAllUsers(), // descomentar si tenés este endpoint activo
-    pendingCarts: this.cartService.getAllCarts({ state: 'pending' })
+    totalUsers: this.userFormService.getAllUsers(),
+    pendingCarts: this.cartService.getAllCarts({ state: 'Pending' })
   }).subscribe({
     next: (res: any) => {
       console.log('loadStats results:', res);
       this.stats = {
-        totalOrders: res.totalOrders?.totalOrders || 0,
+        totalPendingCarts: res.totalPendingCarts?.totalCarts || 1,
+        totalCompletedCarts: res.totalCompletedCarts?.totalCarts || 2,
         totalRevenue: res.totalRevenue?.totalRevenue || 0,
         totalProducts: res.totalProducts?.data?.length || 0,
-        totalUsers: res.totalUsers?.data?.length || 0, 
-        pendingOrders: res.pendingOrders?.data?.length || 0
+        totalUsers: res.totalUsers?.data?.length || 0,
+        pendingOrders: res.pendingCarts?.data?.length || 0   
       };
       this.isLoading = false;
     },
     error: (err) => {
-      console.error('Error cargando estadísticas', err);
+      this.notificationService.error('Error cargando estadísticas');
       this.isLoading = false;
     }
   });
@@ -350,7 +359,7 @@ loadStats(): void {
         this.isLoading = false
       },
       error: (err: any) => {
-        this.error = "Error al cargar productos"
+        this.notificationService.error("Error al cargar productos")
         console.error(err)
         this.isLoading = false
       },
@@ -373,31 +382,18 @@ loadStats(): void {
   // Cargar usuarios (implementar cuando tengamos el servicio correcto)
   loadUsers(): void {
     this.isLoading = true
-
-    // Por ahora, datos de ejemplo
-    this.users = [
-      {
-        id: "1",
-        firstName: "Juan",
-        lastName: "Pérez",
-        dni: "12345678",
-        email: "juan@example.com",
-        userType: "Cliente",
-        createdAt: new Date().toISOString(),
+    this.userFormService.getAllUsers().subscribe({
+      next: (res: any) => {
+        this.users = res.data || []
+        this.filterUsers()
+        this.isLoading = false
       },
-      {
-        id: "2",
-        firstName: "María",
-        lastName: "García",
-        dni: "87654321",
-        email: "maria@example.com",
-        userType: "Mozo",
-        createdAt: new Date().toISOString(),
+      error: (err: any) => {
+        this.notificationService.error("Error al cargar usuarios")
+        console.error(err)
+        this.isLoading = false
       },
-    ]
-
-    this.filterUsers()
-    this.isLoading = false
+    })
   }
 
   // Filtrar usuarios
@@ -434,13 +430,16 @@ loadStats(): void {
         this.isLoading = false
       },
       error: (err: any) => {
-        this.error = "Error al cargar pedidos"
+        this.notificationService.error("Error al cargar pedidos")
         console.error(err)
         this.isLoading = false
       },
     })
   }
-
+// ver pedido seleccionado
+viewCartDetails(cart: any): void {
+  this.selectedCart = { ...cart };
+}
   // Filtrar pedidos
   filterOrders(): void {
     let filtered = [...this.orders]
@@ -472,29 +471,59 @@ loadStats(): void {
         this.isLoading = false
       },
       error: (err: any) => {
-        this.error = "Error al cargar categorías"
-        console.error(err)
-        this.isLoading = false
+        this.notificationService.error("Error al cargar categorías");
+        console.error(err);
+        this.isLoading = false;
       },
     })
   }
   // Crear nuevo usuario (implementar cuando tengamos el servicio correcto)
   createUser(): void {
-    this.isLoading = true
-
-    // Por ahora, simular creación
-    const newUser = {
-      ...this.newUser,
-      id: Date.now().toString(),
-      createdAt: new Date().toISOString(),
+  this.isLoading = true;
+    console.log(this.newUser)
+  this.userFormService.createUser(this.newUser).subscribe({
+    next: (createdUser) => {
+      // Si tu API devuelve el usuario creado:
+      this.users.push(createdUser);
+      this.filterUsers();
+      this.resetNewUser();
+      this.notificationService.success("Usuario creado exitosamente");
+    },
+    error: (err) => {
+      console.error("Error al crear usuario:", err);
+      this.notificationService.error(err.error?.message || "Ocurrió un error al crear el usuario");
+    },
+    complete: () => {
+      this.isLoading = false;
     }
+  });
+}
+selectedUser: any = {}; // Usuario que se está editando
 
-    this.users.push(newUser)
-    this.filterUsers()
-    this.resetNewUser()
-    this.isLoading = false
-    alert("Usuario creado exitosamente")
-  }
+updateUser(user: any): void {
+  // Clonamos para no modificar directamente la lista antes de guardar
+  this.selectedUser = { ...user };
+}
+
+saveUpdatedUser(): void {
+  this.isLoading = true;
+  this.userFormService.updateUser(this.selectedUser.id, this.selectedUser).subscribe({
+    next: (updatedUser) => {
+      // Reemplazar en el array local
+      this.users = this.users.map(u => u.id === updatedUser.id ? updatedUser : u);
+      this.filterUsers();
+      this.notificationService.success("Usuario actualizado exitosamente");
+    },
+    error: (err) => {
+      console.error("Error al actualizar usuario:", err);
+      this.notificationService.error(err.error?.message || "Ocurrió un error al actualizar");
+    },
+    complete: () => {
+      this.isLoading = false;
+    }
+  });
+}
+
 
   // Resetear formulario de nuevo usuario
   resetNewUser(): void {
@@ -517,12 +546,13 @@ loadStats(): void {
         this.categories.push(res.data)
         this.resetNewCategory()
         this.isLoading = false
-        alert("Categoría creada exitosamente")
+
+        this.notificationService.success("Categoría creada exitosamente");
       },
       error: (err: any) => {
-        this.error = "Error al crear categoría"
-        console.error(err)
-        this.isLoading = false
+        this.notificationService.error("Error al crear categoría");
+        console.error(err);
+        this.isLoading = false;
       },
     })
   }
@@ -533,57 +563,39 @@ loadStats(): void {
       name: "",
     }
   }
-
- // Estado para editar categoría
-editingCategory: any = {
-  id: '',
-  name: ''
-};
-
-showEditCategoryModal = false;
-
-// Método para abrir modal y cargar categoría
-openEditCategoryModal(category: any): void {
-  this.editingCategory = { ...category }; // clonamos para no mutar la original
-  this.showEditCategoryModal = true;
+openEditCategoryModal(category: any) {
+  this.selectedCategory = { ...category }; // Clonamos para no tocar el original hasta guardar
 }
 
-// Método para cerrar modal edición categoría
-closeEditCategoryModal(): void {
-  this.showEditCategoryModal = false;
+updateCategory() {
+  this.productService.updateCategory(this.selectedCategory.id, { name: this.selectedCategory.name })
+    .subscribe(() => {
+      this.loadCategories(); // Refrescar lista
+    });
 }
 
-// Método para actualizar categoría (ejemplo simple)
-updateCategory(): void {
-  if (!this.editingCategory.name) {
-    alert('El nombre es obligatorio');
-    return;
-  }
-  this.productService.updateCategory(this.editingCategory.id, this.editingCategory).subscribe({
-    next: (res: any) => {
-      const index = this.categories.findIndex(c => c.id === this.editingCategory.id);
-      if (index !== -1) {
-        this.categories[index] = res.data;
+
+ deleteUser(id: string): void {
+  if (confirm("¿Estás seguro de que deseas eliminar este usuario?")) {
+    this.isLoading = true;
+
+    this.userFormService.deleteUser(id).subscribe({
+      next: () => {
+        this.users = this.users.filter((u) => u.id !== id);
+        this.filteredUsers = this.filteredUsers.filter((u) => u.id !== id);
+        this.notificationService.success("Usuario eliminado exitosamente");
+      },
+      error: (err) => {
+        console.error("Error al eliminar usuario:", err);
+        this.notificationService.error(err.error?.message || "Ocurrió un error al eliminar el usuario");
+      },
+      complete: () => {
+        this.isLoading = false;
       }
-      this.closeEditCategoryModal();
-      alert('Categoría actualizada exitosamente');
-    },
-    error: (err) => {
-      console.error('Error al actualizar categoría', err);
-      alert('Error al actualizar categoría');
-    }
-  });
+    });
+  }
 }
 
-
-  // Eliminar usuario (implementar cuando tengamos el servicio correcto)
-  deleteUser(id: string): void {
-    if (confirm("¿Estás seguro de que deseas eliminar este usuario?")) {
-      this.users = this.users.filter((u) => u.id !== id)
-      this.filteredUsers = this.filteredUsers.filter((u) => u.id !== id)
-      alert("Usuario eliminado exitosamente")
-    }
-  }
 
   // Eliminar categoría
   deleteCategory(id: string): void {
@@ -594,12 +606,12 @@ updateCategory(): void {
         next: () => {
           this.categories = this.categories.filter((c) => c.id !== id)
           this.isLoading = false
-          alert("Categoría eliminada exitosamente")
+          this.notificationService.success("Categoría eliminada exitosamente");
         },
         error: (err: any) => {
-          this.error = "Error al eliminar categoría"
-          console.error(err)
-          this.isLoading = false
+          this.notificationService.error("Error al eliminar categoría");
+          console.error(err);
+          this.isLoading = false;
         },
       })
     }
@@ -616,12 +628,12 @@ updateCategory(): void {
           cart.state = newState
         }
         this.isLoading = false
-        alert("Estado del pedido actualizado exitosamente")
+        this.notificationService.success("Estado del pedido actualizado exitosamente");
       },
       error: (err: any) => {
-        this.error = "Error al actualizar estado del pedido"
-        console.error(err)
-        this.isLoading = false
+        this.notificationService.error("Error al actualizar estado del pedido");
+        console.error(err);
+        this.isLoading = false;
       },
     })
   }

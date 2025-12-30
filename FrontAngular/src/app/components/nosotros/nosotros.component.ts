@@ -1,7 +1,7 @@
 import { Component, type OnInit } from "@angular/core"
 import { CommonModule } from "@angular/common"
-import { NavbarComponent } from "../components/navbar/navbar.component"
-import { FooterComponent } from "../components/footer/footer/footer.component"
+import { NavbarComponent } from "../navbar/navbar.component"
+import { FooterComponent } from "../footer/footer/footer.component"
 
 interface TeamMember {
   name: string
@@ -35,7 +35,7 @@ export class NosotrosComponent implements OnInit {
       description:
         "Especialista en Angular y Node.js. Responsable del desarrollo del frontend y la integración con APIs.",
       skills: ["Angular", "TypeScript", "CSS"],
-      photo: "https://randomuser.me/api/portraits/men/44.jpg",
+      photo: "https://legacymedia.sportsplatform.io/image/upload/v1661974463/ldjekj7ho54pqj9xxj8a.jpg",
       github: "https://github.com/",
       linkedin: "https://linkedin.com/in/",
     },

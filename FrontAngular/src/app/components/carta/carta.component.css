@@ -309,7 +309,7 @@
   border: none;
   border-radius: 1rem;
   background: #f8f8f8;
-  color: #666;
+  color: #000000;
   cursor: pointer;
   transition: var(--transition);
 }
@@ -321,7 +321,7 @@
 
 .category-button.active {
   background: var(--primary-color);
-  color: white;
+  color: rgb(0, 0, 0);
 }
 
 .category-icon {
@@ -357,31 +357,31 @@
 
 .category-button.active.category-entradas {
   background: var(--color-entradas);
-  color: white;
+  color: rgb(0, 0, 0);
 }
 .category-button.active.category-principales {
   background: var(--color-principales);
-  color: white;
+  color: rgb(0, 0, 0);
 }
 .category-button.active.category-postres {
   background: var(--color-postres);
-  color: white;
+  color: rgb(0, 0, 0);
 }
 .category-button.active.category-bebidas {
   background: var(--color-bebidas);
-  color: white;
+  color: rgb(0, 0, 0);
 }
 .category-button.active.category-pizzas {
   background: var(--color-pizzas);
-  color: white;
+  color: rgb(0, 0, 0);
 }
 .category-button.active.category-pastas {
   background: var(--color-pastas);
-  color: white;
+  color: rgb(0, 0, 0);
 }
 .category-button.active.category-ensaladas {
   background: var(--color-ensaladas);
-  color: white;
+  color: rgb(0, 0, 0);
 }
 
 /* Estados de carga y error */

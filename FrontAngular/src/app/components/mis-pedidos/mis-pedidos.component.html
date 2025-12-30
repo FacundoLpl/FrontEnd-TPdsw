@@ -58,29 +58,65 @@
           </div>
           <div class="info-row">
             <span class="label">Pago: {{ getPaymentMethodText(order) }}</span>
-          
+          </div>
         </div>
 
         <div class="order-items">
           <h4>Productos:</h4>
-          <div class="item" *ngFor="let orderItem of order.orders">
+          <div class="item" *ngFor="let itemItem of order.orders">
             <div class="item-content">
               <div class="item-info">
-                <span class="item-name">{{ orderItem.product?.name || orderItem.productName }}</span>
-                <span class="item-quantity">x{{ orderItem.quantity }}</span>
+                <span class="item-name">{{ itemItem.product?.name || itemItem.productName }}</span>
+                <span class="item-quantity">x{{ itemItem.quantity }}</span>
               </div>
-              <span class="item-price">${{ orderItem.subtotal | number:'1.2-2' }}</span>
+              <span class="item-price">${{ itemItem.subtotal | number:'1.2-2' }}</span>
             </div>
-
             <button class="review-btn product-review" 
                     *ngIf="order.state === 'Completed'"
-                    (click)="openProductReview(orderItem)">
+                    (click)="openProductReview(itemItem)">
               <i class="fas fa-star"></i>
               Reseñar Producto
             </button>
+            <!-- Formulario de reseña, visible solo para el producto seleccionado -->
+            <div *ngIf="currentReviewId === itemItem.product.id" class="review-form">
+              <h4 class="review-form-title">Reseña para {{ itemItem.product.name }}</h4>
+              <div class="rating-section">
+                <span class="rating-label">Tu calificación:</span>
+                <div class="star-rating">
+                  <span *ngFor="let star of [1, 2, 3, 4, 5]" (click)="setRating(star)"
+                    class="star"
+                    [ngClass]="{'star-filled': star <= rating, 'star-empty': star > rating}">
+                    {{ star <= rating ? '★' : '☆' }}
+                  </span>
+                </div>
+              </div>
+              <div class="comment-section">
+                <label for="comment-{{ itemItem.product.id }}" class="comment-label">Comentario:</label>
+                <textarea id="comment-{{ itemItem.product.id }}" [(ngModel)]="comment" rows="4"
+                  class="comment-textarea"
+                  placeholder="Escribe tu comentario aquí...">
+                </textarea>
+              </div>
+              <div class="review-actions">
+                <button (click)="cancelReview()" class="cancel-review-btn">
+                  Cancelar
+                </button>
+                <button (click)="submitReview(itemItem.product.id)" [disabled]="isSubmittingReview"
+                  class="submit-review-btn" [ngClass]="{'disabled': isSubmittingReview}">
+                  {{ isSubmittingReview ? 'Enviando...' : 'Enviar Reseña' }}
+                </button>
+              </div>
+              <div *ngIf="formErrorMessage" class="form-error-message">
+                {{ formErrorMessage }}
+              </div>
+              <div *ngIf="successMessage" class="form-success-message">
+                {{ successMessage }}
+              </div>
+            </div>
           </div>
         </div>
-
+      </div>
+      <div>
         <div class="order-total">
           <div class="total-row">
             <span>Subtotal:</span>
@@ -95,14 +131,12 @@
             <span>${{ order.total * 1.1 | number:'1.2-2' }}</span>
           </div>
         </div>
-
         <div class="additional-info" *ngIf="order.additionalInstructions">
           <h4>Instrucciones adicionales:</h4>
           <p>{{ order.additionalInstructions }}</p>
         </div>
-
       </div>
     </div>
   </div>
+  <app-footer></app-footer>
 </div>
-<app-footer></app-footer>

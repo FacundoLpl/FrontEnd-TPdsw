@@ -1,20 +1,20 @@
 import type { Routes } from "@angular/router"
-import { HomeComponent } from "./home/home.component"
-import { CartaComponent } from "./carta/carta.component"
-import { ReservaComponent } from "./reserva/reserva.component"
-import { FaqComponent } from "./faq/faq.component"
-import { NosotrosComponent } from "./nosotros/nosotros.component"
-import { CarritoComponent } from "./components/carrito/carrito.component"
-import { LoginComponent } from "./authentication/login/login.component"
-import { RegisterComponent } from "./authentication/register/register.component"
-import { AdminDashboardComponent } from "./admin/admin-dashboard.component"
-import { MisPedidosComponent } from "./components/mis-pedidos/mis-pedidos.component"
-import { ReviewListComponent } from './components/review/review-list/review-list.component'
+import { HomeComponent } from "../components/home/home.component"
+import { CartaComponent } from "../components/carta/carta.component"
+import { ReservaComponent } from "../components/reserva/reserva.component"
+import { FaqComponent } from "../components/faq/faq.component"
+import { NosotrosComponent } from "../components/nosotros/nosotros.component"
+import { CarritoComponent } from "../components/carrito/carrito.component"
+import { LoginComponent } from "../components/authentication/login/login.component"
+import { RegisterComponent } from "../components/authentication/register/register.component"
+import { AdminDashboardComponent } from "../components/admin/admin-dashboard.component"
+import { MisPedidosComponent } from "../components/mis-pedidos/mis-pedidos.component"
+import { ReviewListComponent } from "../components/review/review-list/review-list.component"
 
-
-import { AuthGuard } from "./core/guards/auth.guard"
-import { AuthenticatedGuard } from "./core/guards/authenticated.guard"
-import { AdminGuard } from "./core/guards/admin.guard"
+// Guards
+import { AuthGuard } from "../core/guards/auth.guard"
+import { AuthenticatedGuard } from "../core/guards/authenticated.guard"
+import { AdminGuard } from "../core/guards/admin.guard"
 
 export const routes: Routes = [
   // Página principal
@@ -68,7 +68,7 @@ export const routes: Routes = [
    //Rutas para diferentes roles 
   {
     path: "mozo/panel",
-   loadComponent: () => import("./mozo/mozo-panel.component").then((m) => m.MozoPanelComponent),
+   loadComponent: () => import("../components/mozo/mozo-panel.component").then((m) => m.MozoPanelComponent),
     canActivate: [AuthGuard], // Puedes crear un guard específico para mozos
   },
 

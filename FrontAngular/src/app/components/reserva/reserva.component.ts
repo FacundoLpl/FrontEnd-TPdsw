@@ -1,13 +1,13 @@
 import { Component, OnInit } from "@angular/core"
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from "@angular/forms"
 import { CommonModule } from "@angular/common"
-import { NavbarComponent } from "../components/navbar/navbar.component"
-import { FooterComponent } from "../components/footer/footer/footer.component"
-import { ListaReservasComponent } from "../components/lista-reservas/lista-reservas.component"
-import { ReservationService } from "../services/reservation.service"
-import { AuthService } from "../core/services/auth.service"
+import { NavbarComponent } from "../navbar/navbar.component"
+import { FooterComponent } from "../footer/footer/footer.component"
+import { ListaReservasComponent } from "../lista-reservas/lista-reservas.component"
+import { ReservationService } from "../../services/reservation.service"
+import { AuthService } from "../../core/services/auth.service"
 import { Router } from "@angular/router"
-import { NotificationService } from "../services/notification.service.js"
+import { NotificationService } from "../../services/notification.service.js"
 
 @Component({
   selector: "app-reserva",
